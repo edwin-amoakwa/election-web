@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+       #{msg.unit}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                <h:outputText value="#{msg.id}" />
+                <p:inputText value="#{institutionController.bankAccount.institutionId}" />
+                
+                <h:outputText value="#{msg.name}" />
+                <p:inputText value="#{institutionController.bankAccount.institutionName}" />                
+                
+                <h:outputText value="approveByLabel" />
+                <p:inputText value="#{institutionController.bankAccount.approveByLabel}" />                
+                
+                
+                <h:outputText value="AmtToWords Field" />
+                <p:selectOneMenu value="#{institutionController.bankAccount.amtInWords}" >
+                    <f:selectItem itemLabel="#{msg.select_one}" />
+                    <f:selectItems value="#{userCommonOptions.amtInWordsList}" />
+                </p:selectOneMenu>
+                
+                <h:outputText value="Authorisation Requirement" />
+                <p:selectOneMenu value="#{institutionController.bankAccount.authorisationRequirement}" >
+                    <f:selectItem itemLabel="#{msg.select_one}" />
+                    <f:selectItems value="#{userCommonOptions.authorisationRequirementList}" />
+                </p:selectOneMenu>
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{institutionController.saveCounterparty()}" 
+                                             cancelButtonAction="#{institutionController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{institutionController.bankAccountsList}" var="unit">
+                <p:column headerText="#{msg.id}">
+                    <h:outputText value="#{unit.institutionId}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{unit.institutionName}" />
+                </p:column>
+                
+                <p:column headerText="approveByLabel">
+                    <h:outputText value="#{unit.approveByLabel}" />
+                </p:column>
+                
+                <p:column headerText="AmtToWords Field">
+                    <h:outputText value="#{unit.amtInWords.label}" />
+                </p:column>
+                
+                
+                <p:column headerText="Authorisation Requirement">
+                    <h:outputText value="#{unit.authorisationRequirement}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{institutionController.editBankAccount(unit)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

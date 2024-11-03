@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV List" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5f4b8616-08bc-40c8-92b0-258ec80fd56d">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="field-value" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri">
+		<box>
+			<bottomPen lineWidth="0.25" lineStyle="Dotted" lineColor="#404040"/>
+		</box>
+	</style>
+	<style name="field-label" vTextAlign="Bottom" fontName="Calibri" isBold="true"/>
+	<style name="detail-data" hTextAlign="Left" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri" fontSize="8" isBold="false"/>
+	<style name="section-field-label" vTextAlign="Bottom" fontName="Calibri" fontSize="9" isBold="false"/>
+	<style name="section-field-header" hTextAlign="Center" vTextAlign="Middle" fontName="Calibri" fontSize="9" isBold="false"/>
+	<style name="field-value-basic" vTextAlign="Top" isBlankWhenNull="true" fontName="Calibri"/>
+	<style name="notes-label" vTextAlign="Top" fontName="Calibri" isBold="true"/>
+	<style name="background-style" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{no}.intValue() % 2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F7F7F7"/>
+		</conditionalStyle>
+	</style>
+	<style name="letter-details" vTextAlign="Top" fontName="Calibri" fontSize="10" isBold="false">
+		<paragraph lineSpacing="Single" lineSpacingSize="1.2"/>
+	</style>
+	<parameter name="institutionLogo" class="java.awt.Image"/>
+	<parameter name="institutionName" class="java.lang.String"/>
+	<parameter name="unitName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="preparedDate" class="java.time.LocalDate"/>
+	<field name="departmentName" class="java.lang.String"/>
+	<field name="pvId" class="java.lang.String"/>
+	<field name="fundingSource" class="java.lang.String"/>
+	<field name="unitName" class="java.lang.String"/>
+	<field name="lpoNo" class="java.lang.String"/>
+	<field name="sraNo" class="java.lang.String"/>
+	<field name="lpoDate" class="java.time.LocalDate"/>
+	<field name="sraDate" class="java.time.LocalDate"/>
+	<field name="invoiceNo" class="java.lang.String"/>
+	<field name="paymentDetail" class="java.lang.String"/>
+	<field name="account" class="java.lang.String"/>
+	<field name="chequeIssuedDate" class="java.time.LocalDate"/>
+	<field name="chequeNo" class="java.lang.String"/>
+	<field name="amountInWords" class="java.lang.String"/>
+	<field name="preparedByTitle" class="java.lang.String"/>
+	<field name="preparedByName" class="java.lang.String"/>
+	<field name="verifiedByTitle" class="java.lang.String"/>
+	<field name="verifiedByName" class="java.lang.String"/>
+	<field name="approvedByTitle" class="java.lang.String"/>
+	<field name="approvedByName" class="java.lang.String"/>
+	<field name="reviewedByTitle" class="java.lang.String"/>
+	<field name="reviewedByName" class="java.lang.String"/>
+	<field name="supplierName" class="java.lang.String"/>
+	<field name="supplierAddress" class="java.lang.String"/>
+	<field name="empty" class="java.lang.String"/>
+	<field name="amountPayable" class="java.lang.Double"/>
+	<field name="chequeWrittenDate" class="java.time.LocalDate"/>
+	<variable name="no" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{pvId}]]></variableExpression>
+	</variable>
+	<variable name="totalAmount" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{amountPayable}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="294" splitType="Stretch">
+			<staticText>
+				<reportElement style="field-label" x="464" y="274" width="91" height="20" uuid="34dd7127-7121-4c10-a033-03042fbc0ad1"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[AMOUNT (GHC)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="30" y="260" width="68" height="34" uuid="35ff8706-b696-4b4c-8f5a-fbf90a3f4a79"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[DATE OF CHEQUE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="98" y="274" width="98" height="20" uuid="6001aa3a-ac69-41f5-9ac9-033e16fa55d3"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[CHEQUE NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="0" y="260" width="30" height="34" uuid="8bc36b5d-bc36-4fc6-8675-11b35e08e2ac"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[SRL NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="2" width="160" height="30" uuid="4c4f2bc1-01f0-4c7a-a4d9-6b7db5738b5a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESTRICTED]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="220" y="38" width="91" height="80" uuid="3c413064-1974-4cad-9a93-4393167b283a"/>
+				<imageExpression><![CDATA[$P{institutionLogo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="193" width="540" height="27" uuid="6b336836-781c-442b-8a67-8ffd45898f66"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHEQUE(S) FOR PAYMENT FROM THE PEACE SUPPORT OPERATIONS CEDI ACCOUNT NO 10121130009151]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="25" width="184" height="60" uuid="a01ee883-19c2-4973-b61b-c37bf9bb491b"/>
+				<text><![CDATA[Dept. of Defence Financial Comptroller
+Ghana Armed Forces
+BURMA CAMP
+Accra 777960]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="131" width="140" height="57" uuid="60072737-6dee-41c9-a714-892822f475ed"/>
+				<text><![CDATA[The Manager
+Ghana Revenue Authority
+KINBU-SUB LTO
+Accra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="370" y="90" width="40" height="20" uuid="d37f6c1e-a9f4-4f7a-9ff9-163af448132d"/>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="410" y="90" width="142" height="20" uuid="e9e5d5f0-5efd-4fd2-8a25-ee4e1b6af5c8"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="0" y="105" width="40" height="20" uuid="fd8c3117-c890-402e-8d3b-46e5bdaa7f0b"/>
+				<text><![CDATA[REF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="40" y="105" width="142" height="20" uuid="2d4ad6a2-abff-419c-bf58-e1fd1e34fcc2"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="196" y="274" width="268" height="20" uuid="5970cda1-4cab-420e-baa3-ac240e35ac5f"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[DETAILS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="letter-details" x="0" y="227" width="509" height="26" uuid="bfee2c21-5295-462f-ac17-151af9ac42a2"/>
+				<textElement markup="html"/>
+				<text><![CDATA[Find below details of cheques released today as payment from the Peace Support Operation Cedi Account]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement key="" style="background-style" mode="Opaque" x="0" y="0" width="555" height="17" uuid="999e4a32-5770-4bd5-8a5d-6ec4b5694ff0"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#4A4A4A"/>
+				</box>
+				<textField>
+					<reportElement style="detail-data" x="29" y="0" width="69" height="15" uuid="f1fb5b1e-bab7-41bb-9204-53b4426de8b2"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{chequeWrittenDate})]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement style="detail-data" x="464" y="0" width="90" height="15" uuid="27a0b3d0-e00c-412d-933b-40d27341fe1a"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{amountPayable}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="196" y="0" width="268" height="15" uuid="86d7a207-88f9-4c65-a622-57cbb2c2f364"/>
+					<textFieldExpression><![CDATA[$F{supplierName} +" - " + $F{paymentDetail}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="98" y="0" width="98" height="15" uuid="b658023f-36b7-4cfb-9e68-7a7acd31333b"/>
+					<textFieldExpression><![CDATA[$F{chequeNo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="1" y="0" width="28" height="15" uuid="4be8c96b-d889-4319-b8ad-b439083f7fcb"/>
+					<textFieldExpression><![CDATA[$V{no}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="44" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="462" y="0" width="92" height="20" uuid="f7659863-7495-4d0c-929a-792bea8ffd0f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{totalAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

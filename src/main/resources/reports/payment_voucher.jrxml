@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5f4b8616-08bc-40c8-92b0-258ec80fd56d">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="field-value" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri">
+		<box>
+			<bottomPen lineWidth="0.25" lineStyle="Dotted" lineColor="#404040"/>
+		</box>
+	</style>
+	<style name="field-label" vTextAlign="Bottom" fontName="Calibri" isBold="true"/>
+	<style name="section-description" hTextAlign="Center" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri" fontSize="8"/>
+	<style name="section-field-label" vTextAlign="Bottom" fontName="Calibri" fontSize="9" isBold="false"/>
+	<style name="section-field-header" hTextAlign="Center" vTextAlign="Middle" fontName="Calibri" fontSize="9" isBold="true"/>
+	<style name="field-value-basic" vTextAlign="Top" isBlankWhenNull="true" fontName="Calibri"/>
+	<style name="Style1"/>
+	<style name="notes-label" vTextAlign="Top" fontName="Calibri" isBold="true"/>
+	<parameter name="institutionLogo" class="java.awt.Image"/>
+	<parameter name="approveByLabel" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="departmentName" class="java.lang.String"/>
+	<field name="pvId" class="java.lang.String"/>
+	<field name="fundingSource" class="java.lang.String"/>
+	<field name="unitName" class="java.lang.String"/>
+	<field name="lpoNo" class="java.lang.String"/>
+	<field name="sraNo" class="java.lang.String"/>
+	<field name="lpoDate" class="java.time.LocalDate"/>
+	<field name="sraDate" class="java.time.LocalDate"/>
+	<field name="invoiceNo" class="java.lang.String"/>
+	<field name="paymentDetail" class="java.lang.String"/>
+	<field name="account" class="java.lang.String"/>
+	<field name="chequeIssuedDate" class="java.time.LocalDate"/>
+	<field name="chequeNo" class="java.lang.String"/>
+	<field name="amountInWords" class="java.lang.String"/>
+	<field name="preparedByTitle" class="java.lang.String"/>
+	<field name="preparedByName" class="java.lang.String"/>
+	<field name="verifiedByTitle" class="java.lang.String"/>
+	<field name="verifiedByName" class="java.lang.String"/>
+	<field name="approvedByTitle" class="java.lang.String"/>
+	<field name="approvedByName" class="java.lang.String"/>
+	<field name="reviewedByTitle" class="java.lang.String"/>
+	<field name="reviewedByName" class="java.lang.String"/>
+	<field name="supplierName" class="java.lang.String"/>
+	<field name="supplierAddress" class="java.lang.String"/>
+	<field name="empty" class="java.lang.String"/>
+	<field name="amountPayable" class="java.lang.Double"/>
+	<field name="vatAmount" class="java.lang.Double"/>
+	<field name="invoiceIssueDate" class="java.time.LocalDate"/>
+	<field name="tourismLevyAmount" class="java.lang.Double"/>
+	<field name="witholdingTaxAmount" class="java.lang.Double"/>
+	<field name="grossAmount" class="java.lang.Double"/>
+	<field name="invoiceAmount" class="java.lang.Double"/>
+	<field name="vatRate" class="java.lang.Double"/>
+	<field name="witholdingTaxRate" class="java.lang.Double"/>
+	<field name="tourismLevyRate" class="java.lang.Double"/>
+	<field name="approved" class="java.lang.Boolean"/>
+	<field name="preparedDate" class="java.time.LocalDate"/>
+	<field name="whtVat" class="java.lang.Double"/>
+	<field name="bankAccount" class="java.lang.String"/>
+	<field name="otherCharges" class="java.lang.Double"/>
+	<field name="nhisRate" class="java.lang.Double"/>
+	<field name="nhisAmount" class="java.lang.Double"/>
+	<field name="voucherCurrency" class="java.lang.String"/>
+	<field name="authorisedDate" class="java.time.LocalDate"/>
+	<field name="approvedDate" class="java.time.LocalDate"/>
+	<background>
+		<band height="362" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="150" width="512" height="140" forecolor="#D1D1D1" uuid="1d7c5518-1dc8-47a2-b583-f9e36172bc0e">
+					<printWhenExpression><![CDATA[$F{approved} == false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="50"/>
+				</textElement>
+				<text><![CDATA[NOT APPROVED]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="773" splitType="Stretch">
+			<staticText>
+				<reportElement x="160" y="0" width="240" height="30" uuid="74ebde38-699b-492a-bade-33943d08da65"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ghana Armed Forces]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="0" y="62" width="80" height="15" uuid="4c5520b9-667c-4abd-a18d-79ab97417439"/>
+				<text><![CDATA[Entity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="0" y="80" width="80" height="15" uuid="3c3b4e6e-edaa-4cb6-8ffd-7048e64964ca"/>
+				<text><![CDATA[Department]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="355" y="62" width="100" height="15" uuid="e02a60d3-cef4-4217-8d65-a424ad99b5c4"/>
+				<text><![CDATA[PV :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="355" y="101" width="100" height="15" uuid="9c116fe2-8f6c-447a-bc0f-cd84908e68a0"/>
+				<text><![CDATA[Source of Funds :]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="251" y="60" width="60" height="50" uuid="817f9e9a-6ba2-4b2e-ba69-4cfca31b6d84"/>
+				<imageExpression><![CDATA[$P{institutionLogo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement style="field-value" x="80" y="80" width="155" height="15" uuid="16c5175b-e7a1-4219-9118-d3131a2004f4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fbaa65f8-9dd3-47e8-810f-eb9bfa8d44c2"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{departmentName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="field-value" x="80" y="62" width="155" height="15" uuid="9df38da6-f98f-4566-a547-303e89ecb977">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5bf8c3a3-7f1c-4165-8e33-a86d71f1ac61"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{unitName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="field-value" x="455" y="62" width="100" height="15" uuid="1c99ade3-d1c8-4858-aa7e-adfbdb652178">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a85b3077-93fc-4984-bd95-7fab4be25e67"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{pvId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="field-value" x="455" y="101" width="100" height="15" uuid="b5e14e77-426b-4b73-9e51-d94f9a881086">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3103040-7f7d-4bf2-b550-f760c07837ac"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{fundingSource}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="131" width="555" height="19" uuid="a75405a4-f783-4dd1-b5df-cc6dcc8669aa"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEPARTMENTAL PAYMENT VOUCHER]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="150" width="280" height="80" uuid="630c85ce-bea1-45c8-aafc-e2e764e3777a"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement style="section-description" x="41" y="3" width="211" height="15" uuid="e3758e55-b880-4342-84e7-333c89c45fc1"/>
+					<text><![CDATA[Recipient as indicated below:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="23" width="110" height="15" uuid="8a1904de-2b30-41b5-93c2-0e75652af437"/>
+					<text><![CDATA[Payee Name :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" positionType="Float" x="10" y="41" width="110" height="15" uuid="89046077-476a-4915-939b-bad31f6be240"/>
+					<text><![CDATA[Payee Address]]></text>
+				</staticText>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="field-value" x="130" y="23" width="140" height="15" uuid="48928b69-f37b-4381-9aa1-4c4e55f85cb7"/>
+					<textFieldExpression><![CDATA[$F{supplierName}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="field-value" positionType="Float" x="130" y="41" width="140" height="15" uuid="ca6aef6d-0c53-4223-83a4-750b97b583d1"/>
+					<textFieldExpression><![CDATA[$F{supplierAddress}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="230" width="555" height="70" uuid="6d1b2485-d0e0-45ea-912c-e11d3b7ce763"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="13" width="152" height="15" uuid="6bb4d6b9-681d-4e65-9528-1847f7cb2dd4"/>
+					<text><![CDATA[Purchase Order ("PO") No :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="47" width="152" height="15" uuid="09755786-3a4a-4ccd-9d98-9f3692578e55"/>
+					<text><![CDATA[Supplier's Bill/Invoice No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="31" width="152" height="15" uuid="000da4d9-4e76-497a-b73e-4a1672e457be"/>
+					<text><![CDATA[Stores Receipt Advice ("SRA") No :]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="field-value" x="170" y="13" width="100" height="15" uuid="aedaa539-85c4-4075-aa10-70bb162a26b0"/>
+					<textFieldExpression><![CDATA[$F{lpoNo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="field-value" x="170" y="31" width="100" height="15" uuid="2c37dba3-619a-4d3d-a548-5586d0acba35"/>
+					<textFieldExpression><![CDATA[$F{sraNo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="field-value" x="170" y="47" width="100" height="15" uuid="ce245085-0a21-41bf-a94f-c89c1a754763"/>
+					<textFieldExpression><![CDATA[$F{invoiceNo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-label" x="291" y="13" width="152" height="15" uuid="a6a5f611-ef0d-40a8-b866-4d0760e8a07c"/>
+					<text><![CDATA[Date :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="291" y="31" width="152" height="15" uuid="8703f46e-6fe1-4bc7-abde-a122f7ed577e"/>
+					<text><![CDATA[Date :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="291" y="47" width="152" height="15" uuid="b2230b8f-0a10-46bc-89d5-ae8b5a69831f"/>
+					<text><![CDATA[Date :]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement style="field-value" x="451" y="47" width="100" height="15" uuid="181d2b04-0d02-4872-b8b1-0ee15f32e6bb"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{invoiceIssueDate})]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement style="field-value" x="451" y="31" width="100" height="15" uuid="41e36dd5-6f3d-4aa1-b7d9-fd7a7292a5d8"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{sraDate})]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement style="field-value" x="451" y="13" width="100" height="15" uuid="62ecfb7c-bfdb-4aa3-ac65-f507bc2d8945"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{lpoDate})]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="280" y="150" width="275" height="80" uuid="a37ad257-d789-4d5e-8871-6aaf3c91fef9"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement style="section-description" x="41" y="3" width="211" height="15" uuid="061b7df2-b085-4a5e-81b1-946ba4f4b201"/>
+					<text><![CDATA[Received as indicated below:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="23" width="90" height="15" uuid="5522361a-102f-4313-97db-33dbb5a71cc8"/>
+					<text><![CDATA[Payee Signature]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="57" width="90" height="15" uuid="d93b24d3-c445-4af7-b42d-0bf778c94b64"/>
+					<text><![CDATA[Date Received]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="10" y="41" width="90" height="15" uuid="94dda29a-6970-4cc9-91f1-4be2fc187b77"/>
+					<text><![CDATA[Name (Printed)]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="field-value" x="110" y="23" width="160" height="15" uuid="adcded32-6395-45c0-92cf-35232482f993"/>
+					<textFieldExpression><![CDATA[$F{empty}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="field-value" x="110" y="41" width="160" height="15" uuid="d8313e98-559e-4a5a-a392-a40624e13dc5"/>
+					<textFieldExpression><![CDATA[$F{empty}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="field-value" x="110" y="57" width="160" height="15" uuid="580cb676-e541-469b-9cc8-8ca3ef48a208"/>
+					<textFieldExpression><![CDATA[$F{empty}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement style="section-field-header" x="0" y="300" width="280" height="50" uuid="488355c7-1938-40e5-856e-c57f1c8f8972"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Payment Detail]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="section-field-header" x="280" y="300" width="275" height="20" uuid="d7d2157f-eef8-47f4-a9de-0b91e53952c2"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[ACCOUNTING ENTRIES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="section-field-header" x="280" y="320" width="80" height="60" uuid="3f9ee281-d421-49c4-8db4-6a67e6b4c29d"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[Account Code / No]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="360" y="320" width="195" height="156" uuid="257c35f4-a51f-4a79-88c1-83ee5763d1a5"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement style="section-field-label" x="0" y="0" width="110" height="15" uuid="b393720c-b875-4cbe-8a41-6057a17468d9"/>
+					<box leftPadding="5"/>
+					<textElement>
+						<font size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Invoice Amount (without VAT)]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="0" width="71" height="15" uuid="09ecc457-aa7d-4a68-9e83-7efea218357a"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{invoiceAmount}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="32" width="71" height="14" uuid="7dc592d3-3427-4192-a358-c1913bb67e96"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{vatAmount}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="139" width="71" height="15" uuid="a4126804-a0af-4c36-bee9-6e1b1048a739"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{amountPayable}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="48" width="71" height="14" uuid="6fcdc637-f2c0-4e0b-b371-2af41d5f45a4"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{tourismLevyAmount}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-label" x="0" y="139" width="110" height="15" uuid="e7eeec2c-522d-441a-94f0-f10994e47b58"/>
+					<box leftPadding="5"/>
+					<textElement>
+						<font size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Net Payment]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="106" width="71" height="14" uuid="dac01093-cd56-48d4-8fa0-c8028f4d8549"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{witholdingTaxAmount}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="section-field-label" x="20" y="32" width="90" height="14" uuid="3e7a9d98-55cb-429c-ad48-ab0e0a544521"/>
+					<box leftPadding="5"/>
+					<textFieldExpression><![CDATA["VAT ("+$F{vatRate}+" %) "]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="section-field-label" x="20" y="106" width="90" height="14" uuid="b188e9de-bffd-494f-96c4-705cdf15f362"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA["Withholding Tax (" +$F{witholdingTaxRate} +" %)"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="section-field-label" x="20" y="48" width="90" height="14" uuid="208ee346-e338-41ee-b711-7dab30156d9a"/>
+					<box leftPadding="5"/>
+					<textFieldExpression><![CDATA["Tourism Levy ("+$F{tourismLevyRate} + " % )"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-label" x="1" y="89" width="109" height="14" uuid="699d48ce-faa0-4bc2-a0a5-b8c9635a03ff"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left">
+						<font size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Less]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="20" y="121" width="90" height="14" uuid="f7fc633a-337a-4da1-b9bd-19115e3acfba"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[WHT VAT (7%)]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="121" width="71" height="14" uuid="ffd5eaa4-3ec9-4881-bbc3-b5c39e327c2a"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{whtVat}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="80" width="71" height="14" uuid="7198c411-2ff6-4b1c-a44b-81641495a499"/>
+					<textElement textAlignment="Right">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{grossAmount}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-label" x="20" y="80" width="90" height="14" uuid="bdbde7ed-0319-4f0e-8898-9bffe2603c0c"/>
+					<box leftPadding="5"/>
+					<textElement>
+						<font isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Gross Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-label" x="20" y="64" width="90" height="14" uuid="1cc2d1d5-d823-48e8-9022-bd0eeacb4755"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[Others]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="64" width="71" height="14" uuid="e509c498-8c6d-4dd4-8b5d-a94f3a7067ba"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{otherCharges}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="section-field-label" x="20" y="16" width="90" height="14" uuid="68d22ca5-2e47-4636-b781-0b4df95eed38"/>
+					<box leftPadding="5"/>
+					<textFieldExpression><![CDATA["NHIS/GetFund ("+$F{nhisRate}+" %) "]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement style="field-value" x="113" y="16" width="71" height="14" uuid="7d12baac-830e-47ff-b4a4-f716d2ba41a6"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{nhisAmount}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="field-value" x="113" y="-18" width="71" height="15" uuid="fffa97ba-63ce-40af-8aec-78eacf402670"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{voucherCurrency}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<textField>
+				<reportElement style="field-value-basic" x="0" y="350" width="280" height="126" uuid="e25336cc-e463-43c3-8ab5-778cb75ff38d"/>
+				<box padding="5">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{paymentDetail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="field-value-basic" x="280" y="380" width="80" height="96" uuid="8b8e1b2e-d50f-4cd8-b9b7-44c56b92b7d6"/>
+				<box leftPadding="5">
+					<pen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{account}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement x="280" y="476" width="275" height="54" uuid="3ab375d2-dcb1-4d71-b60d-1fd5870c380f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textField>
+					<reportElement style="field-value" x="100" y="25" width="164" height="15" uuid="ce9126b9-bbe1-48aa-8515-85600b46f4a7"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{chequeIssuedDate})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-label" x="20" y="25" width="70" height="15" uuid="6cfb26f3-4c82-435c-a363-55ae756f3323"/>
+					<text><![CDATA[Issued Date]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="field-value" x="100" y="7" width="164" height="15" uuid="ac91ae56-1ff9-433f-92cf-a87570567758"/>
+					<textFieldExpression><![CDATA[$F{chequeNo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-label" x="20" y="7" width="70" height="15" uuid="f29f7cbc-87e7-4202-85a2-8534cf261cc2"/>
+					<text><![CDATA[Cheque No]]></text>
+				</staticText>
+			</frame>
+			<textField>
+				<reportElement style="field-value-basic" x="0" y="476" width="280" height="54" uuid="83c65089-df97-403c-8c6b-1b12361ac6fa"/>
+				<box padding="5">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{amountInWords}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement x="0" y="530" width="555" height="100" uuid="041a616c-a616-4e1c-a24f-ca45182dae59"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement style="section-field-header" x="75" y="0" width="120" height="20" uuid="f23d84e9-d7d8-4787-9d20-5ee71fd28923"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Prepared/Entered By :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="field-value-basic" x="0" y="20" width="75" height="20" uuid="34dddf25-29a8-4900-8bf9-e641a3af1a7a"/>
+					<box leftPadding="7">
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Title :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="field-value-basic" x="0" y="40" width="75" height="20" uuid="388d893b-94a1-450a-b413-ec7ac5d8421e"/>
+					<box leftPadding="7">
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Name :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="field-value-basic" x="0" y="60" width="75" height="20" uuid="cc68d3f9-b31a-4bbe-a147-966a5af530aa"/>
+					<box leftPadding="7">
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Signature :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="field-value-basic" x="0" y="80" width="75" height="20" uuid="c6846dc7-25b7-43c4-93ba-c96945289b64"/>
+					<box leftPadding="7">
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Date :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-header" x="75" y="20" width="120" height="20" uuid="8d7c6f67-806c-441e-baed-4f4ee1a0b409"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Accounts Staff Member]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="section-description" x="75" y="40" width="120" height="20" uuid="ae1aa1f0-d5a0-4a5e-a611-4dd97c1abb52"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{preparedByName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="field-value" x="75" y="60" width="120" height="20" uuid="029c49e6-8395-4062-80ae-31fba7a24b79"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[ ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-header" x="195" y="0" width="120" height="20" uuid="76ceb0da-3098-43c8-b542-9cfdcaa00bda"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Verified By :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-header" x="195" y="20" width="120" height="20" uuid="6d572184-4064-454f-a4a7-d7354b3f29ab"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Account Holder]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="section-description" x="195" y="40" width="120" height="20" uuid="84a6df86-3d47-4ff6-8289-109b046d49f9"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{verifiedByName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="field-value" x="195" y="60" width="120" height="20" uuid="e7ac1eea-6d5e-4967-9c1e-7c25a1adcb05"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[ ]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="field-value" x="195" y="80" width="120" height="20" uuid="ce22f2a8-68a8-445e-b62e-d4f5cc0a8b35"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{authorisedDate})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-header" x="315" y="0" width="120" height="20" uuid="7469bc25-1e21-4254-80e5-233a0e86047a"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Approved By :]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement style="section-field-header" x="315" y="20" width="120" height="20" uuid="1e2e826e-bb02-42b1-bcd7-889a5316536c"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$P{approveByLabel}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="section-description" x="315" y="40" width="120" height="20" uuid="07a1b23b-19d5-4693-b65e-6fc00c022c47"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{approvedByName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="field-value" x="315" y="60" width="120" height="20" uuid="ea8ded00-09fc-4580-b3d5-735646728662"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[ ]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="field-value" x="315" y="80" width="120" height="20" uuid="75c93e3c-c8ca-426d-824e-425018e66ca0"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{approvedDate})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="section-field-header" x="435" y="0" width="120" height="20" uuid="e081ed10-7748-4e05-8c79-d1301bc6d7d5">
+						<printWhenExpression><![CDATA[false]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Reviewed By :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="section-field-header" x="435" y="20" width="120" height="20" uuid="3b7b3349-35ff-4494-8f43-58fb61392d5b">
+						<printWhenExpression><![CDATA[false]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[Treasury Official]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="section-description" x="435" y="40" width="120" height="20" uuid="9e1cb963-ed60-4c81-89dc-f77de24ce4a2">
+						<printWhenExpression><![CDATA[false]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{reviewedByName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="field-value" x="435" y="60" width="120" height="20" uuid="b6a8de76-24cd-431a-abb4-cbe3646882e5">
+						<printWhenExpression><![CDATA[false]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[ ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="field-value" x="435" y="80" width="120" height="20" uuid="e77db3cc-0228-4bed-88c6-d2d966800e42">
+						<printWhenExpression><![CDATA[false]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="field-value" x="75" y="80" width="120" height="20" uuid="46fd0428-7b86-4165-9ba3-bc6fe2594656"/>
+					<box>
+						<pen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy").format($F{preparedDate})]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement style="notes-label" x="0" y="689" width="100" height="48" uuid="8ea92f81-85e7-49ab-8dfd-f952361eb262"/>
+				<text><![CDATA[Account Holder  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="notes-label" x="0" y="646" width="100" height="38" uuid="9a1d8240-085f-45a1-87cc-dc43cb4d2fbd"/>
+				<text><![CDATA[Accounts Officer :]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="notes-label" x="0" y="741" width="100" height="30" uuid="18c8160d-ddba-4c5f-a7e8-11514da0f2b6"/>
+				<textFieldExpression><![CDATA["DFC"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="notes-label" x="0" y="741" width="100" height="30" uuid="0130445b-8500-4052-b60d-4b8c4e5aec4a"/>
+				<textFieldExpression><![CDATA[$P{approveByLabel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="field-value" x="100" y="647" width="455" height="38" uuid="d8c14da5-c2cf-4d64-8dc9-fa3d29bf000b"/>
+				<text><![CDATA[Hereby certifies that 1) An accurate record of the commitment of the above payment has been previously recorded in the Expenditure Budget Ledger,where required and .2) The above amount(s) have been duly entered as a liquidation in the Expenditure buget ledger on the data show above]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-value" x="100" y="689" width="454" height="48" uuid="8e7b243b-9aeb-4e7e-aa10-c043252eb579"/>
+				<text><![CDATA[Hereby Certifies that 1)Authorized officials have signed the attached ARA,invoice and / or other supporting documentation certifying that goods or services were ,in fact received or,that payment in advance or receipts is allowed under GAF Rules and in structions, and   2)Evidence of a previous commitment of funds in the form of an LPO is attached were required]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-value" x="100" y="741" width="454" height="30" uuid="a791910f-f44d-4a36-8667-ae4d36a0effa"/>
+				<text><![CDATA[Hereby certifies that 1) the above payment is made in accordance with proper authority and 2) is a proper disbursement of public funds]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="section-description" x="185" y="628" width="170" height="20" uuid="86a36ec8-9038-47af-9906-1a7a19199c15"/>
+				<text><![CDATA[Certifications]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="160" y="30" width="240" height="21" uuid="6c7be336-3c41-4e7c-9b91-c1009251ca2c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unitName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="field-label" x="355" y="82" width="100" height="15" uuid="96fb9fe4-b749-4c51-bdd3-4ff266eed468"/>
+				<text><![CDATA[Bank]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="field-value" x="455" y="82" width="100" height="15" uuid="400ccac3-c650-460a-9452-4992b3ecd8b0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a85b3077-93fc-4984-bd95-7fab4be25e67"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{bankAccount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="21" splitType="Stretch"/>
+	</summary>
+</jasperReport>

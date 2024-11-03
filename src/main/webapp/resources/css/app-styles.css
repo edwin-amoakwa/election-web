@@ -1,0 +1,134 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 29, 2017, 12:19:47 PM
+    Author     : Edwin
+*/
+
+td a {
+    color: #00c0ef;
+}
+
+a.delete 
+{
+    color: red;
+}
+
+
+.spaced-table td
+{
+    padding: 0.2em;
+}
+
+.ui-datatable table {
+    table-layout: auto !important;
+}
+
+
+.field-label
+{
+    font-weight: bold;
+    margin-right: 5px;
+    margin-left: 2px;
+}
+
+.field-label-required
+{
+    /*font-weight: bold;*/
+    margin-right: 5px;
+    color: maroon;
+    border-bottom: 1px  #CCC dashed;
+}
+
+.field-value
+{
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+  font-weight: 400;
+  line-height: 1.5;
+  min-height: 2.5rem;
+  color: #212529;
+  background-color: #f8f9fa;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0.375rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+/*.field-value
+{
+        font-weight: bold;
+    display: inline-block;
+    display: block;
+    min-height: 1em;
+    margin: 2px;
+    padding: 2px 5px 2px 5px;
+        background: #FFF;
+    border:solid 1px #CCC;   
+        background-color: #e9e2e2;
+
+}*/
+
+.td a {
+    color: blue;
+}
+
+.ui-widget-content a{
+    color: #1E88E5;
+}
+
+
+.delete
+{
+    color: red;
+}
+
+.delete a
+{
+    color: red !important;
+}
+
+.selected
+{
+    font-weight: bolder;
+    color: sienna;
+    font-style: italic;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    margin: 0 2.3em;
+    line-height: 1.8em;
+    text-align: center;
+    color:black;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+}
+
+fieldset { 
+    border-top:1px solid #e0e0e0;
+    margin-top: 10px;
+    padding: 10px;
+    /*background-color: #f0f1f4;*/
+}
+
+legend {
+    padding: 0.2em 0.5em;
+    border:1px solid #259dab;
+    color: white;
+    background-color: #259dab;
+    font-size:90%;
+    text-align:left;
+    width: auto;
+}
+
+.fill-space
+{
+    width: 99%;
+}

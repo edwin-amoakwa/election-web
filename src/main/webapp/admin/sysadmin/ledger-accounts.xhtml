@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="jakarta.faces.composite/stately">
+
+    <ui:define name="pageTitle">
+       #{msg.accounts}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                <h:outputText value="#{msg.account_code}" />
+                <p:inputText value="#{accountController.bankAccount.accountCode}" />
+                
+                <h:outputText value="#{msg.account_name}" />
+                <p:inputText value="#{accountController.bankAccount.accountName}" />     
+                
+                <h:outputText value="#{msg.account_type}" />
+                <stately:selectOne value="#{accountController.bankAccount.accountType}" 
+                                   items="#{commonOptions.accountTypesList}"/>
+                
+                
+                <ui:remove>
+                    <h:outputText value="#{msg.bank}" />
+                <p:inputText value="#{accountController.bankAccount.bankName}" />
+                </ui:remove>
+                
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{accountController.saveCounterparty()}" 
+                                             cancelButtonAction="#{accountController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{accountController.bankAccountsList}" var="bankAccount">
+                <p:column headerText="#{msg.account_code}">
+                    <h:outputText value="#{bankAccount.accountCode}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.account_name}">
+                    <h:outputText value="#{bankAccount.accountName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.account_type}" >
+                      <h:outputText value="#{bankAccount.accountType.label}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.bank}" rendered="false">
+                    <h:outputText value="#{bankAccount.bankName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{accountController.editBankAccount(bankAccount)}"/>
+                </p:column>
+                
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.delete}" styleClass="delete"
+                                   action="#{accountController.deleteBankAccount(bankAccount)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

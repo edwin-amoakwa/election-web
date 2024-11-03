@@ -1,0 +1,266 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+                xmlns:epv="jakarta.faces.composite/epv">
+
+    <ui:define name="pageTitle">                
+        #{msg.gl_records}
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+
+            <center>
+                <p:panel>
+                    <h:form>
+                        <h:panelGrid columns="4" styleClass="spaced-table">
+                            <h:outputText value="Date From" />
+                            <p:calendar value="#{generalLedgerRecordsController.dateRange.fromDate}" 
+                                        pattern="#{msg.date_pattern_1}" navigator="true" />
+
+                            <h:outputText value="Date To" />
+                            <p:calendar value="#{generalLedgerRecordsController.dateRange.toDate}" 
+                                        pattern="#{msg.date_pattern_1}" navigator="true" />
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="6" styleClass="spaced-table">
+
+
+
+                            <h:outputText value="#{msg.ledger_account}" />
+                            <p:selectOneMenu value="#{generalLedgerRecordsController.cashTransactionQP.account}"
+                                             filterMatchMode="contains" filter="true">
+                                <f:selectItem itemLabel="#{msg.select_one}" />
+                                <f:selectItems value="#{userCommonOption.ledgerAccountsList}" />
+                            </p:selectOneMenu>
+
+
+                            <h:outputText value="#{msg.type}" />
+                            <h:selectOneMenu value="#{generalLedgerRecordsController.cashTransactionQP.accountType}"
+                                             styleClass="form-control">
+                                <f:selectItem itemLabel="#{msg.select_one}" />
+                                <f:selectItems value="#{userCommonOption.ledgerAccountTypesList}" />
+                            </h:selectOneMenu>
+
+                        </h:panelGrid>
+
+                        <h:panelGrid styleClass="spaced-table" columns="4" >
+                            <p:commandButton value="Search Details" update=":searchResultPanel"
+                                             action="#{generalLedgerRecordsController.search()}" />
+
+                            <p:commandButton value="Search (Summarise by Ledger)" update=":searchResultPanel"
+                                             action="#{generalLedgerRecordsController.searchSummary()}" />
+
+                            <p:commandButton value="Search (Summarise by LedgerType)" update=":searchResultPanel"
+                                             action="#{generalLedgerRecordsController.prepareByLedgerType()}" />
+                        </h:panelGrid>
+
+
+
+
+                    </h:form>
+                </p:panel>
+            </center>
+
+
+            <br />
+            <h:panelGroup id="searchResultPanel">
+
+                <p:tabView activeIndex="#{generalLedgerRecordsController.selectedTabIndex}">
+
+                    <p:ajax event="tabChange" listener="#{generalLedgerRecordsController.onTabChange}" />
+
+                    <p:tab title="Detail Transactions">
+                        <h:form>
+                            <h:commandLink>
+                                Export
+                                <p:dataExporter type="xls" target="cashTransHistoryTable" fileName="BankTransactionsList" />
+                            </h:commandLink>
+
+                            <p:dataTable id="cashTransHistoryTable" value="#{generalLedgerRecordsController.cashTransactionsList}" var="cashTransaction" rows="20"
+                                         paginator="true" paginatorPosition="bottom">
+
+
+
+                                <p:column headerText="#{msg.value_date}">
+                                    <h:outputText value="#{cashTransaction.valueDate}" >
+                                        <f:convertDateTime pattern="#{msg.date_pattern_1}" type="localDate"/>
+                                    </h:outputText>
+                                </p:column>
+                                
+                                  <p:column headerText="#{msg.account}">
+                                    <h:outputText value="#{cashTransaction.account.accountName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.narration}"  filterMatchMode="contains" 
+                                          filterBy="#{cashTransaction.narration}" >
+                                    <h:outputText value="#{cashTransaction.narration}" />
+                                </p:column>
+
+
+
+                              
+
+                                <p:column headerText="#{msg.credit}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.credit}" rendered="#{cashTransaction.credit != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.debit}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.debit}" rendered="#{cashTransaction.debit != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.balance}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.balance}" rendered="#{cashTransaction.balance != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.action}" rendered="false">
+                                    <p:commandLink value="#{msg.select}" ajax="false"
+                                                   action="#{cashTransactionController.selectTransaction(cashTransaction)}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+
+                        <center>
+                            <br />
+                            <epv:summary value="#{generalLedgerRecordsController.detailMoneySummary}" />
+                        </center>
+
+                    </p:tab>
+
+                    <p:tab title="Summary Transactions (Ledger Account)">
+
+                        <h:form>
+                            <h:commandLink>
+                                Export
+                                <p:dataExporter type="xls" target="summaryCashTransHistoryTable" fileName="BankTransactionsList" />
+                            </h:commandLink>
+
+
+
+                            <p:dataTable  value="#{generalLedgerRecordsController.summaryCashTransactionByLedgerList}" var="cashTransaction" rows="20"
+                                          paginator="true" paginatorPosition="bottom" id="summaryCashTransHistoryTable"  sortMode="multiple">
+
+
+
+                                <p:column headerText="#{msg.ledger_account}"  sortBy="#{cashTransaction.account.accountName}">
+                                    <h:outputText value="#{cashTransaction.account.accountName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.type}"  sortBy="#{cashTransaction.account.accountType}">
+                                    <h:outputText value="#{cashTransaction.account.accountType}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.credit}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.credit}" rendered="#{cashTransaction.credit != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.debit}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.debit}" rendered="#{cashTransaction.debit != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.balance}" styleClass="text-right"  sortBy="#{cashTransaction.amount}">
+                                    <h:outputText value="#{cashTransaction.amount}" rendered="#{cashTransaction.amount != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.action}" rendered="false">
+                                    <p:commandLink value="#{msg.select}" ajax="false"
+                                                   action="#{cashTransactionController.selectTransaction(cashTransaction)}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+
+                        <center>
+                            <br />
+                            <epv:summary value="#{generalLedgerRecordsController.summaryMoneySummary}" />
+                        </center>
+
+
+                    </p:tab>
+
+
+                    <p:tab title="Summary Transactions (Ledger Type)">
+
+                        <h:form>
+                            <h:commandLink>
+                                Export
+                                <p:dataExporter type="xls" target="summaryCashTransHistoryTable" fileName="BankTransactionsList" />
+                            </h:commandLink>
+
+
+
+                            <p:dataTable  value="#{generalLedgerRecordsController.summaryCashTransactionByLedgerTypeList}" var="cashTransaction" rows="20"
+                                          paginator="true" paginatorPosition="bottom" id="summaryCashTransHistoryTable"  sortMode="multiple">
+
+
+
+
+                                <p:column headerText="#{msg.type}" sortBy="#{cashTransaction.ledgerAccountType}">
+                                    <h:outputText value="#{cashTransaction.ledgerAccountType}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.credit}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.credit}" rendered="#{cashTransaction.credit != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.debit}" styleClass="text-right">
+                                    <h:outputText value="#{cashTransaction.debit}" rendered="#{cashTransaction.debit != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.balance}" styleClass="text-right" sortBy="#{cashTransaction.amount}">
+                                    <h:outputText value="#{cashTransaction.amount}" rendered="#{cashTransaction.amount != 0}">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="#{msg.action}" rendered="false">
+                                    <p:commandLink value="#{msg.select}" ajax="false"
+                                                   action="#{cashTransactionController.selectTransaction(cashTransaction)}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+
+                        <center>
+                            <br />
+                            <epv:summary value="#{generalLedgerRecordsController.summaryByTypeMoneySummary}" />
+                        </center>
+
+
+                    </p:tab>
+
+                </p:tabView>
+
+
+
+
+            </h:panelGroup>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

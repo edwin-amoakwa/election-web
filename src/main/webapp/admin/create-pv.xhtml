@@ -1,0 +1,197 @@
+<h:panelGroup xmlns="http://www.w3.org/1999/xhtml" 
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+              xmlns:epv="jakarta.faces.composite/epv">
+
+
+    <h:panelGroup id="billPayment">
+
+
+
+
+        <epv:bill value="#{billController.selectedBill}" />
+
+        <br />
+
+
+        <h:form rendered="false">
+            <center >
+                <p:panel style="background: cornsilk;" 
+                         rendered="#{userPermission.authoriser}" >
+
+                    <h:panelGrid columns="5" styleClass="spaced-table">
+
+                        <h:outputText value="#{msg.pv_status}" />
+                        <h:selectOneMenu class="form-control " 
+                                         value="#{billController.selectedBill.billStatus}" >
+                            <f:selectItems value="#{userCommonOptions.pvStatusList}" />
+                        </h:selectOneMenu>
+
+                        <p:commandButton value="Update Status" ajax="false"
+                                         action="#{billController.updatePvStatus()}"/>
+
+                    </h:panelGrid>
+                </p:panel>
+            </center>
+        </h:form>
+
+        <h:panelGroup id="paymentVochersPanel">
+
+            <div class="row">
+                <div class="col-lg-4">
+
+                         <fieldset>
+                            <legend>New PV</legend>
+                             <h:form>
+
+                        <p:panel style="background: cornsilk;" >
+
+                            <h:panelGrid columns="2" styleClass="spaced-table">
+
+
+
+                                <h:outputText value="#{msg.bank_account}" />
+                                <p:selectOneMenu value="#{billController.paymentVocher.bankAccount}" 
+                                                 required="true"  filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{msg.select_one}" />
+                                    <f:selectItems value="#{userCommonOptions.bankAccountsList}" />
+                                </p:selectOneMenu>
+
+                                <h:outputText value="#{msg.source_of_fund}"   />
+                                <p:selectOneMenu value="#{billController.paymentVocher.fundingSource}" styleClass="fill-space"
+                                                 required="true"  filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{msg.select_one}" />
+                                    <f:selectItems value="#{userCommonOptions.fundingSourcesList}" />
+                                </p:selectOneMenu>
+
+
+                                <h:outputText value="#{msg.cheque_no}" />
+                                <p:inputText value="#{billController.paymentVocher.chequeNo}" />
+                                
+                                
+                                <h:outputText value="#{msg.payment_amount}" />
+                                <p:inputText value="#{billController.paymentVocher.paymentAmount}" >
+                                     <f:convertNumber pattern="#,##0.00" />
+                                </p:inputText>
+                                
+
+                                <h:outputText value="#{msg.cheque_written_date}" />
+                                <p:calendar value="#{billController.paymentVocher.chequeWrittenDate}" rendered="true"
+                                            pattern="#{msg.date_pattern_1}" navigator="true" required="true"/>
+
+                                
+
+                                <ui:remove>
+                                    
+                                    <h:outputText value="#{msg.received_by}" />
+                                <p:inputText value="#{billController.selectedBill.receivedBy}" 
+                                             required="true"/>
+
+                                <h:outputText value="#{msg.received_date}/#{msg.cheque_issue_date}"   />
+                                <p:calendar value="#{billController.paymentVocher.chequeIssuedDate}" 
+                                            pattern="#{msg.date_pattern_1}" navigator="true" />
+                                    
+                                    
+                                    <h:outputText value="#{msg.received_status}" />
+                                    <h:selectOneMenu class="form-control " 
+                                                     value="#{billController.paymentVocher.receivedStatus}" >
+                                        <f:selectItems value="#{userCommonOptions.receivedStatusList}" />
+                                    </h:selectOneMenu>
+
+                             
+                                    
+                                    <h:outputLabel value="#{msg.given_out_by}" />
+                                    <h:selectOneMenu class="form-control " 
+                                                     value="#{billController.paymentVocher.givenOutBy}" >
+                                        <f:selectItem itemLabel="#{msg.select_one}" noSelectionOption="true" />
+                                        <f:selectItems value="#{userCommonOptions.usersList}" />
+                                    </h:selectOneMenu>
+                                </ui:remove>
+
+                            </h:panelGrid>
+
+                            <center>
+                                <p:commandButton value="Save Voucher" ajax="true" update="@form, :vouchersList"
+                                                 action="#{billController.savePaymentVoucher()}"/>
+                            </center>
+
+
+                        </p:panel>
+
+
+                    </h:form>
+                         </fieldset>
+
+                   
+
+                </div>
+                <div class="col-lg-8">
+
+                    <h:form id="vouchersList">
+
+                        <p:dataTable value="#{billController.billVouchersList}" var="pv">
+                            
+                            <p:column headerText="#{msg.pv_id}">
+                                <h:outputText value="#{pv.paymentNo}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.cheque_written_date}">
+                                <h:outputText value="#{pv.chequeWrittenDate}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.cheque_no}">
+                                <h:outputText value="#{pv.chequeNo}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.bank_account}">
+                                <h:outputText value="#{pv.bankAccount.accountName}" />
+                            </p:column>
+                            
+                            <p:column headerText="#{msg.amount}">
+                                <h:outputText value="#{pv.paymentAmount}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
+                            </p:column>
+                            
+                            <p:column headerText="#{msg.status}">
+                                <h:outputText value="#{pv.pvStatus.label}" />
+                            </p:column>
+
+                            <p:column>
+                                <h:commandLink value="#{msg.edit}"  
+                                               action="#{billController.editPaymentVoucher(pv)}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:commandLink value="#{msg.delete}"  
+                                               action="#{billController.deletePaymentVocher(pv)}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:commandLink value="#{msg.print}" target="_blank" 
+                                               action="#{billController.printPaymentVoucher(pv)}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+
+                    </h:form>
+
+
+                </div>
+            </div>
+
+        </h:panelGroup>
+
+
+
+    </h:panelGroup>
+
+
+
+
+</h:panelGroup>
+

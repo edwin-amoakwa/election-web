@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV List" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5f4b8616-08bc-40c8-92b0-258ec80fd56d">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="field-value" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri" fontSize="11">
+		<box>
+			<bottomPen lineWidth="0.25" lineStyle="Dotted" lineColor="#404040"/>
+		</box>
+	</style>
+	<style name="field-label" vTextAlign="Bottom" fontName="Calibri" fontSize="11" isBold="true"/>
+	<style name="detail-data" hTextAlign="Left" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri" fontSize="10" isBold="false"/>
+	<style name="section-field-label" vTextAlign="Bottom" fontName="Calibri" fontSize="10" isBold="false"/>
+	<style name="section-field-header" hTextAlign="Center" vTextAlign="Middle" fontName="Calibri" fontSize="10" isBold="false"/>
+	<style name="field-value-basic" vTextAlign="Top" isBlankWhenNull="true" fontName="Calibri" fontSize="10"/>
+	<style name="notes-label" vTextAlign="Top" fontName="Calibri" isBold="true"/>
+	<style name="background-style" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{no}.intValue() % 2 != 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F7F7F7"/>
+		</conditionalStyle>
+	</style>
+	<style name="address" vTextAlign="Top" fontName="Calibri" fontSize="11" isBold="false"/>
+	<style name="letter-title" vTextAlign="Bottom" fontName="Calibri" fontSize="12" isBold="false"/>
+	<style name="letter-details" vTextAlign="Top" fontName="Calibri" fontSize="10" isBold="false">
+		<paragraph lineSpacing="Single" lineSpacingSize="1.2"/>
+	</style>
+	<style name="end" vTextAlign="Middle" isBlankWhenNull="true" fontName="Calibri" fontSize="11">
+		<box>
+			<bottomPen lineWidth="0.0" lineStyle="Dotted" lineColor="#404040"/>
+		</box>
+	</style>
+	<parameter name="institutionLogo" class="java.awt.Image"/>
+	<parameter name="institutionName" class="java.lang.String"/>
+	<parameter name="unitName" class="java.lang.String"/>
+	<parameter name="reportTitle" class="java.lang.String"/>
+	<parameter name="letterDetails" class="java.lang.String"/>
+	<parameter name="otherDetails" class="java.lang.String"/>
+	<parameter name="amountDetails" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="preparedDate" class="java.time.LocalDate"/>
+	<field name="departmentName" class="java.lang.String"/>
+	<field name="pvId" class="java.lang.String"/>
+	<field name="fundingSource" class="java.lang.String"/>
+	<field name="unitName" class="java.lang.String"/>
+	<field name="lpoNo" class="java.lang.String"/>
+	<field name="sraNo" class="java.lang.String"/>
+	<field name="lpoDate" class="java.time.LocalDate"/>
+	<field name="sraDate" class="java.time.LocalDate"/>
+	<field name="invoiceNo" class="java.lang.String"/>
+	<field name="paymentDetail" class="java.lang.String"/>
+	<field name="account" class="java.lang.String"/>
+	<field name="chequeIssuedDate" class="java.time.LocalDate"/>
+	<field name="chequeNo" class="java.lang.String"/>
+	<field name="amountInWords" class="java.lang.String"/>
+	<field name="preparedByTitle" class="java.lang.String"/>
+	<field name="preparedByName" class="java.lang.String"/>
+	<field name="verifiedByTitle" class="java.lang.String"/>
+	<field name="verifiedByName" class="java.lang.String"/>
+	<field name="approvedByTitle" class="java.lang.String"/>
+	<field name="approvedByName" class="java.lang.String"/>
+	<field name="reviewedByTitle" class="java.lang.String"/>
+	<field name="reviewedByName" class="java.lang.String"/>
+	<field name="supplierName" class="java.lang.String"/>
+	<field name="supplierAddress" class="java.lang.String"/>
+	<field name="empty" class="java.lang.String"/>
+	<field name="amountPayable" class="java.lang.Double"/>
+	<field name="chequeWrittenDate" class="java.time.LocalDate"/>
+	<field name="witholdingTaxRate" class="java.lang.Double"/>
+	<field name="witholdingTaxAmount" class="java.lang.Double"/>
+	<field name="grossAmount" class="java.lang.Double"/>
+	<variable name="no" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{pvId}]]></variableExpression>
+	</variable>
+	<variable name="totalAmount" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{witholdingTaxAmount}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="306" splitType="Stretch">
+			<staticText>
+				<reportElement x="197" y="2" width="160" height="30" uuid="913a1530-9934-4ef7-8ea4-3f55f1a59c59"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESTRICTED]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="220" y="38" width="91" height="80" uuid="817f9e9a-6ba2-4b2e-ba69-4cfca31b6d84"/>
+				<imageExpression><![CDATA[$P{institutionLogo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="letter-title" x="0" y="193" width="260" height="19" uuid="be50cec7-c9d7-4330-b8d7-1e922291e907"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REMITTANCE OF WITHOLDING TAX DEDUCTIONS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="464" y="286" width="91" height="20" uuid="34dd7127-7121-4c10-a033-03042fbc0ad1"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[WHT AMOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="40" y="286" width="240" height="20" uuid="b5cab94a-d369-424f-86fa-c0e19daa959c"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[SUPPLIER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="355" y="286" width="109" height="20" uuid="6001aa3a-ac69-41f5-9ac9-033e16fa55d3"/>
+				<box rightPadding="4">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[WITHOLDING RATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="0" y="286" width="40" height="20" uuid="8bc36b5d-bc36-4fc6-8675-11b35e08e2ac"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[SRL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="280" y="286" width="75" height="20" uuid="a2f2c4cc-c3d8-4f14-b661-b9ff3b0d23e2"/>
+				<box rightPadding="4">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="address" x="370" y="25" width="184" height="60" uuid="07cecb70-8858-41d2-b321-23802f3a38db"/>
+				<text><![CDATA[Dept. of Defence Financial Comptroller
+Ghana Armed Forces
+BURMA CAMP
+Accra 777960]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="address" x="0" y="131" width="140" height="57" uuid="97879b72-5ce4-4f8e-afc7-fe9a5e1fb704"/>
+				<text><![CDATA[The Manager
+Ghana Revenue Authority
+KINBU-SUB LTO
+Accra]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="letter-details" x="21" y="219" width="531" height="30" uuid="98d32e5d-8bd3-4439-8bfb-6473af0b8869"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[$P{amountDetails}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="letter-details" x="21" y="259" width="531" height="27" uuid="be69f0b7-9015-4c5e-b161-1de3ff3ede0e"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[$P{otherDetails}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="field-label" x="1" y="219" width="20" height="14" uuid="a2b64604-4be3-4287-94a8-2f28fac82c85">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="1" y="259" width="20" height="14" uuid="49789b70-2716-4b55-a872-9d0b96494971">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="370" y="90" width="40" height="20" uuid="d6831c12-b83c-4f87-93f3-8a7a3be687f9"/>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="410" y="90" width="142" height="20" uuid="6463579e-cc64-4431-8210-1ccbd1e2a88f"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="0" y="105" width="40" height="20" uuid="c19428c6-1d43-45ea-ad7f-de431b22e8e5"/>
+				<text><![CDATA[REF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="40" y="105" width="142" height="20" uuid="8088eedb-39ba-4e54-993c-29f089c1e693"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement key="" style="background-style" mode="Opaque" x="0" y="0" width="555" height="17" uuid="999e4a32-5770-4bd5-8a5d-6ec4b5694ff0"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#4A4A4A"/>
+				</box>
+				<textField pattern="#,##0.00">
+					<reportElement style="detail-data" x="464" y="0" width="90" height="15" uuid="27a0b3d0-e00c-412d-933b-40d27341fe1a"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{witholdingTaxAmount}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="40" y="0" width="240" height="15" uuid="86d7a207-88f9-4c65-a622-57cbb2c2f364"/>
+					<textFieldExpression><![CDATA[$F{supplierName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="355" y="0" width="109" height="15" uuid="b658023f-36b7-4cfb-9e68-7a7acd31333b"/>
+					<box rightPadding="4"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{witholdingTaxRate}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="1" y="0" width="39" height="15" uuid="4be8c96b-d889-4319-b8ad-b439083f7fcb"/>
+					<textFieldExpression><![CDATA[$V{no}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail-data" x="280" y="0" width="75" height="15" uuid="40670398-4f83-4070-b695-dcae0aa7105e"/>
+					<box rightPadding="4"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{grossAmount}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="240" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="462" y="0" width="92" height="20" uuid="f7659863-7495-4d0c-929a-792bea8ffd0f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{totalAmount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="field-label" x="1" y="35" width="20" height="14" uuid="10f54016-b2e0-47ec-bbd0-c422acd1f449">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="letter-details" x="21" y="35" width="531" height="27" uuid="69c2c922-5849-4550-8565-538398287a8b"/>
+				<textElement markup="html"/>
+				<text><![CDATA[Please issue receipts in respect of the companies mentioned above]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="field-label" x="20" y="70" width="100" height="20" uuid="0ea8a6a2-6120-4f96-92a0-9e5580784623"/>
+				<text><![CDATA[DY AKOTEY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="end" x="20" y="90" width="229" height="30" uuid="acfec656-4ec7-4f18-9023-4824e1cec3b2"/>
+				<text><![CDATA[Commander
+for Defence Financial Comptroller]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="end" x="20" y="130" width="229" height="90" uuid="d1384d2b-4e66-4dfb-9b2c-f267c801629b"/>
+				<text><![CDATA[Distribution:
+
+GHQ(COS)
+GHQ(DFC)-AUDIT SECTION
+GHQ(DFC)-PSO SECTION]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

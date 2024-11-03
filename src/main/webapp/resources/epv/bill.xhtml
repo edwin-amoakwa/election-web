@@ -1,0 +1,121 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="ajax" default="true"/>
+        <cc:attribute name="overlay" default="false" />
+        <cc:attribute name="rows" default="15" />
+        <cc:attribute name="value"/>
+        
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        
+        
+      
+        <h:panelGrid columns="6" styleClass="spaced-table">
+
+            <h:outputText value="#{msg.pv_status}" styleClass="field-label" />
+            <h:outputText value="#{cc.attrs.value.billStatus}" styleClass="field-value"/>
+
+
+            <h:outputText value="#{msg.date}" styleClass="field-label"/>
+            <h:outputText value="#{cc.attrs.value.valueDate}" 
+                          styleClass="field-value"/>
+
+            <h:outputText value="#{msg.department}" styleClass="field-label"/>
+            <h:outputText value="#{cc.attrs.value.department.departmentName}" styleClass="field-value"/>
+
+            <h:outputText value="#{msg.supplier}" styleClass="field-label"/>
+            <h:outputText value="#{cc.attrs.value.supplierName}" styleClass="field-value"/>
+
+            <h:outputText value="#{msg.source_of_fund}" styleClass="field-label"/>
+            <h:outputText value="#{cc.attrs.value.fundingSource.sourceName}" styleClass="field-value" />
+
+            <h:outputText value="#{msg.invoice_no}" styleClass="field-label" />
+            <h:outputText value="#{cc.attrs.value.invoiceNo}"  styleClass="field-value" />
+
+            <h:outputText value="#{msg.lpo_no}"  styleClass="field-label" />
+            <h:outputText value="#{cc.attrs.value.lpoNo}"  styleClass="field-value" />
+
+            <ui:remove>                        
+                <h:outputText value="#{msg.lpo_date}" />
+                <p:calendar value="#{cc.attrs.value.lpoDate}" rendered="false"
+                            pattern="#{msg.date_pattern_1}" navigator="true" />
+            </ui:remove>
+
+            <h:outputText value="#{msg.sra_no}" styleClass="field-label"  />
+            <h:outputText value="#{cc.attrs.value.sraNo}" />
+
+            <ui:remove>                        
+                <h:outputText value="#{msg.sra_date}"  styleClass="field-label" />
+                <p:calendar value="#{cc.attrs.value.sraDate}" rendered="false"
+                            pattern="#{msg.date_pattern_1}" navigator="true" />
+            </ui:remove>
+
+            <h:outputText value="#{msg.prepared_by}" styleClass="field-label"  />
+            <h:outputText value="#{cc.attrs.value.preparedBy.accountName}" styleClass="field-value" />
+
+   
+
+
+            <h:outputText value="#{msg.invoice_detail}" styleClass="field-label" />
+            <p:inputTextarea value="#{cc.attrs.value.paymentDetail}" 
+                             disabled="true" styleClass="field-value"  />
+
+        </h:panelGrid>
+
+
+        <center >
+
+            <p:panel style="background: beige;" >
+
+                <h:panelGrid id="calTable" columns="6" styleClass="spaced-table">
+
+                    <h:outputLabel value="#{msg.vat_rate}" />
+                    <h:outputText styleClass="field-value"
+                                  value="#{cc.attrs.value.vatRate}" />
+
+                    <h:outputLabel value="#{msg.withholding_tax_rate}" />
+                    <h:outputText styleClass="field-value"
+                                  value="#{cc.attrs.value.withholdingTaxRate}" />
+
+                    <h:outputLabel value="#{msg.is_tourism_service}" />
+                    <p:selectBooleanCheckbox value="#{cc.attrs.value.tourismInvoice}" disabled="true"/>
+
+
+                    <h:outputLabel value="#{msg.amount}" />
+                    <h:outputText styleClass="field-value"
+                                  value="#{cc.attrs.value.invoiceAmount}" />
+
+                    <h:outputLabel value="#{msg.tourism_levy}" />
+                    <stately:doubleDisplay value="#{cc.attrs.value.tourismLevy}" 
+                                           styleClass="field-value"/>
+
+                    <h:outputLabel value="#{msg.withholding_tax}" />
+                    <stately:doubleDisplay value="#{cc.attrs.value.witholdingTaxAmount}" 
+                                           styleClass="field-value"/>
+
+                    <h:outputLabel value="#{msg.amount_payable}" />
+                    <stately:doubleDisplay value="#{cc.attrs.value.amountPayable}" 
+                                           styleClass="field-value"/>
+
+                </h:panelGrid>
+
+            </p:panel>
+
+        </center>
+
+
+      
+        
+    </cc:implementation>
+
+</html>

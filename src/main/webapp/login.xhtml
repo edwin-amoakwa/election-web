@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately" >
+
+    <h:head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>#{msg.app}</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" href="#{application.contextPath}/resources/plugins/bootstrap/css/bootstrap.min.css" />
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
+        <!-- Theme style -->
+        <link rel="stylesheet" href="#{application.contextPath}/resources/theme/css/AdminLTE.min.css" />
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="#{application.contextPath}/resources/theme/css/skins/_all-skins.min.css" />
+
+        
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+
+    </h:head>
+
+    
+<h:body class="hold-transition login-page">
+    <div class="login-box">
+  <div class="login-logo">
+      <a class="hidden"><b>IIP</b>GH</a>
+    <img src="#{application.contextPath}/resources/images/logo.png" height="100"/>
+  </div>
+        <p:messages  />
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Privileged Login</p>
+
+    <h:form >
+       
+      <div class="form-group has-feedback">
+          <p:inputText value="#{loginController.username}" type="email" class="form-control" placeholder="Email" />
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+          <p:password value="#{loginController.userPassword}"
+              class="form-control" placeholder="Password" />
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+            
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+            <h:commandButton action="#{loginController.doLogin()}" value="Login"
+                             class="btn btn-primary btn-block btn-flat" />
+        </div>
+        <!-- /.col -->
+      </div>
+    </h:form>
+
+    
+    <!-- /.social-auth-links -->
+
+    <a class="hidden" href="#">I forgot my password</a><br />
+    
+  </div>
+  <!-- /.login-box-body -->
+</div>
+</h:body>
+
+<!-- /.login-box -->
+
+
+<script src="#{application.contextPath}/resources/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+</html>

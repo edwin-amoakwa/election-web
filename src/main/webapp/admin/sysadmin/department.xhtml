@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+       #{msg.department}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                <h:outputText value="#{msg.id}" />
+                <p:inputText value="#{departmentController.bankAccount.deptId}" />
+                
+                <h:outputText value="#{msg.name}" />
+                <p:inputText value="#{departmentController.bankAccount.departmentName}" />                
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{departmentController.saveCounterparty()}" 
+                                             cancelButtonAction="#{departmentController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{departmentController.bankAccountsList}" var="bankAccount">
+                <p:column headerText="#{msg.id}">
+                    <h:outputText value="#{bankAccount.deptId}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{bankAccount.departmentName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{departmentController.editBankAccount(bankAccount)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

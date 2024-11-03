@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.user_account}s
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+
+            <div class="col-lg-10">
+
+                <h:form>
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                        <h:outputText value="#{msg.name}" />
+                        <p:inputText value="#{adminLoginController.collector.accountName}" required="true"/>
+
+                        <h:outputText value="#{msg.email}" />
+                        <p:inputText value="#{adminLoginController.collector.emailAddress}" required="true"/>
+
+
+                        <h:outputText value="#{msg.institution}" 
+                                      rendered="#{userSession.accountUR.superUser}"/>
+                        <h:selectOneMenu value="#{adminLoginController.collector.institution}" 
+                                         rendered="#{userSession.accountUR.superUser}"
+                                         required="true"
+                                         styleClass="form-control">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.institutionsList}" />
+                        </h:selectOneMenu>
+                        
+                        <f:facet name="footer">
+                            <center style="margin: 10px">
+                                <stately:formControl saveButtonAction="#{adminLoginController.saveCollector()}" 
+                                                     cancelButtonAction="#{adminLoginController.clear()}"/>
+                            </center>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </h:form>
+                
+
+            </div>
+
+            
+             <div class="row">
+                    <div class="col-lg-9">
+                        <h:form style="margin-top: 20px;">
+                            <p:dataTable value="#{adminLoginController.collectorsList}" var="collector" 
+                                         paginator="true" paginatorPosition="bottom" rows="20">
+                                
+                                <p:column headerText="#{msg.name}" filterBy="#{collector.accountName}">
+                                    <h:outputText value="#{collector.accountName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.email}">
+                                    <h:outputText value="#{collector.emailAddress}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.category}">
+                                    <h:outputText value="#{collector.accountCategory.label}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.institution}" filterBy="#{collector.institution.institutionName}"
+                                          rendered="#{userSession.accountUR.superUser}">
+                                    <h:outputText value="#{collector.institution.institutionName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.action}">
+                                    <h:commandLink value="Delete" styleClass="delete"
+                                                   action="#{adminLoginController.deleteAdminLogin(collector)}"/>
+                                </p:column>
+
+                                <p:column headerText="#{msg.action}">
+                                    <h:commandLink value="#{msg.edit} / Set Password" 
+                                                   action="#{adminLoginController.editCollector(collector)}"/>
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="col-lg-3">
+                        
+                        
+                        <p:panel header="#{msg.user_group}" rendered="#{not empty adminLoginController.collector.id}">
+
+                        <h:form>
+
+                            <h:panelGrid columns="2"  styleClass="spaced-table">
+                                <h:outputText value="Group" />
+                                <stately:selectOne value="#{adminLoginController.accessLevel.userGroup}" 
+                                                   items="#{commonOptions.userAccountCategorysList}" />
+
+
+                                <f:facet name="footer">
+                                    <p:commandButton value="#{msg.add}" update="@form"
+                                                     action="#{adminLoginController.addStaffAccessLevel()}" />
+
+                                </f:facet>
+                            </h:panelGrid>
+
+                            <p:dataTable value="#{adminLoginController.staffAccessLevelList}" var="accessLevel">
+
+                                <p:column headerText="#{msg.group}">
+                                    <h:outputText value="#{accessLevel.userGroup}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.role}">
+                                    <h:outputText value="#{accessLevel.userRole}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.remove}">
+                                    <p:commandLink value="#{msg.remove}" styleClass="delete" 
+                                                   update="@form"
+                                                   action="#{adminLoginController.removeStaffAccess(accessLevel)}" />
+                                </p:column>
+
+
+                            </p:dataTable>
+
+                        </h:form>
+
+
+                    </p:panel>
+                        
+                        
+
+                        <h:panelGroup id="passwordForm">
+                            <h:form rendered="#{not empty adminLoginController.collector.id}">
+
+                                <h:panelGrid columns="2" styleClass="spaced-table">
+                                    <h:outputText value="Password" />
+                                    <h:inputText value="#{adminLoginController.newPassword}"/>
+
+                                    <h:outputLabel />
+
+                                    <p:commandButton value="Save Password" action="#{adminLoginController.saveNewPassword()}" 
+                                                     ajax="false" />
+                                </h:panelGrid>
+
+                            </h:form>
+                        </h:panelGroup>
+
+
+
+                    </div>
+                </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

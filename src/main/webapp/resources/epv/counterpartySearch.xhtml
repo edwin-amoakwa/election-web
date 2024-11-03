@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="ajax" default="false"/>
+        <cc:attribute name="overlay" default="false"/>
+        <cc:attribute name="rows" default="15" />
+        <cc:attribute name="update"/>
+
+        <cc:attribute name="allowMutipleSelection" default="false"/>
+
+        <cc:attribute name="selectCounterpartyAction" 
+                      required="false"
+                      method-signature="java.lang.String action()"/>
+
+        <cc:attribute name="otherAccountAction" 
+                      required="false"
+                      method-signature="java.lang.String action()"/>
+
+        <cc:attribute name="otherActionLabel"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <h:panelGroup >
+
+            <p:commandButton id="imageBtn" value="Select Counteryparty" type="button" />
+            <p:overlayPanel id="imagePanel" for="imageBtn" hideEffect="fade">
+
+                <div class="form-inline">
+                    <p:watermark value="Enter counterparty name or code" for="counterparty"/>
+                    <div class="form-group">
+                        <h:inputText id="counterparty" class="form-control" value="#{counterpartySearch.searchText}"/>
+                    </div>
+                    <div class="form-group">
+                        <p:commandButton value="Search" class="btn btn-sm"
+                                         action="#{counterpartySearch.searchAccount()}" update="clientTblGroup" />
+                    </div>
+                </div>
+                <h:panelGroup id="clientTblGroup">
+
+                    <p:dataTable value="#{counterpartySearch.counterpartysList}" var="account" 
+                                 paginator="true" paginatorPosition="bottom" rows="#{cc.attrs.rows}" style="width: 99%;overflow: auto;" >
+
+                        <p:column headerText="Counterparty Code">
+                            <p:commandLink value="#{account.counterpartyCode}"  update="#{cc.attrs.update}"
+                                           action="#{cc.attrs.selectCounterpartyAction}">
+                                <f:setPropertyActionListener value="#{account}" target="#{counterpartySearch.counterParty}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="#{msg.name}">
+                            <p:commandLink value="#{account.counterpartyName}"  update="#{cc.attrs.update}"
+                                           action="#{cc.attrs.selectCounterpartyAction}">
+                                <f:setPropertyActionListener value="#{account}" target="#{counterpartySearch.counterParty}" />
+                            </p:commandLink>
+
+                        </p:column>
+                    </p:dataTable>
+
+                </h:panelGroup>
+
+
+            </p:overlayPanel>
+
+
+
+
+        </h:panelGroup>
+
+    </cc:implementation>
+
+</html>

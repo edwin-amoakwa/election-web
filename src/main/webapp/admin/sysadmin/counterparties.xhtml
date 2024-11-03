@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.counterparty}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                <h:outputText value="#{msg.code}" />
+                <p:inputText value="#{counterpartyController.counterparty.counterpartyCode}" />
+                
+                <h:outputText value="#{msg.name}" />
+                <p:inputText value="#{counterpartyController.counterparty.counterpartyName}" />
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{counterpartyController.saveCounterparty()}" 
+                                             cancelButtonAction="#{counterpartyController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{counterpartyController.counterpartiesList}" var="counterparty">
+                <p:column headerText="#{msg.code}">
+                    <h:outputText value="#{counterparty.counterpartyCode}" />
+                </p:column>
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{counterparty.counterpartyName}" />
+                </p:column>
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{counterpartyController.editCounterparty(counterparty)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

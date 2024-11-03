@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+       #{msg.supplier}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                <h:outputText value="#{msg.code}" />
+                <p:inputText value="#{supplierController.bankAccount.supplierId}" />
+                
+                <h:outputText value="#{msg.name}" />
+                <p:inputText value="#{supplierController.bankAccount.supplierName}" />                
+                
+                <h:outputText value="#{msg.address}" />
+                <p:inputTextarea value="#{supplierController.bankAccount.supplierAddress}" />                
+                
+                
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{supplierController.saveCounterparty()}" 
+                                             cancelButtonAction="#{supplierController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{supplierController.bankAccountsList}" var="bankAccount">
+                <p:column headerText="#{msg.code}">
+                    <h:outputText value="#{bankAccount.supplierId}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{bankAccount.supplierName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.address}" >
+                    <h:outputText value="#{bankAccount.supplierAddress}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{supplierController.editBankAccount(bankAccount)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.risk_profile}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                <h:outputText value="#{msg.profile_name}" />
+                <p:inputText value="#{riskProfileController.riskProfile.profileName}" />
+                
+                <h:outputText value="#{msg.credit_limit}" />
+                <p:inputText value="#{riskProfileController.riskProfile.creditLimit}" />                
+                
+                <h:outputText value="#{msg.min_interest_acct_bal} (%)" />
+                <p:inputText value="#{riskProfileController.riskProfile.minInterestAcctBal}" />
+                
+                
+                <h:outputText value="#{msg.daily_interest_rate}" />
+                <p:inputText value="#{riskProfileController.riskProfile.dailyInterestRate}" />
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{riskProfileController.saveCounterparty()}" 
+                                             cancelButtonAction="#{riskProfileController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{riskProfileController.riskProfilesList}" var="riskProfile">
+                
+                <p:column headerText="#{msg.profile_name}">
+                    <h:outputText value="#{riskProfile.profileName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.credit_limit}">
+                    <h:outputText value="#{riskProfile.creditLimit}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.min_interest_acct_bal}">
+                    <h:outputText value="#{riskProfile.minInterestAcctBal}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.daily_interest_rate}">
+                    <h:outputText value="#{riskProfile.dailyInterestRate}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{riskProfileController.editRiskProfile(riskProfile)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

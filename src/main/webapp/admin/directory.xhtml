@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.directory}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{memberDirectoryController.membersList}" var="member" rows="25" paginator="true" paginatorPosition="bottom">
+                
+                <p:column>
+                    <p:rowToggler />
+                </p:column>
+                <p:rowExpansion>
+                    <p:panelGrid styleClass="spaced-table ui-panelgrid-blank" 
+                                 columns="6">
+                        
+                        <h:outputLabel  value="Email" styleClass="field-label"/>
+                        <h:outputText value="#{member.userEmail}" styleClass="field-value"/>
+                        
+                        <h:outputLabel  value="Education" styleClass="field-label"/>
+                        <h:outputText value="#{member.userEducat}" styleClass="field-value"/>
+                    
+                        
+                        <h:outputLabel  value="Department" styleClass="field-label"/>
+                        <h:outputText value="#{member.userDwork}" styleClass="field-value"/>
+                    
+                    </p:panelGrid>
+                </p:rowExpansion>
+                
+                <p:column headerText="#{msg.mobile_no}">
+                    <h:outputText value="#{member.userMobile}" />
+                </p:column>
+                <p:column headerText="First Name" filterMatchMode="contains" filterBy="#{member.userFName}">
+                    <h:outputText value="#{member.userFName}" />
+                </p:column>
+                <p:column headerText="Last Name" filterMatchMode="contains" filterBy="#{member.userLName}">
+                    <h:outputText value="#{member.userLName}" />
+                </p:column>
+                <p:column headerText="#{msg.membership_id}">
+                    <h:outputText value="#{member.userMemberID} " rendered="#{member.userMemberID != 0}"/>
+                </p:column>
+                <p:column headerText="Department">
+                    <h:outputText value="#{member.userDwork}" />
+                </p:column>
+                <p:column headerText="Place of Work"  filterMatchMode="contains" filterBy="#{member.userPwork}">
+                    <h:outputText value="#{member.userPwork}" />
+                </p:column>
+                <p:column headerText="#{msg.speciality}">
+                    <h:outputText value="#{member.userSpec}" />
+                </p:column>
+                
+                          
+                <p:column headerText="#{msg.action}" rendered="false">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{merchantController.editMerchant(merchant)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

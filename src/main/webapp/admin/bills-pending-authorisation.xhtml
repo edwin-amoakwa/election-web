@@ -1,0 +1,255 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.pending_authorisation}
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:panelGroup rendered="#{empty pvPendingAuthController.selectedVoucher}">
+
+
+            <h:form id="voucherList">
+
+                <center>
+                    <h:panelGrid columns="4" styleClass="spaced-table">
+
+                        <h:commandLink value="#{msg.print}" target="_blank" style="color: white;"
+                                       styleClass="btn btn-primary"
+                                       action="#{pvPendingAuthController.printPvList()}"/>
+
+                        <h:commandLink value="Export to Excel" 
+                                       styleClass="btn btn-primary"  style="color: white;"
+                                       action="#{pvPendingAuthController.exportToExcel()}"/>
+
+                    </h:panelGrid>
+                </center>
+
+                <p:dataTable value="#{pvPendingAuthController.vouchersList}" var="voucher">
+
+                    <p:column headerText="#{msg.date}">
+                        <h:outputText value="#{voucher.valueDate}">
+                            <f:convertDateTime pattern="#{msg.date_pattern_1}" type="localDate"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{msg.pv_id}">
+                        <h:outputText value="#{voucher.billNo}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg.detail}">
+                        <h:outputText value="#{voucher.paymentDetail}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg.received_status}">
+                        <h:outputText value="#{voucher.receivedStatus}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg.supplier}" >
+                        <h:outputText value="#{voucher.supplierName}" />
+                    </p:column>
+
+                    <p:column >
+                        <h:outputText value="#{voucher.voucherCurrency}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg.amount_payable}" styleClass="text-right">
+                        <h:outputText value="#{voucher.amountPayable}">
+                            <f:convertNumber pattern="#,##0.00" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{msg.pv_status}">
+                        <h:outputText value="#{voucher.billStatus.label}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg.action}" >
+                        <h:commandLink value="#{msg.view}" 
+                                       action="#{pvPendingAuthController.viewPaymentVoucher(voucher)}"/>
+                    </p:column>
+
+                    <p:column headerText="#{msg.print}" >
+                        <h:commandLink value="#{msg.print}" target="_blank"
+                                       action="#{pvPendingAuthController.print(voucher)}"/>
+                    </p:column>
+                    
+
+                </p:dataTable>
+
+            </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not empty pvPendingAuthController.selectedVoucher}">
+
+            <h:panelGrid columns="6" styleClass="spaced-table">
+
+                <h:outputText value="#{msg.pv_status}" styleClass="field-label" />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.billStatus}" styleClass="field-value"/>
+
+
+                <h:outputText value="#{msg.date}" styleClass="field-label"/>
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.valueDate}" 
+                              styleClass="field-value"/>
+
+                <h:outputText value="#{msg.department}" styleClass="field-label"/>
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.department.departmentName}" styleClass="field-value"/>
+
+                <h:outputText value="#{msg.supplier}" styleClass="field-label"/>
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.supplierName}" styleClass="field-value"/>
+
+                <h:outputText value="#{msg.source_of_fund}" styleClass="field-label"/>
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.fundingSource.sourceName}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.invoice_no}" styleClass="field-label" />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.invoiceNo}"  styleClass="field-value" />
+
+                <h:outputText value="#{msg.lpo_no}"  styleClass="field-label" />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.lpoNo}"  styleClass="field-value" />
+
+                <ui:remove>                        
+                    <h:outputText value="#{msg.lpo_date}" />
+                    <p:calendar value="#{pvPendingAuthController.selectedVoucher.lpoDate}" rendered="false"
+                                pattern="#{msg.date_pattern_1}" navigator="true" />
+                </ui:remove>
+
+                <h:outputText value="#{msg.sra_no}" styleClass="field-label"  />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.sraNo}" />
+
+                <ui:remove>                        
+                    <h:outputText value="#{msg.sra_date}"  styleClass="field-label" />
+                    <p:calendar value="#{pvPendingAuthController.selectedVoucher.sraDate}" rendered="false"
+                                pattern="#{msg.date_pattern_1}" navigator="true" />
+                </ui:remove>
+
+                <h:outputText value="#{msg.account_code}" styleClass="field-label"  />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.account.accountName}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.bank_account}" styleClass="field-label"  />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.bankAccount.accountName}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.prepared_by}" styleClass="field-label"  />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.preparedBy.accountName}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.verified_by}" styleClass="field-label"  />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.verifiedBy.accountName}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.approved_by}" styleClass="field-label"  />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.approvedBy.accountName}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.reviewed_by}" styleClass="field-label" />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.reviewedBy.accountName}"  styleClass="field-value" />
+
+                <h:outputText value="#{msg.cheque_no}" styleClass="field-label" />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.chequeNo}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.cheque_issue_date}" styleClass="field-label" />
+                <h:outputText value="#{pvPendingAuthController.selectedVoucher.chequeIssuedDate}" styleClass="field-value" />
+
+                <h:outputText value="#{msg.invoice_detail}" styleClass="field-label" />
+                <p:inputTextarea value="#{pvPendingAuthController.selectedVoucher.paymentDetail}" 
+                                 disabled="true"/>
+
+            </h:panelGrid>
+
+            <center >
+
+                <p:panel style="background: beige;" >
+
+                    <h:panelGrid id="calTable" columns="6" styleClass="spaced-table">
+
+                        <h:outputLabel value="#{msg.vat_rate}" />
+                        <h:outputText class="form-control input-sm " 
+                                      value="#{pvPendingAuthController.selectedVoucher.vatRate}" />
+
+                        <h:outputLabel value="#{msg.withholding_tax_rate}" />
+                        <h:outputText class="form-control input-sm " 
+                                      value="#{pvPendingAuthController.selectedVoucher.withholdingTaxRate}" />
+
+                        <h:outputLabel value="#{msg.is_tourism_service}" />
+                        <p:selectBooleanCheckbox value="#{pvPendingAuthController.selectedVoucher.tourismInvoice}" disabled="true"/>
+
+
+                        <h:outputLabel value="#{msg.amount}" />
+                        <h:outputText class="form-control input-sm" id="firstName" 
+                                      value="#{pvPendingAuthController.selectedVoucher.invoiceAmount}" />
+
+                        <h:outputLabel value="#{msg.tourism_levy}" />
+                        <stately:doubleDisplay value="#{pvPendingAuthController.selectedVoucher.tourismLevy}" 
+                                               styleClass="field-value"/>
+
+                        <h:outputLabel value="#{msg.withholding_tax}" />
+                        <stately:doubleDisplay value="#{pvPendingAuthController.selectedVoucher.witholdingTaxAmount}" 
+                                               styleClass="field-value"/>
+
+                        <h:outputLabel value="#{msg.amount_payable}" />
+                        <stately:doubleDisplay value="#{pvPendingAuthController.selectedVoucher.amountPayable}" 
+                                               styleClass="field-value"/>
+
+                    </h:panelGrid>
+
+                </p:panel>
+
+            </center>
+
+            <br />
+
+
+            <h:form>
+                <center >
+                    <p:panel style="background: cornsilk;" 
+                             rendered="#{userSession.accountUR.authoriserUser}" >
+
+                        <h:panelGrid columns="3" styleClass="spaced-table">
+                            
+                            <h:outputText value="#{msg.verified_by}" styleClass="field-label" />
+                            <h:outputText value="#{pvPendingAuthController.selectedVoucher.verifiedBy.accountName}" styleClass="field-value" />
+                            <p:commandButton value="Authorise" ajax="false"
+                                             action="#{pvPendingAuthController.verifyPv()}"/>
+
+                            <h:outputText value="#{msg.approved_by}"  styleClass="field-label"  />
+                            <h:outputText value="#{pvPendingAuthController.selectedVoucher.approvedBy.accountName}" styleClass="field-value" />
+                            <p:commandButton value="Authorise" ajax="false"
+                                             action="#{pvPendingAuthController.approveBy()}"/>
+
+                        </h:panelGrid>
+                        
+                    </p:panel>
+                </center>
+            </h:form>
+
+
+            <h:form>
+
+                
+                <p:panel>
+                    <h:commandLink value="#{msg.print}" 
+                                   target="_blank" styleClass="pull-right"
+                                   immediate="true"
+                                   action="#{pvPendingAuthController.printPv()}"/>
+                    <div style="clear: both;"></div>
+                </p:panel>
+
+            </h:form>
+
+
+            <h:form>
+                <center>
+                    <h:commandButton value="#{msg.close}" 
+                                     styleClass="btn btn-danger" action="#{pvPendingAuthController.close()}"/>
+                </center>
+            </h:form>
+
+        </h:panelGroup>
+
+
+    </ui:define>
+
+</ui:composition>
+

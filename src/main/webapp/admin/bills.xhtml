@@ -1,0 +1,413 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.bills}
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <h:panelGroup id="billsMainPanel">
+
+            <h:panelGroup rendered="#{billController.formView.listView}">
+
+                <center>
+                    <h:form>
+                       
+                        <br />
+                    </h:form>
+                </center>
+                
+                
+                <h:form style="clear: both;">
+                    <div class="row">
+                         <div class="pull-left">
+                          <p:commandButton value="Create New Bill" 
+                                         ajax="false"
+                                         styleClass="btn btn-primary"
+                                         action="#{billController.initNewPV()}"/>
+                         </div>
+                         
+                         
+                    <div class="pull-right">
+                        <h:commandLink value="Print Pending Bills" styleClass="btn btn-info"
+                                       target="_blank"
+                                       action="#{billController.printPendingBills()}"/>
+                    </div>
+                </div>
+                </h:form>
+                
+
+                <h:form>
+
+                    <p:dataTable value="#{billController.billsList}" var="bill">
+
+                        <p:column headerText="#{msg.date}">
+                            <h:outputText value="#{bill.valueDate}">
+                                <f:convertDateTime pattern="#{msg.date_pattern_1}" type="localDate"/>
+                            </h:outputText>
+                        </p:column>
+
+                      
+
+                        <p:column headerText="#{msg.invoice_no}">
+                            <h:outputText value="#{bill.invoiceNo}" />
+                        </p:column>
+                        
+                         <p:column headerText="#{msg.supplier}">
+                            <h:outputText value="#{bill.supplierName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.detail}">
+                            <h:outputText value="#{bill.paymentDetail}" />
+                        </p:column>
+
+                       
+                        <p:column headerText="#{msg.currency}">
+                            <h:outputText value="#{bill.voucherCurrency}" />
+                        </p:column>
+                        
+                        <p:column headerText="#{msg.amount_payable}" styleClass="text-right">
+                            <h:outputText value="#{bill.amountPayable}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
+                        </p:column>
+                        
+                             
+                        <p:column headerText="#{msg.amount_paid}" styleClass="text-right">
+                            <h:outputText value="#{bill.amountPaid}" rendered="#{bill.amountPaid != 0}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
+                        </p:column>
+                        
+                          <p:column headerText="#{msg.amount_outstanding}" styleClass="text-right">
+                              <h:outputText value="#{bill.amountOutstanding}" rendered="#{bill.amountOutstanding != 0}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
+                        </p:column>
+                        
+                          <p:column headerText="#{msg.status}">
+                            <h:outputText value="#{bill.paymentStatus.label}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.pv_status}" rendered="false">
+                            <h:outputText value="#{bill.billStatus.label}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}" >
+                            <h:commandLink value="#{msg.edit}" 
+                                           action="#{billController.editBill(bill)}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}" >
+                            <h:commandLink value="Add Payment" 
+                                           action="#{billController.viewPaymentVoucher(bill)}"/>
+                        </p:column>
+
+
+                        <p:column headerText="#{msg.action}" rendered="false">
+                            <h:commandLink value="#{msg.delete}" style="color: red;" 
+                                           action="#{billController.deleteBill(bill)}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}" >
+                            <h:commandLink value="Mark as Invalid" style="color: red;" 
+                                           action="#{billController.markAsInvalid(bill)}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.archived}" rendered="false">
+                            <h:commandLink value="archive" style="color: red;" 
+                                           action="#{billController.archiveBill(bill)}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.print}" rendered="false">
+                            <h:commandLink value="#{msg.print}" target="_blank"
+                                           action="#{billController.print(bill)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+
+
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{billController.formView.createView}">
+
+
+                <h:form>
+                    <h:panelGrid columns="6" styleClass="spaced-table">
+
+
+                        <h:outputText value="#{msg.invoice_no}" />
+                        <p:inputText value="#{billController.bill.invoiceNo}" />
+
+                        <h:outputText value="#{msg.invoice_date}" />
+                        <p:calendar value="#{billController.bill.valueDate}" rendered="true" 
+                                    required="true"
+                                    pattern="#{msg.date_pattern_1}" navigator="true"/>
+
+                        <h:outputText value="#{msg.department}" styleClass="field-label-required" />
+                        <p:selectOneMenu value="#{billController.bill.department}" required="true" 
+                                         styleClass="fill-space"
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.departmentsList}" />
+                        </p:selectOneMenu>
+
+
+                        <ui:remove>                        
+                            <h:outputText value="#{msg.supplier}" />
+                            <p:selectOneMenu value="#{billController.bill.supplier}" required="true">
+                                <f:selectItem itemLabel="#{msg.select_one}" />
+                                <f:selectItems value="#{userCommonOptions.suppliersList}" />
+                            </p:selectOneMenu>
+                        </ui:remove>
+                        
+                         <h:outputText value="#{msg.expense_account}" styleClass="field-label-required" />
+                         <p:selectOneMenu value="#{billController.bill.expenseAccount}" required="true" 
+                                         styleClass="fill-space"
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.expenseAccountsList}" />
+                        </p:selectOneMenu>
+
+                        <h:outputText value="#{msg.currency}" />
+                        <p:selectOneMenu value="#{billController.bill.voucherCurrency}" 
+                                         required="false" styleClass="fill-space">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.currencysList}" />
+                        </p:selectOneMenu>
+
+
+                        <h:outputText value="#{msg.supplier_name}" />
+                        <p:inputText value="#{billController.bill.supplierName}" />
+
+                        <h:outputText />
+                        <h:outputText />
+                        <h:outputText value="#{msg.supplier_address}" />
+                        <p:inputTextarea value="#{billController.bill.supplierAddress}" />
+
+                        <h:outputText value="#{msg.payment_detail}" />
+                        <p:inputTextarea value="#{billController.bill.paymentDetail}" />
+
+                        <h:outputText value="#{msg.lpo_no}" />
+                        <p:inputText value="#{billController.bill.lpoNo}" />
+
+                        <h:outputText value="#{msg.lpo_date}" />
+                        <p:datePicker value="#{billController.bill.lpoDate}" rendered="true" />
+
+                        <h:outputText value="#{msg.sra_no}" />
+                        <p:inputText value="#{billController.bill.sraNo}" />
+
+                        <h:outputText value="#{msg.sra_date}" />
+                        <p:datePicker value="#{billController.bill.sraDate}" rendered="true"
+                                      pattern="#{msg.date_pattern_1}" />
+
+
+                        <h:outputText />
+                        <h:outputText />
+
+
+                    </h:panelGrid>
+
+                    <center >
+
+
+                        <p:panel id="figuresPanel" style="background: beige; margin-top: 10px;" >
+
+                            <h:panelGrid id="calTable" 
+                                         columns="4" styleClass="spaced-table">
+
+                                <h:outputLabel value="#{msg.invoice_amount}" />
+                                <h:inputText class="form-control input-sm" 
+                                             value="#{billController.bill.invoiceAmount}">
+                                    <f:convertNumber pattern="#,##0.00" />
+                                    <ui:remove>
+                                        <p:ajax process="vatRate, withholdingTaxRate, tourismInvoice" update="calTable" 
+                                                listener="#{billController.calculateAmount()}" />
+                                    </ui:remove>
+                                </h:inputText>
+
+                                <h:outputLabel value="#{msg.vat_rate}" />
+                                <h:selectOneMenu class="form-control input-sm " 
+                                                 value="#{billController.bill.vatRate}"
+                                                 id="vatRate"
+                                                 required="false"   requiredMessage="required">
+                                    <f:selectItem itemLabel="#{msg.select_one}"/>
+                                    <f:selectItem itemValue="0"/>
+                                    <f:selectItem itemValue="3"/>                                
+                                    <f:selectItem itemValue="4"/>                                
+                                    <f:selectItem itemValue="12.0"/>
+                                    <f:selectItem itemValue="12.5"/>
+                                    <f:selectItem itemValue="15.0"/>
+                                    <f:selectItem itemValue="15.5"/>
+                                    <f:selectItem itemValue="17.5"/>
+                                    <f:selectItem itemValue="20"/>
+
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="#{msg.nhis_rate}" />
+                                <h:selectOneMenu class="form-control input-sm " 
+                                                 value="#{billController.bill.nhisRate}"
+                                                 id="nhis"
+                                                 required="false"   requiredMessage="required">
+                                    <f:selectItem itemLabel="#{msg.select_one}"/>
+                                    <f:selectItem itemValue="0"/>
+                                    <f:selectItem itemValue="2.5"/>                                 
+                                    <f:selectItem itemValue="6"/> 
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="#{msg.withholding_tax_rate}" />
+                                <h:selectOneMenu class="form-control input-sm " 
+                                                 id="withholdingTaxRate"
+                                                 value="#{billController.bill.withholdingTaxRate}"
+                                                 required="false"   requiredMessage="required">
+                                    <f:selectItem itemLabel="#{msg.select_one}"/>
+                                    <f:selectItem itemValue="0"/>
+                                    <f:selectItem itemValue="3"/>
+                                    <f:selectItem itemValue="5"/>
+                                    <f:selectItem itemValue="5.5"/>
+                                    <f:selectItem itemValue="7.5"/>
+                                    <f:selectItem itemValue="8"/>
+                                    <f:selectItem itemValue="10"/>
+                                    <f:selectItem itemValue="15"/>
+                                    <f:selectItem itemValue="20"/>
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="WHT on VAT" />
+                                <h:selectOneMenu class="form-control input-sm " 
+                                                 id="whtVatRate"
+                                                 value="#{billController.bill.whtVatRate}"
+                                                 required="false"   requiredMessage="required">
+                                    <f:selectItem itemLabel="#{msg.select_one}" noSelectionOption="true"/>
+                                    <f:selectItem itemValue="0"/>
+                                    <f:selectItem itemValue="7"/>
+                                </h:selectOneMenu>
+
+                                <h:outputLabel value="Other Charges" />
+                                <h:inputText class="form-control input-sm" 
+                                             value="#{billController.bill.otherCharges}">
+                                    <f:convertNumber pattern="#,##0.00" />
+                                </h:inputText>
+
+                                <h:outputLabel value="#{msg.is_tourism_service}" />
+                                <p:selectBooleanCheckbox value="#{billController.bill.tourismInvoice}" 
+                                                         id="tourismInvoice"/>
+
+
+
+                            </h:panelGrid>
+                            <center>
+                                <p:commandButton value="Calculate" ajax="false" 
+                                                 styleClass="btn btn-primary" 
+                                                 action="#{billController.calculateAmount()}"/>
+                            </center>
+                            <br />
+
+                            <label class="alert1 alert-success1">
+                                <h:panelGrid columns="4" styleClass="spaced-table">
+
+                                    <h:outputLabel value="#{msg.tourism_levy}" />
+                                    <stately:doubleDisplay value="#{billController.bill.tourismLevy}" 
+                                                           styleClass="field-value text-right"/>
+
+                                    <h:outputLabel value="#{msg.withholding_tax}" />
+                                    <stately:doubleDisplay value="#{billController.bill.witholdingTaxAmount}" 
+                                                           styleClass="field-value text-right"/>
+
+                                    <h:outputLabel value="#{msg.vat_amount}" />
+                                    <stately:doubleDisplay value="#{billController.bill.vatAmount}" 
+                                                           styleClass="field-value text-right"/>
+
+                                    <h:outputLabel value="#{msg.nhis_amount}" />
+                                    <stately:doubleDisplay value="#{billController.bill.nhisAmount}" 
+                                                           styleClass="field-value text-right"/>
+
+                                    <h:outputLabel value="WHT-VAT" />
+                                    <stately:doubleDisplay value="#{billController.bill.whtVat}" 
+                                                           styleClass="field-value text-right"/>
+
+                                    <h:outputLabel value="#{msg.gross_amount}" />
+                                    <stately:doubleDisplay value="#{billController.bill.grossAmount}" 
+                                                           styleClass="field-value text-right" pattern="#,##0.0000"/>
+
+                                    <h:outputLabel value="#{msg.amount_payable}" />
+                                    <stately:doubleDisplay value="#{billController.bill.amountPayable}" 
+                                                           styleClass="field-value text-right"/>
+
+                                </h:panelGrid>
+                            </label>
+
+
+
+
+                        </p:panel>
+
+                        <h:panelGroup>
+                            <h:panelGrid columns="2" styleClass="spaced-table">
+
+                                <h:commandLink value="#{msg.save}" styleClass="btn btn-success"
+                                               action="#{billController.saveBill()}"/>
+
+                            </h:panelGrid>
+
+                        </h:panelGroup>
+
+                    </center>
+
+
+
+
+
+
+
+                </h:form>
+
+
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{billController.formView.detailView}">
+
+                <ui:include src="create-pv.xhtml" />
+
+            </h:panelGroup>
+
+
+        </h:panelGroup>
+
+
+
+
+
+
+
+
+
+
+        <h:panelGroup >
+
+
+
+
+
+            <h:form>
+                <br />
+                <br />
+                <center>
+                    <h:commandButton value="#{msg.close}" 
+                                     styleClass="btn btn-danger" action="#{billController.close()}"/>
+                </center>
+            </h:form>
+
+        </h:panelGroup>
+
+
+    </ui:define>
+
+</ui:composition>
+

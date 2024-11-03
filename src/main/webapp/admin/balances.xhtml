@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <body>
+
+        <ui:composition template="template.xhtml">
+
+            <ui:define name="pageTitle">
+                Balances
+            </ui:define>
+
+
+            <ui:define name="content">
+
+                <center>
+                    <h:form>
+                        <h:outputText value="Date" />
+                        From
+                        <p:calendar value="#{balancesView.dateRange.fromDate}" 
+                                    pattern="#{msg.date_pattern_1}" navigator="true" />
+                        To
+                        <p:calendar value="#{balancesView.dateRange.toDate}" 
+                                    pattern="#{msg.date_pattern_1}" navigator="true" />
+
+                        <h:commandButton value="Load" action="#{balancesView.init()}"/>
+                    </h:form>
+                    <br />
+                </center>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Bank and Cash Balances
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <h:form>
+                                    <p:dataTable value="#{balancesView.bankAccountsList}" var="bankAccount">
+
+                                        <p:column headerText="#{msg.account_name}">
+                                            <h:outputText value="#{bankAccount.accountName}" />
+                                        </p:column>
+
+
+                                        <p:column headerText="#{msg.balance}" styleClass="text-right">
+                                            <h:outputText value="#{bankAccount.balance}" >
+                                                <f:convertNumber pattern="#,##0.00" />
+                                            </h:outputText>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </div>
+                        </div>                        
+
+                        <hr />
+
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Ledger Type Balances
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <h:form>
+                                    <p:dataTable value="#{balancesView.ledgerTypesList}" var="ledgerAccount">
+
+                                        <p:column headerText="#{msg.account_name}">
+                                            <h:outputText value="#{ledgerAccount.accountName}" />
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.balance}" styleClass="text-right">
+                                            <h:outputText value="#{ledgerAccount.balance}" >
+                                                <f:convertNumber pattern="#,##0.00" />
+                                            </h:outputText>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+                            </div>
+                        </div>
+
+       
+
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Ledger Balances
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <h:form>
+                                    <p:dataTable value="#{balancesView.ledgerAccountsList}" var="ledgerAccount">
+
+                                        <p:column headerText="#{msg.account_name}">
+                                            <h:outputText value="#{ledgerAccount.account.accountName}" />
+                                            
+                                            
+                                            
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.credit}" styleClass="text-right">
+                                            <h:outputText value="#{ledgerAccount.credit}" rendered="#{ledgerAccount.credit != 0}" >
+                                                <f:convertNumber pattern="#,##0.00" />
+                                            </h:outputText>
+                                            
+                                            <f:facet name="footer">
+                                                <h:outputText value="#{balancesView.glSummary.totalCredit}" >
+                                                    <f:convertNumber pattern="#,##0.00" />
+                                                </h:outputText>
+                                            </f:facet>
+                                            
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.debit}" styleClass="text-right">
+                                            <h:outputText value="#{ledgerAccount.debit}" rendered="#{ledgerAccount.debit != 0}">
+                                                <f:convertNumber pattern="#,##0.00" />
+                                            </h:outputText>
+
+                                            <f:facet name="footer">
+                                                <h:outputText value="#{balancesView.glSummary.totalDebit}" >
+                                                    <f:convertNumber pattern="#,##0.00" />
+                                                </h:outputText>
+                                            </f:facet>
+
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    
+                                    <center>
+                                         <h:panelGrid columns="2" styleClass="spaced-table">
+                                         <h:outputLabel value="Net Balance " />
+                                    <h:outputText value="#{balancesView.glSummary.netAmount}" styleClass="field-value" >
+                                                    <f:convertNumber pattern="#,##0.00" />
+                                                </h:outputText>
+                                    </h:panelGrid>
+                                    </center>
+                                    
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

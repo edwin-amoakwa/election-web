@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="value" />
+    </cc:interface>
+
+    <cc:implementation>
+        <h:panelGrid columns="8">
+
+            <h:outputText value="Count" styleClass="field-label"/>
+            <h:outputText value="#{cc.attrs.value.count}" styleClass="field-value"/>
+
+            <h:outputText value="Total Credit" styleClass="field-label"/>
+            <stately:doubleDisplay value="#{cc.attrs.value.totalCredit}" styleClass="field-value"/>
+
+            <h:outputText value="Total Debit" styleClass="field-label"/>
+            <stately:doubleDisplay value="#{cc.attrs.value.totalDebit}" styleClass="field-value"/>
+
+            <h:outputText value="Net Amount" styleClass="field-label"/>
+            <stately:doubleDisplay value="#{cc.attrs.value.netAmount}" styleClass="field-value"/>
+
+        </h:panelGrid>
+
+    </cc:implementation>
+</html>
