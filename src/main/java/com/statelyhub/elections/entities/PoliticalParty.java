@@ -42,6 +42,11 @@ public class PoliticalParty extends UniqueEntityModel3 {
     public void setPartyName(String partyName) {
         this.partyName = partyName;
     }
+
+    @Override
+    public String toString() {
+        return initials;
+    }
     
 
     

@@ -1,0 +1,114 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="ajax" default="true"/>
+        <cc:attribute name="overlay" default="false" />
+        <cc:attribute name="rows" default="15" />
+        <cc:attribute name="showTable" default="true"/>
+        <cc:attribute name="update"/>
+        
+        <cc:attribute name="allowMutipleSelection" default="false"/>
+        
+        <cc:attribute name="selectAction" 
+                      required="false"
+                      method-signature="java.lang.String action()"/>
+        
+        <cc:attribute name="otherSelectAction" 
+                      required="false"
+                      method-signature="java.lang.String action()"/>
+        
+        <cc:attribute name="otherSelectActionLabel"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <h:panelGroup >
+
+            
+            <h:panelGrid columns="2" styleClass="spaced-table">
+
+                <ui:remove>
+                    
+                     <h:outputLabel value="Filter"/>
+                 <h:selectOneMenu value="#{pollingStationSearch.field}" 
+                                  styleClass="form-control">
+                    <f:selectItem itemLabel="#{msg.select_one}" />
+                    <f:selectItems value="#{commonOptions.iipghFieldsMap}" />
+                </h:selectOneMenu>
+                
+                </ui:remove>
+                
+               
+                <h:outputLabel value="Search"/>
+                <p:inputText value="#{pollingStationSearch.searchText}" />
+                
+               
+                <h:outputLabel />
+                
+                <p:commandButton value="Search"
+                                 ajax="#{cc.attrs.ajax}"
+                                 action="#{pollingStationSearch.searchPollingStation()}" update="searchResult, #{cc.attrs.update}"/>
+
+            </h:panelGrid>
+            
+            
+            <h:panelGroup id="searchResult">
+
+                <p:dataTable value="#{pollingStationSearch.pollingStationsList}" var="pollingStation" rendered="#{cc.attrs.showTable}"
+                             paginator="true" paginatorPosition="bottom" rows="#{cc.attrs.rows}">
+
+                    <p:column headerText="#{msg.name}" >
+                        <p:commandLink value="#{pollingStation.pollingStation.stationName}" 
+                                       rendered="#{not empty cc.attrs.selectAction}" 
+                                       ajax="#{cc.attrs.ajax}"
+                                       update="#{cc.attrs.update}"
+                                       action="#{cc.attrs.selectAction}">
+                            <f:setPropertyActionListener value="#{pollingStation}" target="#{pollingStationSearch.pollingStation}" />
+                        </p:commandLink>
+                        
+                        <h:outputText value="#{pollingStation.pollingStation.stationName}" 
+                                      rendered="#{empty cc.attrs.selectAction}" />                        
+                    </p:column>
+                    
+                    <p:column headerText="#{msg.email}" rendered="false">
+                        <h:outputText value="#{pollingStation.pollingStation}" />                
+                    </p:column>
+
+                    
+                    
+                    
+                    <p:column headerText="#{msg.action}" rendered="#{not empty cc.attrs.otherSelectAction}" >
+                        <p:commandLink value="#{cc.attrs.otherSelectActionLabel}"                                        
+                                       ajax="#{cc.attrs.ajax}"
+                                       update="#{cc.attrs.update}"
+                                       action="#{cc.attrs.otherSelectAction}">
+                            <f:setPropertyActionListener value="#{quotation}" target="#{merchantSearch.quotation}" />
+                        </p:commandLink>
+                        
+                        
+                    </p:column>
+                    
+                    
+                    <p:column headerText="Select" rendered="#{cc.attrs.allowMutipleSelection}">
+                        <p:selectBooleanCheckbox value="#{counterparty.selected}">
+                            <p:ajax listener="#{merchantSearch.addSelectedAccount(counterparty)}"/>
+                        </p:selectBooleanCheckbox>
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:panelGroup>
+
+        </h:panelGroup>
+
+    </cc:implementation>
+
+</html>

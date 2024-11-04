@@ -1,0 +1,129 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        #{msg.election}s
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+
+            <div class="col-lg-4">
+
+                <h:form>
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                        <h:outputText value="#{msg.initial}" />
+                        <p:inputText value="#{electionController.election.electionYear}" />    
+
+                        <h:outputText value="#{msg.name}" />
+                        <p:inputText value="#{electionController.election.electionName}" />
+
+
+                        <f:facet name="footer">
+                            <center style="margin: 10px">
+                                <stately:formControl saveButtonAction="#{electionController.saveElection()}" 
+                                                     cancelButtonAction="#{electionController.clear()}"/>
+                            </center>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </h:form>
+
+                <h:form style="margin-top: 20px;">
+                    <p:dataTable value="#{electionController.electionsList}" var="election">
+                        <p:column headerText="#{msg.initial}">
+                            <h:outputText value="#{election.electionYear}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.name}">
+                            <h:outputText value="#{election.electionName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}">
+                            <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                           action="#{electionController.editElection(election)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+            </div>
+
+
+            <div class="col-lg-4">
+
+                <h:form>
+
+                    <h:panelGrid columns="2" styleClass="spaced-table">
+
+
+                        <h:outputText value="Election" />
+                        <h:outputText value="#{electionController.election.electionName}" />
+
+
+
+                        <h:outputText value="Party" />
+                        <p:selectOneMenu value="#{electionController.selectedParty}">
+                            <f:selectItems value="#{userCommonOptions.partysList}" />
+                        </p:selectOneMenu>
+
+                    </h:panelGrid>
+
+                    <p:commandButton value="Save" ajax="false"
+                                     action="#{electionController.addParty()}"/>
+
+
+
+
+
+
+                    <p:dataTable value="#{electionController.partyElectionsList}" var="partyElection">
+
+                        <p:column headerText="#{msg.view_order}">
+                            <h:outputText value="#{partyElection.viewOrder}" />
+                        </p:column>
+
+
+                        <p:column headerText="#{msg.name}" rendered="false">
+                            <h:outputText value="#{partyElection.election.electionName}" />
+                        </p:column>
+
+
+                        <p:column headerText="#{msg.party}">
+                            <h:outputText value="#{partyElection.party.initials}" />
+                        </p:column>
+
+
+
+                    </p:dataTable>
+
+
+                </h:form>
+
+            </div>
+
+
+            <div class="col-lg-4">
+
+                <p:panel header="Independent Candiate">
+
+                </p:panel>
+
+
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

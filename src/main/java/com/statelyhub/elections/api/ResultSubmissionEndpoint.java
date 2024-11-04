@@ -1,7 +1,7 @@
 package com.statelyhub.elections.api;
 
 import com.stately.modules.api.ApiResponse;
-import com.statelyhub.gafpv.service.CrudService;
+import com.statelyhub.elections.services.CrudService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;

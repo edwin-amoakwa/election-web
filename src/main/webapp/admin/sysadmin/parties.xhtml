@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+       #{msg.department}
+    </ui:define>
+
+    <ui:define name="content">
+      
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                
+                   <h:outputText value="#{msg.initial}" />
+                <p:inputText value="#{politicalPartyController.party.initials}" />    
+                
+                <h:outputText value="#{msg.name}" />
+                <p:inputText value="#{politicalPartyController.party.partyName}" />
+                
+                         
+                
+                
+                
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{politicalPartyController.savePoliticalParty()}" 
+                                             cancelButtonAction="#{politicalPartyController.clear()}"/>
+                    </center>
+                </f:facet>
+                
+            </p:panelGrid>
+        </h:form>
+        
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{politicalPartyController.partysList}" var="party">
+                <p:column headerText="#{msg.initial}">
+                    <h:outputText value="#{party.initials}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{party.partyName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{politicalPartyController.editParty(party)}"/>
+                </p:column>
+                
+                
+            </p:dataTable>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

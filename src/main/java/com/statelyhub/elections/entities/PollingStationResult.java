@@ -22,30 +22,53 @@ public class PollingStationResult extends Result {
     @JoinColumn(name = "volunteer")
     @ManyToOne
     private Volunteer volunteer;
-    
+
     public static final String _election = "election";
     @JoinColumn(name = "election")
     @ManyToOne
     private Election election;
-    
+
     public static final String _pollingStation = "pollingStation";
     @JoinColumn(name = "polling_station")
     @ManyToOne
     private PollingStation pollingStation;
-    
-    public static final String _candidate = "candidate";
-    @JoinColumn(name = "candidate")
+
+    public static final String _electionPollingStation = "electionPollingStation";
+    @JoinColumn(name = "election_polling_station")
     @ManyToOne
-    private Candidate candidate;
-    
-    
-    public static final String _electionContestant = "electionContestant";
-    @JoinColumn(name = "election_contestant")
-    @ManyToOne
-    private ConstituencyElectionContestant electionContestant;
-    
-    
-    
-    
-    
+    private ElectionPollingStation electionPollingStation;
+
+
+    public Volunteer getVolunteer() {
+        return volunteer;
+    }
+
+    public void setVolunteer(Volunteer volunteer) {
+        this.volunteer = volunteer;
+    }
+
+    public Election getElection() {
+        return election;
+    }
+
+    public void setElection(Election election) {
+        this.election = election;
+    }
+
+    public PollingStation getPollingStation() {
+        return pollingStation;
+    }
+
+    public void setPollingStation(PollingStation pollingStation) {
+        this.pollingStation = pollingStation;
+    }
+
+    public ElectionPollingStation getElectionPollingStation() {
+        return electionPollingStation;
+    }
+
+    public void setElectionPollingStation(ElectionPollingStation electionPollingStation) {
+        this.electionPollingStation = electionPollingStation;
+    }
+
 }

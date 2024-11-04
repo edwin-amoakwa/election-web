@@ -14,7 +14,7 @@ import java.util.List;
 public class TypeElection {
     private ElectionType seat;
     private int rejectedBallot;
-    private List<CandiateResultDto> candidateResultList;
+    private List<CandidateResultDto> candidateResultList;
 
     public ElectionType getSeat() {
         return seat;
@@ -32,11 +32,11 @@ public class TypeElection {
         this.rejectedBallot = rejectedBallot;
     }
 
-    public List<CandiateResultDto> getCandidateResultList() {
+    public List<CandidateResultDto> getCandidateResultList() {
         return candidateResultList;
     }
 
-    public void setCandidateResultList(List<CandiateResultDto> candidateResultList) {
+    public void setCandidateResultList(List<CandidateResultDto> candidateResultList) {
         this.candidateResultList = candidateResultList;
     }
     

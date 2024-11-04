@@ -33,10 +33,61 @@ public class PollingStation extends UniqueEntityModel3 {
     @ManyToOne
     private ElectorialArea electorialArea;
 
+    public static final String _administrativeArea = "administrativeArea";
+    @JoinColumn(name = "administrative_area")
+    @ManyToOne
+    private AdministrativeArea  administrativeArea;
+
     public static final String _constituency = "constituency";
     @JoinColumn(name = "constituency")
     @ManyToOne
     private Constituency constituency;
 
+    public String getStationCode() {
+        return stationCode;
+    }
+
+    public void setStationCode(String stationCode) {
+        this.stationCode = stationCode;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
+    public ElectorialArea getElectorialArea() {
+        return electorialArea;
+    }
+
+    public void setElectorialArea(ElectorialArea electorialArea) {
+        this.electorialArea = electorialArea;
+    }
+
+    public AdministrativeArea getAdministrativeArea() {
+        return administrativeArea;
+    }
+
+    public void setAdministrativeArea(AdministrativeArea administrativeArea) {
+        this.administrativeArea = administrativeArea;
+    }
+
+    public Constituency getConstituency() {
+        return constituency;
+    }
+
+    public void setConstituency(Constituency constituency) {
+        this.constituency = constituency;
+    }
+
+    @Override
+    public String toString() {
+        return stationName;
+    }
+
+    
     
 }

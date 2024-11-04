@@ -29,6 +29,22 @@ public class ElectorialArea extends UniqueEntityModel3 {
     @ManyToOne
     private Constituency constituency;
 
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public Constituency getConstituency() {
+        return constituency;
+    }
+
+    public void setConstituency(Constituency constituency) {
+        this.constituency = constituency;
+    }
+
     
 
     

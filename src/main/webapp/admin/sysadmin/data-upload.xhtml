@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        Data Upload
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <div class="card">
+            <h5>Upload</h5>
+            <h:form enctype="multipart/form-data">
+                <p:fileUpload value="#{dataUploadController.uploadFile}" mode="simple" skinSimple="true"/>
+
+                <p:commandButton value="Submit" ajax="false" action="#{dataUploadController.handleFileUpload}" 
+                                 styleClass="mt-3 ui-button-outlined block"/>
+            </h:form>
+        </div>
+
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{fundingSourceController.bankAccountsList}" var="fundingSource">
+                <p:column headerText="#{msg.code}">
+                    <h:outputText value="#{fundingSource.sourceId}" />
+                </p:column>
+
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{fundingSource.sourceName}" />
+                </p:column>
+
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" 
+                                   action="#{fundingSourceController.editFundingSource(fundingSource)}"/>
+                </p:column>
+
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.delete}" styleClass="delete"
+                                   action="#{fundingSourceController.deleteFundingSource(fundingSource)}"/>
+                </p:column>
+
+
+            </p:dataTable>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+

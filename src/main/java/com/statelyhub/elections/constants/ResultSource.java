@@ -17,6 +17,7 @@ public enum ResultSource implements MessageResolvable
 {
 
     COALLATED("COALLATED","COALLATED"),
+    SUBMITTED("SUBMITTED","SUBMITTED"),
     OFFICIAL("OFFICIAL","OFFICIAL");
 
     private final String code;

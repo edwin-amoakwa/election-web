@@ -9,102 +9,27 @@
 
     <ul class="sidebar-menu">
 
-         <li class="header">MAIN NAVIGATION</li>
+        <li class="header">MAIN NAVIGATION</li>
 
-            <li class="active">
-                <a href="#{application.contextPath}/admin/index.xhtml">
-                    <i class="active fa fa-dashboard"></i> <span>DashBoard</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
+        <li class="active">
+            <a href="#{application.contextPath}/admin/index.xhtml">
+                <i class="active fa fa-dashboard"></i> <span>DashBoard</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
 
-            </li>
-         
-         
-              <f:subview id="fsfgsgf" rendered="#{userPermission.inputter or userPermission.admin}">
-            <li class="active treeview ">
-                <a href="#">
-                    <i class="active fa fa-bars"></i> <span>General</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li >
-                        <a href="#{application.contextPath}/admin/bills.xhtml"><i class="fa fa-circle-o"></i>#{msg.bills}</a>
-                    </li>
-                    
-                    <li >
-                        <a href="#{application.contextPath}/admin/pv-history.xhtml"><i class="fa fa-circle-o"></i>#{msg.pv_records}</a>
-                    </li>
-                </ul>
-            </li>
-        </f:subview>
-             
+        </li>
 
-         <f:subview id="viewer" rendered="#{userPermission.viewer}">
-            <li class="active treeview ">
-                <a href="#">
-                    <i class="active fa fa-bars"></i> <span>General</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li >
-                        <a href="#{application.contextPath}/admin/pv-history.xhtml"><i class="fa fa-circle-o"></i>#{msg.pv_history}</a>
-                    </li>
-                </ul>
-            </li>
-        </f:subview>
 
-         
-        
 
-         <f:subview id="ssssssssssss" rendered="#{userPermission.authoriser}">
-            <li class="active treeview ">
-                <a href="#">
-                    <i class="active fa fa-bars"></i> <span>General</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    
-                    <li class="hidden">
-                        <a href="#{application.contextPath}/admin/bills-pending-authorisation.xhtml"><i class="fa fa-circle-o"></i>Bills #{msg.pending_authorisation}</a>
-                    </li>
-                    
-                    <li >
-                        <a href="#{application.contextPath}/admin/pv-pending-authorisation.xhtml"><i class="fa fa-circle-o"></i>PVs #{msg.pending_authorisation}</a>
-                    </li>
-                    
-                    <li >
-                        <a href="#{application.contextPath}/admin/pv-history.xhtml"><i class="fa fa-circle-o"></i>#{msg.pv_records}</a>
-                    </li>
-                    
-                     <li >
-                        <a href="#{application.contextPath}/admin/balances.xhtml"><i class="fa fa-circle-o"></i>#{msg.summary_balances}</a>
-                    </li>
-                    
-                    
-                     <li >
-                        <a href="#{application.contextPath}/admin/general-ledger-records.xhtml"><i class="fa fa-circle-o"></i>#{msg.gl_records}</a>
-                    </li>
-                    
-                    
-                    
-                </ul>
-            </li>
-        </f:subview>
-         
 
-         <f:subview id="dddd" rendered="#{userPermission.admin}">
+
+        <f:subview id="dddd" >
 
             <li class="active treeview ">
                 <a href="#">
-                    <i class="active fa fa-adn"></i> <span>#{msg.sysadmin}</span>
+                    <i class="active fa fa-adn"></i> <span>Election Management</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -112,16 +37,13 @@
                 <ul class="treeview-menu">
 
                     <li >                    
-                        <a href="#{application.contextPath}/admin/sysadmin/ledger-accounts.xhtml"><i class="fa fa-money"></i>#{msg.ledger_account}</a>
-                        <a href="#{application.contextPath}/admin/sysadmin/bank-account.xhtml"><i class="fa fa-money"></i>#{msg.bank_account}</a>
-                        <a href="#{application.contextPath}/admin/sysadmin/supplier.xhtml"><i class="fa fa-money"></i>#{msg.supplier}</a>
-                        <a href="#{application.contextPath}/admin/sysadmin/funding-source.xhtml"><i class="fa fa-money"></i>#{msg.funding_source}</a>
-                        <a href="#{application.contextPath}/admin/sysadmin/department.xhtml"><i class="fa fa-money"></i>#{msg.department}</a>
-                        <a href="#{application.contextPath}/admin/sysadmin/cash-transfer.xhtml"><i class="fa fa-money"></i>Cash Transactions</a>
+                        
+                        <a href="#{application.contextPath}/admin/sysadmin/election-setup.xhtml"><i class="fa fa-anchor"></i>Election Details</a>
+                        <a href="#{application.contextPath}/admin/sysadmin/polling-station-collation.xhtml"><i class="fa fa-anchor"></i>Polling Station Collation</a>
+                        
+                        
                     </li>
-                    <li >                    
-                        <a href="#{application.contextPath}/admin/admin-users.xhtml"><i class="fa fa-circle-o"></i>Users</a>
-                    </li>
+         
 
 
                 </ul>
@@ -130,7 +52,7 @@
         </f:subview>
 
 
-         <f:subview id="super" rendered="#{userPermission.superAdmin}">
+        <f:subview id="super" >
 
             <li class="active treeview ">
                 <a href="#">
@@ -143,14 +65,16 @@
 
                     <li >  
                         <a href="#{application.contextPath}/admin/admin-users.xhtml"><i class="fa fa-circle-o"></i>Users</a>
-                        <a href="#{application.contextPath}/admin/system/institution.xhtml"><i class="fa fa-anchor"></i>#{msg.unit}</a>
+                         <a href="#{application.contextPath}/admin/sysadmin/data-upload.xhtml"><i class="fa fa-anchor"></i>Data Uploads</a>
+                         <a href="#{application.contextPath}/admin/sysadmin/parties.xhtml"><i class="fa fa-anchor"></i>Political Party</a>
+                         <a href="#{application.contextPath}/admin/sysadmin/elections.xhtml"><i class="fa fa-anchor"></i>Elections</a>
                     </li>
-                    
+
                 </ul>
             </li>
 
         </f:subview>
-         
+
 
 
     </ul>

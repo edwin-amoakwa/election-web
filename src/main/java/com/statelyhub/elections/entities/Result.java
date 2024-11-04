@@ -23,7 +23,14 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Result extends UniqueEntityModel3 {
     
-      public static final String _viewOrder = "viewOrder";
+    
+    public static final String _electionContestant = "electionContestant";
+    public static final String _electionContestant_electionType = _electionContestant + "." + ElectionContestant._electionType;
+    @JoinColumn(name = "election_contestant")
+    @ManyToOne
+    private ElectionContestant electionContestant;
+
+    public static final String _viewOrder = "viewOrder";
     @Column(name = "view_order")
     private int viewOrder;
 
@@ -31,6 +38,22 @@ public class Result extends UniqueEntityModel3 {
     @JoinColumn(name = "constituency_election")
     @ManyToOne
     private ConstituencyElection constituencyElection;
+    
+//       public static final String _pollingStation = "pollingStation";
+//    @JoinColumn(name = "polling_station")
+//    @ManyToOne
+//    private PollingStation pollingStation;
+//
+//    public static final String _electionPollingStation = "electionPollingStation";
+//    @JoinColumn(name = "election_polling_station")
+//    @ManyToOne
+//    private ElectionPollingStation electionPollingStation;
+    
+    
+        public static final String _candidateName = "candidateName";
+    @Column(name = "candidate_name")
+    private String candidateName;
+    
 
     public static final String _candidate = "candidate";
     @JoinColumn(name = "candidate")
@@ -59,11 +82,23 @@ public class Result extends UniqueEntityModel3 {
     public static final String _collatedResult = "collatedResult";
     @Column(name = "collated_result")
     private int collatedResult;
-    
+
+    public static final String _submittedResult = "submittedResult";
+    @Column(name = "submitted_result")
+    private int submittedResult;
+
     public static final String _acceptedResult = "acceptedResult";
     @Column(name = "accepted_result")
     private int acceptedResult;
+    
+      public static final String _position = "position";
+    @Column(name = "position")
+    private int position;
 
+      public static final String _votePct = "votePct";
+    @Column(name = "vote_pct")
+    private double votePct;
+    
     public ConstituencyElection getConstituencyElection() {
         return constituencyElection;
     }
@@ -136,5 +171,46 @@ public class Result extends UniqueEntityModel3 {
         this.viewOrder = viewOrder;
     }
 
+    public int getSubmittedResult() {
+        return submittedResult;
+    }
+
+    public void setSubmittedResult(int submittedResult) {
+        this.submittedResult = submittedResult;
+    }
+
+    public String getCandidateName() {
+        return candidateName;
+    }
+
+    public void setCandidateName(String candidateName) {
+        this.candidateName = candidateName;
+    }
+
+    public ElectionContestant getElectionContestant() {
+        return electionContestant;
+    }
+
+    public void setElectionContestant(ElectionContestant electionContestant) {
+        this.electionContestant = electionContestant;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public double getVotePct() {
+        return votePct;
+    }
+
+    public void setVotePct(double votePct) {
+        this.votePct = votePct;
+    }
+
+    
     
 }

@@ -20,15 +20,43 @@ import jakarta.persistence.Table;
 @Table(name = "constituency")
 public class Constituency extends UniqueEntityModel3 {
 
-       public static final String _constituencyName = "constituencyName";
+    public static final String _constituencyName = "constituencyName";
     @Column(name = "constituency_name")
     private String constituencyName;
-    
-    
+
     public static final String _region = "region";
     @JoinColumn(name = "region")
     @ManyToOne
     private Region region;
     
     
+    public static final String _district = "district";
+    @JoinColumn(name = "district")
+    @ManyToOne
+    private DistrictAssembly district;
+
+    public String getConstituencyName() {
+        return constituencyName;
+    }
+
+    public void setConstituencyName(String constituencyName) {
+        this.constituencyName = constituencyName;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public DistrictAssembly getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(DistrictAssembly district) {
+        this.district = district;
+    }
+
 }

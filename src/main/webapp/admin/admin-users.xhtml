@@ -25,7 +25,8 @@
                         <h:outputText value="#{msg.email}" />
                         <p:inputText value="#{adminLoginController.collector.emailAddress}" required="true"/>
 
-
+                        <ui:remove>
+                            
                         <h:outputText value="#{msg.institution}" 
                                       rendered="#{userSession.accountUR.superUser}"/>
                         <h:selectOneMenu value="#{adminLoginController.collector.institution}" 
@@ -36,6 +37,8 @@
                             <f:selectItems value="#{userCommonOptions.institutionsList}" />
                         </h:selectOneMenu>
                         
+                        </ui:remove>
+
                         <f:facet name="footer">
                             <center style="margin: 10px">
                                 <stately:formControl saveButtonAction="#{adminLoginController.saveCollector()}" 

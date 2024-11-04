@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        Election Details
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            Regions
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <h:form>
+                            <p:dataTable value="#{userCommonOptions.regionsList}" var="region" 
+                                         rows="10" paginator="true" paginatorPosition="bottom">
+                                <p:column filterBy="#{region.regionName}" filterMatchMode="contains">
+                                    <h:commandLink value="#{region.regionName}" 
+                                                   action="#{electionDetailController.selectRegion(region)}"/>
+                                </p:column>
+                                
+                                <p:column headerText="# #{msg.constituency}">
+                                    <h:outputText value="#{region.constituencyCount}" rendered="#{region.constituencyCount != 0}">
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="# #{msg.polling_stations}" >
+                                    <h:outputText value="#{region.pollingStationCount}" rendered="#{region.pollingStationCount != 0}" >
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <h:form rendered="true">
+                    <p:dataTable value="#{electionDetailController.constituencyList}" var="consElection"
+                                 rows="10" paginator="true" paginatorPosition="bottom">
+                        
+                        <p:column headerText="#{msg.constituency}">
+                            <h:commandLink value="#{consElection.constituency.constituencyName}" 
+                                           action="#{electionDetailController.selectConstituency(consElection)}"/>
+                        </p:column>
+
+                        <p:column headerText="# #{msg.polling_stations}">
+                                    <h:outputText value="#{consElection.pollingStationCount}" >
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </p:column>
+                        
+
+                    </p:dataTable>
+                </h:form>
+
+            </div>
+
+
+            <div class="col-lg-3">
+
+
+                <h:form>
+                    <p:dataTable value="#{electionDetailController.pollingStationsList}" var="pollingStation" 
+                                 rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="#{msg.code}">
+                            <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.polling_stations}" >
+                            <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
+                                           action="#{electionDetailController.selectPollingStation(pollingStation)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+
+            </div>
+
+
+            <div class="col-lg-2">
+
+            </div>
+
+        </div>
+
+        
+        
+        
+        <h:form>
+            <p:commandButton value="Update Stats" ajax="false"
+                             action="#{electionDetailController.updateStats()}"/>
+            
+            
+            
+              <p:commandButton value="Init" ajax="false"
+                             action="#{electionDetailController.initIaliseDefaultContesttants()}"/>
+        </h:form>
+        
+
+    </ui:define>
+
+</ui:composition>
+

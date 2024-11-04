@@ -1,0 +1,180 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+                xmlns:election="jakarta.faces.composite/election"
+                xmlns:c="jakarta.tags.core">
+
+    <ui:define name="pageTitle">
+        Polling Station Collation
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <div class="row">
+
+            <div class="col-lg-3">
+                <h:form>
+                    <election:pollingStationSearch selectAction="#{pollingStationCollationController.searchPollingStation()}"
+                                                   update=":stationResult"/>
+                </h:form>
+            </div>
+
+            <div class="col-lg-6">
+                <h:panelGroup id="stationResult">
+                    
+                             
+                    <h3>#{pollingStationCollationController.electionPollingStation.pollingStation.stationCode} - #{pollingStationCollationController.electionPollingStation.pollingStation.stationName}</h3>
+                
+                <c:forEach items="#{pollingStationCollationController.resultsList}" var="electionTypeContainer">
+                    
+                    
+                     
+                      <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            #{electionTypeContainer.electionType}
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        
+                <h:form>
+                    
+                    
+
+
+                    <p:dataTable value="#{electionTypeContainer.resultsList}" var="pollingStationResult" 
+                                 rowKey="#{pollingStationResult.id}">
+                        
+                        <p:column>
+                            <p:rowToggler />
+                        </p:column>
+                        
+                        <p:rowExpansion>
+                            #{pollingStationResult.id}
+                        </p:rowExpansion>
+                        
+                        <p:column headerText="#{msg.party}">
+                            <h:outputText value="#{pollingStationResult.electionContestant.party.initials}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.name}">
+                            <h:outputText value="#{pollingStationResult.candidateName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.accepted}">
+                            <h:outputText value="#{pollingStationResult.acceptedResult}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+                        
+                         <p:column headerText="#{msg.collated}">
+                             <h:outputText value="#{pollingStationResult.collatedResult}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+                        
+                        
+                         <p:column headerText="#{msg.official}">
+                             <h:outputText value="#{pollingStationResult.officialResult}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+                        
+                          <p:column headerText="#{msg.submitted}">
+                              <h:outputText value="#{pollingStationResult.submittedResult}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+
+
+                        <p:column headerText="#{msg.action}">
+                            <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                           action="#{counterpartyController.editCounterparty(counterparty)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+
+
+
+
+                </h:form>
+
+                    </div>
+                </div>
+                
+                
+                    
+                </c:forEach>
+                
+                
+                    
+                </h:panelGroup>
+               
+
+
+            </div>
+
+
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+        
+        
+        <hr />
+        <hr />
+
+        <div class="row">
+            <div class="col-lg-4">
+                
+            </div>
+        </div>
+
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                <h:outputText value="#{msg.code}" />
+                <p:inputText value="#{counterpartyController.counterparty.counterpartyCode}" />
+
+                <h:outputText value="#{msg.name}" />
+                <p:inputText value="#{counterpartyController.counterparty.counterpartyName}" />
+
+
+
+                <f:facet name="footer">
+                    <center style="margin: 10px">
+                        <stately:formControl saveButtonAction="#{counterpartyController.saveCounterparty()}" 
+                                             cancelButtonAction="#{counterpartyController.clear()}"/>
+                    </center>
+                </f:facet>
+
+            </p:panelGrid>
+        </h:form>
+
+        <h:form style="margin-top: 20px;">
+            <p:dataTable value="#{counterpartyController.counterpartiesList}" var="counterparty">
+                <p:column headerText="#{msg.code}">
+                    <h:outputText value="#{counterparty.counterpartyCode}" />
+                </p:column>
+                <p:column headerText="#{msg.name}">
+                    <h:outputText value="#{counterparty.counterpartyName}" />
+                </p:column>
+                <p:column headerText="#{msg.action}">
+                    <h:commandLink value="#{msg.edit}" styleClass="delete"
+                                   action="#{counterpartyController.editCounterparty(counterparty)}"/>
+                </p:column>
+
+
+            </p:dataTable>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+

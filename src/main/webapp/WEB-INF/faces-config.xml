@@ -19,7 +19,7 @@
         
     <lifecycle>
         <phase-listener>
-            com.statelyhub.gafpv.web.ApplicationListener
+            com.statelyhub.elections.web.ApplicationListener
         </phase-listener>
     </lifecycle>
 
