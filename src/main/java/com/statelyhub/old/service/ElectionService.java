@@ -7,6 +7,7 @@ package com.statelyhub.old.service;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ConstituencyElection;
+import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
@@ -23,6 +24,13 @@ import java.util.List;
 public class ElectionService {
     
       @Inject private CrudService crudService;
+      
+      public Election getCurrentElection()
+      {
+          List<Election> elections = crudService.findAll(Election.class);
+          
+          return elections.get(0);
+      }
     
       
       public List<ElectionContestant> cecs(ConstituencyElection constituencyElection, ElectionType electionType)
