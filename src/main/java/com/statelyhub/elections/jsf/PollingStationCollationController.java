@@ -8,6 +8,7 @@ import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.SubmissionStatus;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.ResultSubmission;
@@ -16,8 +17,8 @@ import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.model.PollingStationResultContainer;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.web.PollingStationSearch;
-import com.statelyhub.old.service.ElectionResultService;
-import com.statelyhub.old.service.ElectionService;
+import com.statelyhub.elections.services.ElectionResultService;
+import com.statelyhub.elections.services.ElectionService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -58,6 +59,10 @@ public class PollingStationCollationController implements Serializable {
     private List<ElectionTypeResult> resultsList;
     
     private List<ResultSubmission> submissionsList;
+    
+     private List<ElectionPollingStation> pollingStationsList;
+    
+    private ConstituencyElection selectedConstituencyElection;
 
     public void searchPollingStation() {
         selectPollingStation(pollingStationSearch.getPollingStation());
@@ -66,23 +71,19 @@ public class PollingStationCollationController implements Serializable {
     public void selectPollingStation(ElectionPollingStation station) {
         this.electionPollingStation = station;
 
-//        stationResultList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-//                .addObjectParam(ElectionPollingStation._election, station.getElection())
-//                .addObjectParam(ElectionPollingStation._pollingStation, station.getPollingStation())
-//                .buildQry().getResultList();
-
-//        presidentialList = electionService.eps(station, ElectionType.PRESIDENTIAL);
-//        parliamentaryList = electionService.eps(station, ElectionType.PARLIAMENTARY);
-//
-//        ElectionTypeResult typeResult = new ElectionTypeResult();
-//        typeResult.setElectionType(ElectionType.PRESIDENTIAL);
-//        typeResult.setResultsList(stationResultList);
 
         resultsList = electionResultService.pollingStationBucket(station);
-
-        System.out.println(".... " + presidentialList);
+        
         
         loadSubmissions();
+    }
+    
+    public void loadPollingStation()
+    {
+        pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParam(ElectionPollingStation._constituencyElection, selectedConstituencyElection)
+                .orderByDesc(ElectionPollingStation._pollingStation_stationCode)
+                .buildQry().getResultList();
     }
     
     public void loadSubmissions()
@@ -126,7 +127,7 @@ public class PollingStationCollationController implements Serializable {
          
 //         System.out.println("...maps ... " +resultMap);
     
-         List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(electionTypeResultsList);
+         List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(resultsList);
          
          for (PollingStationResult pollingStationResult : stationResultsList) {
              Integer votes =  resultMap.get(pollingStationResult.getId());
@@ -180,6 +181,24 @@ public class PollingStationCollationController implements Serializable {
     public void setSubmissionsList(List<ResultSubmission> submissionsList) {
         this.submissionsList = submissionsList;
     }
+
+    public ConstituencyElection getSelectedConstituencyElection() {
+        return selectedConstituencyElection;
+    }
+
+    public void setSelectedConstituencyElection(ConstituencyElection selectedConstituencyElection) {
+        this.selectedConstituencyElection = selectedConstituencyElection;
+    }
+
+    public List<ElectionPollingStation> getPollingStationsList() {
+        return pollingStationsList;
+    }
+
+    public void setPollingStationsList(List<ElectionPollingStation> pollingStationsList) {
+        this.pollingStationsList = pollingStationsList;
+    }
+
+   
 
     
     
