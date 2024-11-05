@@ -78,10 +78,12 @@ public class UpdateStatsService {
         List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._election, election).buildQry().getResultList();
         
-        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
-                .addObjectParam(PartyElection._election, election).buildQry().getResultList();
         
-        for (ConstituencyElection constituency : constituencys) {
+        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .addObjectParam(PartyElection._election, election).printQryInfo().buildQry().getResultList();
+        
+        for (ConstituencyElection constituency : constituencys) 
+        {
             for (PartyElection partyElection : partyElectionsList) {
                 add(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
                 add(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
