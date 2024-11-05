@@ -121,7 +121,7 @@ public class ResultSubmissionEndpoint {
                 
                 submittedDto.setId(submittedResult.getId());
                 submittedDto.setCondidateName(submittedResult.getCandidateName());
-                submittedDto.setVotes(submittedResult.getCollatedResult());
+                submittedDto.setVotes(submittedResult.getSubmittedResult());
                 submittedDto.setParty(submittedResult.getPartyDetails());
                 
                 if(StringUtil.isNullOrEmpty(submittedDto.getCondidateName()))

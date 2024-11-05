@@ -47,6 +47,12 @@ public class ElectionPollingStation extends UniqueEntityModel3 {
     @JoinColumn(name = "constituency_election")
     @ManyToOne
     private ConstituencyElection constituencyElection;
+    
+    
+      public static final String _resultSubmission = "resultSubmission";
+    @JoinColumn(name = "result_submission")
+    @ManyToOne
+    private ResultSubmission resultSubmission;
 
     public int getVotersCount() {
         return votersCount;
@@ -86,6 +92,14 @@ public class ElectionPollingStation extends UniqueEntityModel3 {
 
     public void setConstituencyElection(ConstituencyElection constituencyElection) {
         this.constituencyElection = constituencyElection;
+    }
+
+    public ResultSubmission getResultSubmission() {
+        return resultSubmission;
+    }
+
+    public void setResultSubmission(ResultSubmission resultSubmission) {
+        this.resultSubmission = resultSubmission;
     }
 
     @Override

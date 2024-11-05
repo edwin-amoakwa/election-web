@@ -37,29 +37,17 @@ public class Result extends UniqueEntityModel3 {
     @JoinColumn(name = "constituency_election")
     @ManyToOne
     private ConstituencyElection constituencyElection;
-    
-    
-       public static final String _resultSubmission = "resultSubmission";
-    @JoinColumn(name = "result_submission")
-    @ManyToOne
-    private ResultSubmission resultSubmission;
-    
-     
-       public static final String _submittedResult = "submittedResult";
-    @JoinColumn(name = "submitted_result")
-    @ManyToOne
-    private SubmittedResult submittedResult;
-    
 
-//       public static final String _pollingStation = "pollingStation";
-//    @JoinColumn(name = "polling_station")
+//    public static final String _resultSubmission = "resultSubmission";
+//    @JoinColumn(name = "result_submission")
 //    @ManyToOne
-//    private PollingStation pollingStation;
-//
-//    public static final String _electionPollingStation = "electionPollingStation";
-//    @JoinColumn(name = "election_polling_station")
+//    private ResultSubmission resultSubmission;
+
+//    public static final String _volunteerResult = "volunteerResult";
+//    @JoinColumn(name = "volunteer_result")
 //    @ManyToOne
-//    private ElectionPollingStation electionPollingStation;
+//    private SubmittedResult volunteerResult;
+
     public static final String _candidateName = "candidateName";
     @Column(name = "candidate_name")
     private String candidateName;
@@ -88,9 +76,9 @@ public class Result extends UniqueEntityModel3 {
     @Column(name = "official_result")
     private int officialResult;
 
-    public static final String _collatedResult = "collatedResult";
-    @Column(name = "collated_result")
-    private int collatedResult;
+    public static final String _submittedResult = "submittedResult";
+    @Column(name = "submitted_result")
+    private int submittedResult;
 
     public static final String _inputResult = "inputResult";
     @Column(name = "input_result")
@@ -107,25 +95,17 @@ public class Result extends UniqueEntityModel3 {
     public static final String _votePct = "votePct";
     @Column(name = "vote_pct")
     private double votePct;
-    
-    
-    public String getPartyDetails()
-    {
-        if(electionContestant != null)
-        {
-            if(electionContestant.getParty() != null)
-            {
+
+    public String getPartyDetails() {
+        if (electionContestant != null) {
+            if (electionContestant.getParty() != null) {
                 return electionContestant.getParty().getInitials();
-            }
-            else
-            {
+            } else {
                 return "INDB";
             }
         }
         return "";
     }
-    
-    
 
     public ConstituencyElection getConstituencyElection() {
         return constituencyElection;
@@ -159,12 +139,12 @@ public class Result extends UniqueEntityModel3 {
         this.officialResult = officialResult;
     }
 
-    public int getCollatedResult() {
-        return collatedResult;
+    public int getSubmittedResult() {
+        return submittedResult;
     }
 
-    public void setCollatedResult(int collatedResult) {
-        this.collatedResult = collatedResult;
+    public void setSubmittedResult(int submittedResult) {
+        this.submittedResult = submittedResult;
     }
 
     public int getAcceptedResult() {
@@ -239,20 +219,20 @@ public class Result extends UniqueEntityModel3 {
         this.votePct = votePct;
     }
 
-    public ResultSubmission getResultSubmission() {
-        return resultSubmission;
-    }
+//    public ResultSubmission getResultSubmission() {
+//        return resultSubmission;
+//    }
+//
+//    public void setResultSubmission(ResultSubmission resultSubmission) {
+//        this.resultSubmission = resultSubmission;
+//    }
 
-    public void setResultSubmission(ResultSubmission resultSubmission) {
-        this.resultSubmission = resultSubmission;
-    }
-
-    public SubmittedResult getSubmittedResult() {
-        return submittedResult;
-    }
-
-    public void setSubmittedResult(SubmittedResult submittedResult) {
-        this.submittedResult = submittedResult;
-    }
+//    public SubmittedResult getVolunteerResult() {
+//        return volunteerResult;
+//    }
+//
+//    public void setVolunteerResult(SubmittedResult volunteerResult) {
+//        this.volunteerResult = volunteerResult;
+//    }
 
 }

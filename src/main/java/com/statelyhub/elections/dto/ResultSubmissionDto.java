@@ -4,7 +4,6 @@
  */
 package com.statelyhub.elections.dto;
 
-import com.statelyhub.elections.dto.BaseDto;
 import java.util.List;
 
 /**
