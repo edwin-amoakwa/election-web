@@ -33,6 +33,11 @@ public class SubmittedResult extends Result {
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;
+    
+     public static final String _pollingStationResult = "pollingStationResult";
+    @JoinColumn(name = "polling_station_result")
+    @ManyToOne
+    private PollingStationResult pollingStationResult;
 
     
 
@@ -59,6 +64,14 @@ public class SubmittedResult extends Result {
 
     public void setResultSubmission(ResultSubmission resultSubmission) {
         this.resultSubmission = resultSubmission;
+    }
+
+    public PollingStationResult getPollingStationResult() {
+        return pollingStationResult;
+    }
+
+    public void setPollingStationResult(PollingStationResult pollingStationResult) {
+        this.pollingStationResult = pollingStationResult;
     }
 
     

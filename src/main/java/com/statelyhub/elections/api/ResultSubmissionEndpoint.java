@@ -54,22 +54,17 @@ public class ResultSubmissionEndpoint {
                 .addObjectParam(ElectionPollingStation._pollingStation_stationCode, pollingStationCode)
                 .printQryInfo()
                 .getSingleResult(ElectionPollingStation.class);
-        
-        if(eps == null)
-        {
+
+        if (eps == null) {
             return ApiResponse.badRequest("Code is wrong " + pollingStationCode);
         }
 
-        ResultSubmissionDto submissionDto = new ResultSubmissionDto();
-
         System.out.println("....... " + qryparam.getUserId());
         Volunteer volunteer = crudService.find(Volunteer.class, qryparam.getUserId());
-        
-        if(volunteer == null)
-        {
+
+        if (volunteer == null) {
             return ApiResponse.ok("Unknown User");
         }
-        
 
         // create one for volunteer
         ResultSubmission resultSubmission = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
@@ -101,6 +96,7 @@ public class ResultSubmissionEndpoint {
                 submittedResult.setResultSubmission(resultSubmission);
                 submittedResult.setElectionPollingStation(eps);
                 submittedResult.setViewOrder(stationResult.getViewOrder());
+                submittedResult.setPollingStationResult(stationResult);
                 submittedResult.setElectionContestant(stationResult.getElectionContestant());
                 crudService.save(submittedResult);
             }
@@ -109,33 +105,32 @@ public class ResultSubmissionEndpoint {
         List<ElectionTypeResult> volunteerBuckets = electionResultService.volunteerEpsBucket(eps);
 
         List<ElectionTypeResultDto> dtos = new LinkedList<>();
-        
+
         for (ElectionTypeResult volunteerBucket : volunteerBuckets) {
             ElectionTypeResultDto dto = new ElectionTypeResultDto();
             dto.setElectionType(volunteerBucket.getElectionType());
-            
-            
+
             List<SubmittedResultDto> submittedList = new LinkedList<>();
             for (SubmittedResult submittedResult : volunteerBucket.getSubmittedResultsList()) {
                 SubmittedResultDto submittedDto = new SubmittedResultDto();
-                
+
                 submittedDto.setId(submittedResult.getId());
                 submittedDto.setCondidateName(submittedResult.getCandidateName());
                 submittedDto.setVotes(submittedResult.getSubmittedResult());
                 submittedDto.setParty(submittedResult.getPartyDetails());
-                
-                if(StringUtil.isNullOrEmpty(submittedDto.getCondidateName()))
-                {
+
+                if (StringUtil.isNullOrEmpty(submittedDto.getCondidateName())) {
                     submittedDto.setCondidateName("");
                 }
-                
-                
+
                 submittedList.add(submittedDto);
             }
             dto.setCandidatesList(submittedList);
 
             dtos.add(dto);
         }
+        ResultSubmissionDto submissionDto = new ResultSubmissionDto();
+        submissionDto.setId(resultSubmission.getId());
         submissionDto.setVotingsList(dtos);
 
         return ApiResponse.ok(submissionDto);
@@ -143,25 +138,34 @@ public class ResultSubmissionEndpoint {
 
     @POST
     @Path("/submit")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response submitResult(@BeanParam DefaultHeaders qryparam, ResultSubmissionDto submissionDto) {
-        
-        
+
         ResultSubmission resultSubmission = crudService.find(ResultSubmission.class, submissionDto.getId());
-        if(resultSubmission.getSubmissionStatus() == SubmissionStatus.LOCKED)
-        {
+
+        if (resultSubmission == null) {
+            return ApiResponse.ok("Cannot Process Submission. Referesh and try again");
+        }
+
+        if (resultSubmission.getSubmissionStatus() == SubmissionStatus.LOCKED) {
             return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
         }
-      
+
         for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) {
             for (SubmittedResultDto submittedResultDto : electionTypeResultDto.getCandidatesList()) {
-                
+
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
                 submittedResult.setInputResult(submittedResultDto.getVotes());
                 crudService.save(submittedResult);
                 
-                
+                System.out.println("..... " + submittedResult.getInputResult());
+
             }
         }
+
+        resultSubmission.setSubmissionStatus(SubmissionStatus.OPEN);
+
+        crudService.save(resultSubmission);
 
         return ApiResponse.ok(submissionDto);
     }

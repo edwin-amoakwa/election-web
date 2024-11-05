@@ -5,12 +5,15 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.stately.modules.web.jsf.JsfMsg;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.model.ElectionTypeResult;
+import com.statelyhub.elections.model.PollingStationResultContainer;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.web.PollingStationSearch;
 import com.statelyhub.old.service.ElectionResultService;
@@ -19,6 +22,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +50,7 @@ public class PollingStationCollationController implements Serializable {
 
     private ElectionPollingStation electionPollingStation;
 
-    private List<PollingStationResult> stationResultList;
+//    private List<PollingStationResult> stationResultList;
 
     private List<PollingStationResult> presidentialList;
     private List<PollingStationResult> parliamentaryList;
@@ -62,10 +66,10 @@ public class PollingStationCollationController implements Serializable {
     public void selectPollingStation(ElectionPollingStation station) {
         this.electionPollingStation = station;
 
-        stationResultList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                .addObjectParam(ElectionPollingStation._election, station.getElection())
-                .addObjectParam(ElectionPollingStation._pollingStation, station.getPollingStation())
-                .buildQry().getResultList();
+//        stationResultList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+//                .addObjectParam(ElectionPollingStation._election, station.getElection())
+//                .addObjectParam(ElectionPollingStation._pollingStation, station.getPollingStation())
+//                .buildQry().getResultList();
 
 //        presidentialList = electionService.eps(station, ElectionType.PRESIDENTIAL);
 //        parliamentaryList = electionService.eps(station, ElectionType.PARLIAMENTARY);
@@ -77,6 +81,8 @@ public class PollingStationCollationController implements Serializable {
         resultsList = electionResultService.pollingStationBucket(station);
 
         System.out.println(".... " + presidentialList);
+        
+        loadSubmissions();
     }
     
     public void loadSubmissions()
@@ -111,6 +117,32 @@ public class PollingStationCollationController implements Serializable {
     public void acceptSubmission(ResultSubmission resultSubmission)
     {
          List<ElectionTypeResult> electionTypeResultsList = resultSubmission.getElectionResultsList();
+         
+         List<SubmittedResult> results = PollingStationResultContainer.submitedResults(electionTypeResultsList);
+         
+         Map<String,Integer> resultMap = new LinkedHashMap<>();
+         for (SubmittedResult result : results) {
+            resultMap.put(result.getId(), result.getInputResult());
+        }
+    
+         List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(electionTypeResultsList);
+         
+         for (PollingStationResult pollingStationResult : stationResultsList) {
+             Integer votes =  resultMap.get(pollingStationResult.getId());
+             if(votes != null)
+             {
+                 pollingStationResult.setSubmittedResult(votes);
+                 crudService.saveEntity(pollingStationResult);
+             }
+            
+        }
+         electionPollingStation.setResultSubmission(resultSubmission);
+         crudService.saveEntity(resultSubmission);
+         resultSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
+         
+         System.out.println("ress ..... " + resultSubmission);
+         
+         JsfMsg.msg(true);
     }
 
     
