@@ -84,9 +84,22 @@
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
+                                        
+                                         <p:column headerText="#{msg.position}">
+                                                <h:outputText value="#{submittedResult.position}" >
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                            </p:column>
+                                            
+                                            <p:column headerText="#{msg.percent}">
+                                                <h:outputText value="#{submittedResult.votePct}" >
+                                                    <f:convertNumber pattern="#,##0.0 %" />
+                                                </h:outputText>
+                                            </p:column>
+                                            
 
 
-                                        <p:column headerText="#{msg.action}">
+                                        <p:column headerText="#{msg.action}" rendered="false">
                                             <h:commandLink value="#{msg.edit}" styleClass="delete"
                                                            action="#{counterpartyController.editCounterparty(counterparty)}"/>
                                         </p:column>
@@ -186,6 +199,20 @@
                                                     <f:convertNumber pattern="#,##0" />
                                                 </h:outputText>
                                             </p:column>
+                                            
+                                             <p:column headerText="#{msg.position}">
+                                                <h:outputText value="#{submittedResult.position}" >
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                            </p:column>
+                                            
+                                            <p:column headerText="#{msg.percent}">
+                                                <h:outputText value="#{submittedResult.votePct}" >
+                                                    <f:convertNumber pattern="#,##0.0 %" />
+                                                </h:outputText>
+                                            </p:column>
+                                            
+                                            
                                         </p:dataTable>
 
 
@@ -235,6 +262,20 @@
                                                     <f:convertNumber pattern="#,##0" />
                                                 </h:outputText>
                                             </p:column>
+                                            
+                                              <p:column headerText="#{msg.position}">
+                                                <h:outputText value="#{submittedResult.position}" >
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                            </p:column>
+                                            
+                                            <p:column headerText="#{msg.percent}">
+                                                <h:outputText value="#{submittedResult.votePct}" >
+                                                    <f:convertNumber pattern="#,##0.0 %" />
+                                                </h:outputText>
+                                            </p:column>
+                                            
+                                            
                                         </p:dataTable>
 
 

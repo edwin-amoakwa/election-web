@@ -151,17 +151,52 @@ public class ResultSubmissionEndpoint {
             return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
         }
 
-        for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) {
+        
+        List<SubmittedResult> resultsList = new LinkedList<>();
+        
+        for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) 
+        {
             for (SubmittedResultDto submittedResultDto : electionTypeResultDto.getCandidatesList()) {
 
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
                 submittedResult.setInputResult(submittedResultDto.getVotes());
-                crudService.save(submittedResult);
+                resultsList.add(submittedResult);
+//                crudService.save(submittedResult);
                 
-                System.out.println("..... " + submittedResult.getInputResult());
+                
 
             }
         }
+        
+        //run position logic;
+        
+        
+        for (SubmittedResult compare : resultsList) {
+           
+            int counter = 0;
+            for (SubmittedResult submitted : resultsList) {
+                if(submitted.getInputResult() > compare.getInputResult())
+                {
+                    counter++;
+                }
+            }
+            compare.setPosition(counter+1);
+        }
+        
+        if(resultSubmission.getElectionPollingStation().getVotersCount() != 0)
+        {
+            double totalVotes = resultSubmission.getElectionPollingStation().getVotersCount();
+            for (SubmittedResult submittedResult : resultsList) {
+                double pct = submittedResult.getInputResult() / totalVotes;
+                submittedResult.setVotePct(pct);
+                
+            }
+        }
+        
+        for (SubmittedResult submittedResult : resultsList) {
+            crudService.save(submittedResult);
+        }
+        
 
         resultSubmission.setSubmissionStatus(SubmissionStatus.OPEN);
 

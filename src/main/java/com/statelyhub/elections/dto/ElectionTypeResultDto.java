@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class ElectionTypeResultDto {
     private ElectionType electionType;
+    
+    private int rejectedBallots;
+    private int spoiltBallots;
+    
     private List<SubmittedResultDto> candidatesList;
 
     public ElectionType getElectionType() {
@@ -29,6 +33,22 @@ public class ElectionTypeResultDto {
 
     public void setCandidatesList(List<SubmittedResultDto> candidatesList) {
         this.candidatesList = candidatesList;
+    }
+
+    public int getRejectedBallots() {
+        return rejectedBallots;
+    }
+
+    public void setRejectedBallots(int rejectedBallots) {
+        this.rejectedBallots = rejectedBallots;
+    }
+
+    public int getSpoiltBallots() {
+        return spoiltBallots;
+    }
+
+    public void setSpoiltBallots(int spoiltBallots) {
+        this.spoiltBallots = spoiltBallots;
     }
     
 }

@@ -116,14 +116,15 @@ public class PollingStationCollationController implements Serializable {
     
     public void acceptSubmission(ResultSubmission resultSubmission)
     {
-         List<ElectionTypeResult> electionTypeResultsList = resultSubmission.getElectionResultsList();
-         
-         List<SubmittedResult> results = PollingStationResultContainer.submitedResults(electionTypeResultsList);
+        
+         List<SubmittedResult> results = PollingStationResultContainer.submitedResults(resultSubmission.getElectionResultsList());
          
          Map<String,Integer> resultMap = new LinkedHashMap<>();
          for (SubmittedResult result : results) {
-            resultMap.put(result.getId(), result.getInputResult());
+            resultMap.put(result.getPollingStationResult().getId(), result.getInputResult());
         }
+         
+//         System.out.println("...maps ... " +resultMap);
     
          List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(electionTypeResultsList);
          
@@ -132,6 +133,7 @@ public class PollingStationCollationController implements Serializable {
              if(votes != null)
              {
                  pollingStationResult.setSubmittedResult(votes);
+                 System.out.println("........ votes " + votes);
                  crudService.saveEntity(pollingStationResult);
              }
             
