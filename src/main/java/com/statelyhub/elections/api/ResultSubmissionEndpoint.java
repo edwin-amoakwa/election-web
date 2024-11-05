@@ -81,6 +81,7 @@ public class ResultSubmissionEndpoint {
             resultSubmission = new ResultSubmission();
             resultSubmission.setElectionPollingStation(eps);
             resultSubmission.setVolunteer(volunteer);
+            resultSubmission.setSubmissionStatus(SubmissionStatus.PENDING);
             resultSubmission.setSubmissionLevel(SubmissionLevel.POLLING_STATION);
 
             crudService.save(resultSubmission);

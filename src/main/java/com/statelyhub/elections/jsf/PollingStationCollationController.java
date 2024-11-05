@@ -107,6 +107,11 @@ public class PollingStationCollationController implements Serializable {
             resultSubmission.setElectionResultsList(electionTypeResultsList);
         }
     }
+    
+    public void acceptSubmission(ResultSubmission resultSubmission)
+    {
+         List<ElectionTypeResult> electionTypeResultsList = resultSubmission.getElectionResultsList();
+    }
 
     
 

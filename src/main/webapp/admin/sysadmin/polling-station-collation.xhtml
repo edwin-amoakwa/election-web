@@ -126,7 +126,7 @@
                     <center>
                         <h:form>
                             
-                              <p:commandButton value="Load Submissions" 
+                              <p:commandButton value="Load Submissions" styleClass="ui-button-help " 
                                      action="#{pollingStationCollationController.loadSubmissions()}"
                                      update="@form"/>
                               
@@ -143,7 +143,7 @@
                 <h5>#{submission.volunteer.volunteerName}</h5>
             </f:facet>
             
-                            <div class="card-body" style="margin-left: 10px;">
+                            <div class="card" style="margin-left: 10px;">
                                 
                                 
                             <c:forEach items="#{pollingStationCollationController.resultsList}" var="electionTypeContainer">
@@ -156,8 +156,7 @@
                             </div>
                             <div class="panel-body">
 
-                                <h:form>
-
+                             
                                     <p:dataTable value="#{electionTypeContainer.votingsList}" var="pollingStationResult" 
                                                  rowKey="#{pollingStationResult.id}">
 
@@ -185,13 +184,13 @@
 
 
 
-                                        <p:column headerText="#{msg.action}">
+                                        <p:column headerText="#{msg.action}" rendered="false">
                                             <h:commandLink value="#{msg.edit}" styleClass="delete"
                                                            action="#{counterpartyController.editCounterparty(counterparty)}"/>
                                         </p:column>
                                     </p:dataTable>
 
-                                </h:form>
+                             
 
                             </div>
                         </div>
@@ -203,36 +202,17 @@
 
                                 
                                 
+                                <center>
+                                     <h:form>
+                                         <p:commandButton value="Accept this from #{submission.volunteer.volunteerName}" type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                </h:form>
+                                </center>
+                                
+                                
+                                
+                                
                             </div>
             
-            
-            
-            
-            
-            
-            
-            
-            <div class="product-item">
-                <div class="product-item-content">
-                    <div class="mb-3">
-                        <p:graphicImage name="demo/images/product/#{product.image}" styleClass="product-image"/>
-                    </div>
-                    <div>
-                        <h4 class="mb-1">#{product.name}</h4>
-                        <h6 class="mt-0 mb-3">
-                            <h:outputText value="#{product.price}">
-                                <f:convertNumber type="currency" pattern="¤#0" currencySymbol="$" />
-                            </h:outputText>
-                        </h6>
-                        <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>
-                        <div class="mt-5">
-                            <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button mr-2" />
-                            <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
-                            <p:commandButton type="button" icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
-                        </div>
-                    </div>
-                </div>
-            </div>
         </p:carousel>
     </div>
                     

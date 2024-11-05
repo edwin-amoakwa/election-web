@@ -16,6 +16,7 @@ import com.stately.common.api.MessageResolvable;
 public enum SubmissionStatus implements MessageResolvable
 {
 
+    PENDING("PENDING","PENDING"),
     OPEN("PENDING","PENDING"),
     LOCKED("FINALISED","FINALISED");
 
