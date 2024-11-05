@@ -11,6 +11,7 @@ import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.services.CrudService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -38,6 +39,7 @@ public class ElectionService {
           return QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                   .addObjectParam(ElectionContestant._electionType, electionType)
                   .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
+                    .orderByAsc(ElectionContestant._viewOrder)
                   .buildQry().getResultList();
       }
       
@@ -46,7 +48,19 @@ public class ElectionService {
           return QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                   .addObjectParam(PollingStationResult._electionContestant_electionType, electionType)
                   .addObjectParam(PollingStationResult._electionPollingStation, eps)
-                  .printQryInfo()
+                    .orderByAsc(PollingStationResult._viewOrder)
+//                  .printQryInfo()
+                  .buildQry().getResultList();
+      }
+      
+      
+      public List<SubmittedResult> submitted(ElectionPollingStation eps, ElectionType electionType)
+      {
+          return QryBuilder.get(crudService.getEm(), SubmittedResult.class)
+                  .addObjectParam(SubmittedResult._electionContestant_electionType, electionType)
+                  .addObjectParam(SubmittedResult._electionPollingStation, eps)
+                  .orderByAsc(SubmittedResult._viewOrder)
+//                  .printQryInfo()
                   .buildQry().getResultList();
       }
       

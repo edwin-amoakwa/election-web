@@ -4,6 +4,7 @@
  */
 package com.statelyhub.elections.api;
 
+import com.statelyhub.elections.dto.CandidateResultDto;
 import com.statelyhub.elections.constants.ElectionType;
 import java.util.List;
 

@@ -19,10 +19,10 @@ import jakarta.persistence.Table;
 public class SubmittedResult extends Result {
 
  
-    public static final String _resultSubmission = "resultSubmission";
-    @JoinColumn(name = "result_submission")
-    @ManyToOne
-    private ResultSubmission resultSubmission;
+//    public static final String _resultSubmission = "resultSubmission";
+//    @JoinColumn(name = "result_submission")
+//    @ManyToOne
+//    private ResultSubmission resultSubmission;
 
     public static final String _pollingStation = "pollingStation";
     @JoinColumn(name = "polling_station")
@@ -34,6 +34,7 @@ public class SubmittedResult extends Result {
     @ManyToOne
     private ElectionPollingStation electionPollingStation;
 
+    
 
     
     public PollingStation getPollingStation() {
@@ -52,13 +53,13 @@ public class SubmittedResult extends Result {
         this.electionPollingStation = electionPollingStation;
     }
 
-    public ResultSubmission getResultSubmission() {
-        return resultSubmission;
-    }
-
-    public void setResultSubmission(ResultSubmission resultSubmission) {
-        this.resultSubmission = resultSubmission;
-    }
+//    public ResultSubmission getResultSubmission() {
+//        return resultSubmission;
+//    }
+//
+//    public void setResultSubmission(ResultSubmission resultSubmission) {
+//        this.resultSubmission = resultSubmission;
+//    }
 
     
 }

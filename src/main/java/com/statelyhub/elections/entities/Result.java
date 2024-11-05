@@ -22,8 +22,7 @@ import jakarta.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 public class Result extends UniqueEntityModel3 {
-    
-    
+
     public static final String _electionContestant = "electionContestant";
     public static final String _electionContestant_electionType = _electionContestant + "." + ElectionContestant._electionType;
     @JoinColumn(name = "election_contestant")
@@ -39,6 +38,19 @@ public class Result extends UniqueEntityModel3 {
     @ManyToOne
     private ConstituencyElection constituencyElection;
     
+    
+       public static final String _resultSubmission = "resultSubmission";
+    @JoinColumn(name = "result_submission")
+    @ManyToOne
+    private ResultSubmission resultSubmission;
+    
+     
+       public static final String _submittedResult = "submittedResult";
+    @JoinColumn(name = "submitted_result")
+    @ManyToOne
+    private SubmittedResult submittedResult;
+    
+
 //       public static final String _pollingStation = "pollingStation";
 //    @JoinColumn(name = "polling_station")
 //    @ManyToOne
@@ -48,12 +60,9 @@ public class Result extends UniqueEntityModel3 {
 //    @JoinColumn(name = "election_polling_station")
 //    @ManyToOne
 //    private ElectionPollingStation electionPollingStation;
-    
-    
-        public static final String _candidateName = "candidateName";
+    public static final String _candidateName = "candidateName";
     @Column(name = "candidate_name")
     private String candidateName;
-    
 
     public static final String _candidate = "candidate";
     @JoinColumn(name = "candidate")
@@ -83,22 +92,41 @@ public class Result extends UniqueEntityModel3 {
     @Column(name = "collated_result")
     private int collatedResult;
 
-    public static final String _submittedResult = "submittedResult";
-    @Column(name = "submitted_result")
-    private int submittedResult;
+    public static final String _inputResult = "inputResult";
+    @Column(name = "input_result")
+    private int inputResult;
 
     public static final String _acceptedResult = "acceptedResult";
     @Column(name = "accepted_result")
     private int acceptedResult;
-    
-      public static final String _position = "position";
+
+    public static final String _position = "position";
     @Column(name = "position")
     private int position;
 
-      public static final String _votePct = "votePct";
+    public static final String _votePct = "votePct";
     @Column(name = "vote_pct")
     private double votePct;
     
+    
+    public String getPartyDetails()
+    {
+        if(electionContestant != null)
+        {
+            if(electionContestant.getParty() != null)
+            {
+                return electionContestant.getParty().getInitials();
+            }
+            else
+            {
+                return "INDB";
+            }
+        }
+        return "";
+    }
+    
+    
+
     public ConstituencyElection getConstituencyElection() {
         return constituencyElection;
     }
@@ -171,12 +199,12 @@ public class Result extends UniqueEntityModel3 {
         this.viewOrder = viewOrder;
     }
 
-    public int getSubmittedResult() {
-        return submittedResult;
+    public int getInputResult() {
+        return inputResult;
     }
 
-    public void setSubmittedResult(int submittedResult) {
-        this.submittedResult = submittedResult;
+    public void setInputResult(int inputResult) {
+        this.inputResult = inputResult;
     }
 
     public String getCandidateName() {
@@ -211,6 +239,20 @@ public class Result extends UniqueEntityModel3 {
         this.votePct = votePct;
     }
 
-    
-    
+    public ResultSubmission getResultSubmission() {
+        return resultSubmission;
+    }
+
+    public void setResultSubmission(ResultSubmission resultSubmission) {
+        this.resultSubmission = resultSubmission;
+    }
+
+    public SubmittedResult getSubmittedResult() {
+        return submittedResult;
+    }
+
+    public void setSubmittedResult(SubmittedResult submittedResult) {
+        this.submittedResult = submittedResult;
+    }
+
 }

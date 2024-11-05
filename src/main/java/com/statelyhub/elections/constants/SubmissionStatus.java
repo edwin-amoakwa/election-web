@@ -13,16 +13,16 @@ import com.stately.common.api.MessageResolvable;
  * @email edwin.amoakwa@gmail.com
  * @contact 0277115150
  */
-public enum SubmissionLevel implements MessageResolvable
+public enum SubmissionStatus implements MessageResolvable
 {
 
-    POLLING_STATION("PRESIDENTIAL","PRESIDENTIAL"),
-    CONSTITUENCY("PARLIAMENTARY","PARLIAMENTARY");
+    OPEN("PENDING","PENDING"),
+    LOCKED("FINALISED","FINALISED");
 
     private final String code;
     private final String label;
     
-    private SubmissionLevel(String code, String label)
+    private SubmissionStatus(String code, String label)
     {
         this.code = code;
         this.label = label;

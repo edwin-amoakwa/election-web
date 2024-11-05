@@ -24,10 +24,7 @@ public class CrudService extends CrudController
   private EntityManager em;
   
   
-  public EntityManager getEM()
-  {
-      return em;
-  }
+  
   
   @PostConstruct
   private void initComplete()

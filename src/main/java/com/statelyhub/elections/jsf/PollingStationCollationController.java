@@ -8,6 +8,8 @@ import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.ResultSubmission;
+import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.web.PollingStationSearch;
@@ -17,7 +19,10 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -47,6 +52,8 @@ public class PollingStationCollationController implements Serializable {
     private List<PollingStationResult> parliamentaryList;
 
     private List<ElectionTypeResult> resultsList;
+    
+    private List<ResultSubmission> submissionsList;
 
     public void searchPollingStation() {
         selectPollingStation(pollingStationSearch.getPollingStation());
@@ -70,6 +77,35 @@ public class PollingStationCollationController implements Serializable {
         resultsList = electionResultService.pollingStationBucket(station);
 
         System.out.println(".... " + presidentialList);
+    }
+    
+    public void loadSubmissions()
+    {
+        submissionsList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
+                .addObjectParam(ResultSubmission._electionPollingStation, electionPollingStation)
+                .buildQry().getResultList();
+        
+          List<ElectionTypeResult> electionTypeResultsList = new LinkedList<>();
+        
+        for (ResultSubmission resultSubmission : submissionsList) 
+        {
+            List<SubmittedResult> results = QryBuilder.get(crudService.getEm(), SubmittedResult.class)
+                    .addObjectParam(SubmittedResult._resultSubmission, resultSubmission)
+                    .orderByAsc(SubmittedResult._viewOrder)
+                    .buildQry().getResultList();
+            
+            Map<ElectionType,List<SubmittedResult>> map = results.stream().collect(Collectors.groupingBy(SubmittedResult::getElectionType));
+      
+            for (Map.Entry<ElectionType, List<SubmittedResult>> entry : map.entrySet()) {
+                
+                ElectionTypeResult electionTypeResult = new ElectionTypeResult();
+                electionTypeResult.setElectionType(entry.getKey());
+                electionTypeResult.setSubmittedResultsList(entry.getValue());
+                electionTypeResultsList.add(electionTypeResult);
+            }
+            
+            resultSubmission.setElectionResultsList(electionTypeResultsList);
+        }
     }
 
     
@@ -98,4 +134,14 @@ public class PollingStationCollationController implements Serializable {
         this.electionPollingStation = electionPollingStation;
     }
 
+    public List<ResultSubmission> getSubmissionsList() {
+        return submissionsList;
+    }
+
+    public void setSubmissionsList(List<ResultSubmission> submissionsList) {
+        this.submissionsList = submissionsList;
+    }
+
+    
+    
 }
