@@ -104,7 +104,7 @@ public class UpdateStatsService {
             contestant.setParty(party);
             contestant.setConstituencyElection(constituency);
             contestant.setElectionType(electionType);
-            contestant.setResultStatus(ResultStatus.PENDING);
+//            contestant.setResultStatus(ResultStatus.PENDING);
             crudService.save(contestant);
         }
         

@@ -6,8 +6,12 @@
 package com.statelyhub.elections.entities;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
+import com.statelyhub.elections.constants.ResultSource;
+import com.statelyhub.elections.constants.ResultStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -26,6 +30,7 @@ public class ConstituencyElection extends UniqueEntityModel3 {
     private Election election;
 
     public static final String _constituency = "constituency";
+    public static final String _constituency_constituencyName = _constituency + "." + Constituency._constituencyName;
     @JoinColumn(name = "constituency")
     @ManyToOne
     private Constituency constituency;
@@ -35,10 +40,17 @@ public class ConstituencyElection extends UniqueEntityModel3 {
     @ManyToOne
     private Region region;
 
-    public static final String _constituencyCount = "constituencyCount";
-    @Column(name = "constituency_count")
-    private int constituencyCount;
-    
+    public static final String _resultSource = "resultSource";
+    @Column(name = "result_source")
+    @Enumerated(EnumType.STRING)
+    private ResultSource resultSource;
+
+    public static final String _resultStatus = "resultStatus";
+    @Column(name = "result_status")
+    @Enumerated(EnumType.STRING)
+    private ResultStatus resultStatus;
+
+
     public static final String _pollingStationCount = "pollingStations";
     @Column(name = "polling_stations")
     private int pollingStationCount;
@@ -46,22 +58,39 @@ public class ConstituencyElection extends UniqueEntityModel3 {
     public static final String _votersCount = "votersCount";
     @Column(name = "voters_count")
     private int votersCount;
+
+    public static final String _validVotesPresidential = "validVotesPresidential";
+    @Column(name = "valid_votes_presidential")
+    private int validVotesPresidential;
+
+    public static final String _rejectedBallotsPresidential = "rejectedBallotsPresidential";
+    @Column(name = "rejected_ballots_presidential")
+    private int rejectedBallotsPresidential;
+
+    public static final String _spoiltBallotsPresidential = "spoiltBallotsPresidential";
+    @Column(name = "spoilt_ballots_presidential")
+    private int spoiltBallotsPresidential;
+
+    public static final String _voterTurnoutPresidential = "voterTurnoutPresidential";
+    @Column(name = "voter_turnout_presidential")
+    private double voterTurnoutPresidential;
     
-      public static final String _validVotes = "validVotes";
-    @Column(name = "valid_votes")
-    private int validVotes;
     
-     public static final String _rejectedBallots = "rejectedBallots";
-    @Column(name = "rejected_ballots")
-    private int rejectedBallots;
-    
-     public static final String _spoiltBallots = "spoiltBallots";
-    @Column(name = "spoilt_ballots")
-    private int spoiltBallots;
-    
-     public static final String _voterTurnout = "voterTurnout";
-    @Column(name = "voter_turnout")
-    private int voterTurnout;
+    public static final String _validVotesParliamentary = "validVotesPresidential";
+    @Column(name = "valid_votes_parliamentary")
+    private int validVotesParliamentary;
+
+    public static final String _rejectedBallotsParliamentary = "rejectedBallotsPresidential";
+    @Column(name = "rejected_ballots_parliamentary")
+    private int rejectedBallotsParliamentary;
+
+    public static final String _spoiltBallotsParliamentary = "spoiltBallotsPresidential";
+    @Column(name = "spoilt_ballots_parliamentary")
+    private int spoiltBallotsParliamentary;
+
+    public static final String _voterTurnoutParliamentary = "voterTurnoutPresidential";
+    @Column(name = "voter_turnout_parliamentary")
+    private double voterTurnoutParliamentary;
 
     public Election getElection() {
         return election;
@@ -86,15 +115,7 @@ public class ConstituencyElection extends UniqueEntityModel3 {
     public void setRegion(Region region) {
         this.region = region;
     }
-
-    public int getConstituencyCount() {
-        return constituencyCount;
-    }
-
-    public void setConstituencyCount(int constituencyCount) {
-        this.constituencyCount = constituencyCount;
-    }
-
+    
     public int getPollingStationCount() {
         return pollingStationCount;
     }
@@ -111,39 +132,92 @@ public class ConstituencyElection extends UniqueEntityModel3 {
         this.votersCount = votersCount;
     }
 
-    public int getValidVotes() {
-        return validVotes;
+    public int getValidVotesPresidential() {
+        return validVotesPresidential;
     }
 
-    public void setValidVotes(int validVotes) {
-        this.validVotes = validVotes;
+    public void setValidVotesPresidential(int validVotesPresidential) {
+        this.validVotesPresidential = validVotesPresidential;
     }
 
-    public int getRejectedBallots() {
-        return rejectedBallots;
+    public int getRejectedBallotsPresidential() {
+        return rejectedBallotsPresidential;
     }
 
-    public void setRejectedBallots(int rejectedBallots) {
-        this.rejectedBallots = rejectedBallots;
+    public void setRejectedBallotsPresidential(int rejectedBallotsPresidential) {
+        this.rejectedBallotsPresidential = rejectedBallotsPresidential;
     }
 
-    public int getSpoiltBallots() {
-        return spoiltBallots;
+    public int getSpoiltBallotsPresidential() {
+        return spoiltBallotsPresidential;
     }
 
-    public void setSpoiltBallots(int spoiltBallots) {
-        this.spoiltBallots = spoiltBallots;
+    public void setSpoiltBallotsPresidential(int spoiltBallotsPresidential) {
+        this.spoiltBallotsPresidential = spoiltBallotsPresidential;
     }
 
-    public int getVoterTurnout() {
-        return voterTurnout;
+    public double getVoterTurnoutPresidential() {
+        return voterTurnoutPresidential;
     }
 
-    public void setVoterTurnout(int voterTurnout) {
-        this.voterTurnout = voterTurnout;
+    public void setVoterTurnoutPresidential(double voterTurnoutPresidential) {
+        this.voterTurnoutPresidential = voterTurnoutPresidential;
     }
 
-   
+    public int getValidVotesParliamentary() {
+        return validVotesParliamentary;
+    }
+
+    public void setValidVotesParliamentary(int validVotesParliamentary) {
+        this.validVotesParliamentary = validVotesParliamentary;
+    }
+
+    public int getRejectedBallotsParliamentary() {
+        return rejectedBallotsParliamentary;
+    }
+
+    public void setRejectedBallotsParliamentary(int rejectedBallotsParliamentary) {
+        this.rejectedBallotsParliamentary = rejectedBallotsParliamentary;
+    }
+
+    public int getSpoiltBallotsParliamentary() {
+        return spoiltBallotsParliamentary;
+    }
+
+    public void setSpoiltBallotsParliamentary(int spoiltBallotsParliamentary) {
+        this.spoiltBallotsParliamentary = spoiltBallotsParliamentary;
+    }
+
+    public double getVoterTurnoutParliamentary() {
+        return voterTurnoutParliamentary;
+    }
+
+    public void setVoterTurnoutParliamentary(double voterTurnoutParliamentary) {
+        this.voterTurnoutParliamentary = voterTurnoutParliamentary;
+    }
+
+  
     
+
+    public ResultSource getResultSource() {
+        return resultSource;
+    }
+
+    public void setResultSource(ResultSource resultSource) {
+        this.resultSource = resultSource;
+    }
+
+    public ResultStatus getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(ResultStatus resultStatus) {
+        this.resultStatus = resultStatus;
+    }
+
+    @Override
+    public String toString() {
+        return constituency + "";
+    }
 
 }

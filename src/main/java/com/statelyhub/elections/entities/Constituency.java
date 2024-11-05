@@ -59,4 +59,11 @@ public class Constituency extends UniqueEntityModel3 {
         this.district = district;
     }
 
+    @Override
+    public String toString() {
+        return constituencyName;
+    }
+    
+    
+
 }

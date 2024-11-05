@@ -19,6 +19,41 @@
 
             <div class="col-lg-3">
                 <h:form>
+                    
+                    <h:outputText value="#{msg.constituency}" />
+                    <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection}" 
+                                     filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{msg.select_one}" />
+                        <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
+                    </p:selectOneMenu>
+                    
+                    <p:commandButton value="Load" ajax="false"
+                                     action="#{pollingStationCollationController.loadPollingStation()}"/>
+                    
+                </h:form>
+                
+                        <h:form>
+                    <p:dataTable value="#{pollingStationCollationController.pollingStationsList}" var="pollingStation" 
+                                 rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="#{msg.code}">
+                            <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
+                        </p:column>
+                        
+                          <p:column headerText="#{msg.polling_stations}">
+                            <h:outputText value="#{pollingStation.pollingStation.stationName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.polling_stations}" rendered="false" >
+                            <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
+                                           action="#{pollingStationCollationController.selectPollingStation(pollingStation)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+                
+                <h:form>
                     <election:pollingStationSearch selectAction="#{pollingStationCollationController.searchPollingStation()}"
                                                    update=":stationResult, :submittedResultPanel"/>
                 </h:form>

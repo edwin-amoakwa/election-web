@@ -83,7 +83,8 @@ public class DataUploadController implements Serializable {
 
                 System.out.println(index + " .... " + counter + " --- " + stationCode + " ---- " + stationName + " --- " + consistuencyName + "..regionName." + regionName);
 
-                if (StringUtil.isNullOrEmpty(regionName) || StringUtil.isNullOrEmpty(stationCode)) {
+                if (StringUtil.isNullOrEmpty(regionName) || StringUtil.isNullOrEmpty(stationCode)
+                        || StringUtil.isNullOrEmpty(consistuencyName)) {
                     continue;
                 }
 

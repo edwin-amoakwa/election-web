@@ -15,8 +15,8 @@ import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
-import com.statelyhub.old.service.ElectionResultService;
-import com.statelyhub.old.service.ElectionService;
+import com.statelyhub.elections.services.ElectionResultService;
+import com.statelyhub.elections.services.ElectionService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
@@ -148,30 +148,26 @@ public class ResultSubmissionEndpoint {
         }
 
         if (resultSubmission.getSubmissionStatus() == SubmissionStatus.LOCKED) {
-            return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
+//            return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
         }
 
         
-        List<SubmittedResult> resultsList = new LinkedList<>();
+        
         
         for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) 
         {
+            List<SubmittedResult> resultsList = new LinkedList<>();
+            
             for (SubmittedResultDto submittedResultDto : electionTypeResultDto.getCandidatesList()) {
 
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
                 submittedResult.setInputResult(submittedResultDto.getVotes());
                 resultsList.add(submittedResult);
 //                crudService.save(submittedResult);
-                
-                
-
             }
-        }
-        
-        //run position logic;
-        
-        
-        for (SubmittedResult compare : resultsList) {
+            
+            
+             for (SubmittedResult compare : resultsList) {
            
             int counter = 0;
             for (SubmittedResult submitted : resultsList) {
@@ -196,6 +192,13 @@ public class ResultSubmissionEndpoint {
         for (SubmittedResult submittedResult : resultsList) {
             crudService.save(submittedResult);
         }
+            
+        }
+        
+        //run position logic;
+        
+        
+       
         
 
         resultSubmission.setSubmissionStatus(SubmissionStatus.OPEN);

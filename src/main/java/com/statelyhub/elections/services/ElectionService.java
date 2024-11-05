@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.statelyhub.old.service;
+package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;

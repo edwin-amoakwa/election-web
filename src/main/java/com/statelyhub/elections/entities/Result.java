@@ -38,16 +38,6 @@ public class Result extends UniqueEntityModel3 {
     @ManyToOne
     private ConstituencyElection constituencyElection;
 
-//    public static final String _resultSubmission = "resultSubmission";
-//    @JoinColumn(name = "result_submission")
-//    @ManyToOne
-//    private ResultSubmission resultSubmission;
-
-//    public static final String _volunteerResult = "volunteerResult";
-//    @JoinColumn(name = "volunteer_result")
-//    @ManyToOne
-//    private SubmittedResult volunteerResult;
-
     public static final String _candidateName = "candidateName";
     @Column(name = "candidate_name")
     private String candidateName;

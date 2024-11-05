@@ -7,6 +7,7 @@ package com.statelyhub.elections.jsf;
 
 import com.google.common.base.Supplier;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.PoliticalParty;
 import com.statelyhub.elections.entities.Region;
@@ -47,6 +48,7 @@ public class UserCommonOptions implements Serializable
     private List<Region> regionsList;
     private List<PoliticalParty> partysList;
     
+     private List<ConstituencyElection> constituencyElectionsList;
     
     private List<UserAccount> usersList;
     
@@ -65,6 +67,10 @@ public class UserCommonOptions implements Serializable
             
                partysList =  QryBuilder.get(crudService.getEm(), PoliticalParty.class)
                     .orderByAsc(PoliticalParty._partyName)
+                .buildQry().getResultList();
+               
+                    constituencyElectionsList =  QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                    .orderByAsc(ConstituencyElection._constituency_constituencyName)
                 .buildQry().getResultList();
           
             
@@ -156,6 +162,10 @@ public class UserCommonOptions implements Serializable
 
     public List<PoliticalParty> getPartysList() {
         return partysList;
+    }
+
+    public List<ConstituencyElection> getConstituencyElectionsList() {
+        return constituencyElectionsList;
     }
 
     

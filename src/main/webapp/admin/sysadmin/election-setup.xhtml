@@ -84,8 +84,12 @@
                         <p:column headerText="#{msg.code}">
                             <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
                         </p:column>
+                        
+                          <p:column headerText="#{msg.polling_stations}">
+                            <h:outputText value="#{pollingStation.pollingStation.stationName}" />
+                        </p:column>
 
-                        <p:column headerText="#{msg.polling_stations}" >
+                        <p:column headerText="#{msg.polling_stations}" rendered="false" >
                             <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
                                            action="#{electionDetailController.selectPollingStation(pollingStation)}"/>
                         </p:column>

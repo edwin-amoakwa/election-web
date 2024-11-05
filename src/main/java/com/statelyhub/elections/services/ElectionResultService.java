@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.statelyhub.old.service;
+package com.statelyhub.elections.services;
 
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.model.ElectionTypeResult;
-import com.statelyhub.elections.services.CrudService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.LinkedList;
