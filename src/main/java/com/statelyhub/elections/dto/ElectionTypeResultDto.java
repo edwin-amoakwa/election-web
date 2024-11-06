@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class ElectionTypeResultDto {
     private ElectionType electionType;
-    
     private int rejectedBallots;
     private int spoiltBallots;
     
