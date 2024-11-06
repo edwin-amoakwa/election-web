@@ -24,7 +24,7 @@ import jakarta.persistence.Table;
 @Table(name = "volunteers")
 public class Volunteer extends UniqueEntityModel3 {
 
-    public static final String _candidateName = "candidateName";
+    public static final String _volunteerName = "volunteerName";
     @Column(name = "volunteer_name")
     private String volunteerName;
 
@@ -137,6 +137,16 @@ public class Volunteer extends UniqueEntityModel3 {
         this.processedBy = processedBy;
     }
     
+    public boolean isVerified()
+    {
+        if(getClassification() == null)return false;
+        return getClassification() == VolunteerClassification.VERIFIED;
+    }
     
+    public boolean isApproved()
+    {
+        if(getApprovalStatus()== null)return false;
+        return getApprovalStatus() == VolunteerApprovalStatus.APPROVED;
+    }
     
 }

@@ -5,15 +5,14 @@
  */
 package com.statelyhub.elections.jsf;
 
-import com.google.common.base.Supplier;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.PoliticalParty;
 import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.entities.UserAccount;
-import com.statelyhub.old.entities.FundingSource;
 import com.statelyhub.old.service.LoaderService;
 import com.statelyhub.old.constants.AmtInWords;
 import com.statelyhub.old.entities.BillStatus;
@@ -44,6 +43,7 @@ public class UserCommonOptions implements Serializable
     
     
     private List<Election> electionsList;
+    private List<Constituency> constituenciesList;
     
     private List<Region> regionsList;
     private List<PoliticalParty> partysList;
@@ -71,6 +71,10 @@ public class UserCommonOptions implements Serializable
                
                     constituencyElectionsList =  QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                     .orderByAsc(ConstituencyElection._constituency_constituencyName)
+                .buildQry().getResultList();
+               
+                    constituenciesList =  QryBuilder.get(crudService.getEm(), Constituency.class)
+                    .orderByAsc(Constituency._constituencyName)
                 .buildQry().getResultList();
           
             
@@ -168,12 +172,12 @@ public class UserCommonOptions implements Serializable
         return constituencyElectionsList;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
+    public List<Constituency> getConstituenciesList() {
+        return constituenciesList;
+    }
+
+    public void setConstituenciesList(List<Constituency> constituenciesList) {
+        this.constituenciesList = constituenciesList;
+    }
+
 }
