@@ -4,15 +4,19 @@
  */
 package com.statelyhub.elections.api;
 
+import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.entities.Constituency;
+import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Region;
+import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.CrudService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -79,6 +83,48 @@ public class LookupEndpoint
                    .add("constituencyName", data.getConstituencyName()== null ? "":data.getConstituencyName() )
                    .add("regionName", data.getRegion()== null ? "":data.getRegion().getRegionName() )
                    .add("regionId", data.getRegion()== null ? "":data.getRegion().getId());
+
+           dataArray.add(object);
+       }
+
+         JsonObjectBuilder result =  Json.createObjectBuilder()
+             .add("success", true)
+             .add("statusCode", 200)
+             .add("data", dataArray);
+                 
+         return Response.status(Response.Status.OK).entity(result.build()).build(); 
+    }
+    
+    @GET
+    @Path("/polling-stations")   
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPollingStations(@BeanParam DefaultHeaders qryparam)
+    {
+        System.out.println("--qryparam.getUserId() = "+qryparam.getUserId());
+         Volunteer volunteer = QryBuilder.get(crudService.getEm(), Volunteer.class)
+                .addObjectParam(Volunteer._id, qryparam.getUserId())
+                .printQryInfo()
+                .getSingleResult(Volunteer.class);
+         if(volunteer == null)
+         {
+             return ApiResponse.error("Specified Volunteer Not Found");
+         }
+         
+        List<PollingStation> dataList = QryBuilder.get(crudService.getEm(), PollingStation.class)
+                .addObjectParamWhenNotNull(PollingStation._constituency, volunteer.getConstituency())
+                .orderByAsc(PollingStation._stationName)
+                .printQryInfo().buildQry().getResultList();
+        
+        JsonArrayBuilder dataArray = Json.createArrayBuilder();
+
+        for (PollingStation data : dataList)
+       {
+           JsonObjectBuilder object = Json.createObjectBuilder()
+                   .add("id", data.getId())
+                   .add("itemName", data.getStationName()== null ? "":data.getStationName() )
+                   .add("stationCode", data.getStationCode()== null ? "":data.getStationCode() )
+                   .add("constituencyId", data.getConstituency() == null ? "":data.getConstituency().getId())
+                   .add("constituencyName", data.getConstituency() == null ? "":data.getConstituency().getConstituencyName());
 
            dataArray.add(object);
        }
