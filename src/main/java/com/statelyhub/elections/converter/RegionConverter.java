@@ -5,7 +5,7 @@
 package com.statelyhub.elections.converter;
 
 ;
-import com.statelyhub.elections.entities.PoliticalParty;
+import com.statelyhub.elections.entities.Region;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.FacesConverter;
@@ -18,8 +18,8 @@ import org.omnifaces.converter.SelectItemsConverter;
  */
 
 @Named
-@FacesConverter(forClass=PoliticalParty.class)
-public class PartyConverter extends SelectItemsConverter
+@FacesConverter(forClass=Region.class)
+public class RegionConverter extends SelectItemsConverter
 {
     
     @Override
@@ -27,7 +27,7 @@ public class PartyConverter extends SelectItemsConverter
     {
          try
         {
-            PoliticalParty entity = (PoliticalParty) value;
+            Region entity = (Region) value;
             
             if(entity != null)
             {
