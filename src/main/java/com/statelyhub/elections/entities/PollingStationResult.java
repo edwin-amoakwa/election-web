@@ -34,6 +34,7 @@ public class PollingStationResult extends Result {
     private PollingStation pollingStation;
 
     public static final String _electionPollingStation = "electionPollingStation";
+    public static final String _electionPollingStation_constituency = _electionPollingStation + "." + ElectionPollingStation._constituency;
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;

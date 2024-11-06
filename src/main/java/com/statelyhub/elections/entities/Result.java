@@ -53,10 +53,10 @@ public class Result extends UniqueEntityModel3 {
     @Enumerated(EnumType.STRING)
     private ElectionType electionType;
 
-    public static final String _resultSource = "resultSource";
-    @Column(name = "result_source")
-    @Enumerated(EnumType.STRING)
-    private ResultSource resultSource;
+//    public static final String _resultSource = "resultSource";
+//    @Column(name = "result_source")
+//    @Enumerated(EnumType.STRING)
+//    private ResultSource resultSource;
 
     public static final String _resultStatus = "resultStatus";
     @Column(name = "result_status")
@@ -146,13 +146,13 @@ public class Result extends UniqueEntityModel3 {
         this.acceptedResult = acceptedResult;
     }
 
-    public ResultSource getResultSource() {
-        return resultSource;
-    }
-
-    public void setResultSource(ResultSource resultSource) {
-        this.resultSource = resultSource;
-    }
+//    public ResultSource getResultSource() {
+//        return resultSource;
+//    }
+//
+//    public void setResultSource(ResultSource resultSource) {
+//        this.resultSource = resultSource;
+//    }
 
     public ResultStatus getResultStatus() {
         return resultStatus;
@@ -212,9 +212,9 @@ public class Result extends UniqueEntityModel3 {
 
     @Override
     public String toString() {
-        return "Result{" + "electionContestant=" + electionContestant + ", viewOrder=" + viewOrder + ", constituencyElection=" + constituencyElection + ", candidateName=" + candidateName + ", candidate=" + candidate + ", electionType=" + electionType + ", resultSource=" + resultSource + ", resultStatus=" + resultStatus + ", officialResult=" + officialResult + ", submittedResult=" + submittedResult + ", inputResult=" + inputResult + ", acceptedResult=" + acceptedResult + ", position=" + position + ", votePct=" + votePct + '}';
+        return "Result{" + "electionContestant=" + electionContestant + ", viewOrder=" + viewOrder + ", constituencyElection=" + constituencyElection + ", candidateName=" + candidateName + ", candidate=" + candidate + ", electionType=" + electionType + ", resultStatus=" + resultStatus + ", officialResult=" + officialResult + ", submittedResult=" + submittedResult + ", inputResult=" + inputResult + ", acceptedResult=" + acceptedResult + ", position=" + position + ", votePct=" + votePct + '}';
     }
-
+    
     
     
 }

@@ -100,7 +100,7 @@
 
                             <h:form>
 
-                                <p:dataTable value="#{electionTypeContainer.contestantsList}" var="pollingStationResult" 
+                                <p:dataTable value="#{electionTypeContainer.contestantsList}" var="result" 
                                              rowKey="#{pollingStationResult.id}">
 
                                     <p:column rendered="false">
@@ -108,42 +108,36 @@
                                     </p:column>
 
                                     <p:rowExpansion>
-                                        #{pollingStationResult.id}
+                                        #{result.id}
                                     </p:rowExpansion>
 
                                     <p:column headerText="#{msg.party}">
-                                        <h:outputText value="#{pollingStationResult.electionContestant.party.initials}" />
+                                        <h:outputText value="#{result.party.initials}" />
                                     </p:column>
 
                                     <p:column headerText="#{msg.name}">
-                                        <h:outputText value="#{pollingStationResult.candidateName}" />
+                                        <h:outputText value="#{result.candidateName}" />
                                     </p:column>
 
                                     <p:column headerText="#{msg.votes}">
-                                        <h:outputText value="#{pollingStationResult.acceptedResult}" >
+                                        <h:outputText value="#{result.acceptedResult}" >
                                             <f:convertNumber pattern="#,##0" />
                                         </h:outputText>
                                     </p:column>
 
 
                                     <p:column headerText="#{msg.position}">
-                                        <h:outputText value="#{submittedResult.position}" >
+                                        <h:outputText value="#{result.position}" >
                                             <f:convertNumber pattern="#,##0" />
                                         </h:outputText>
                                     </p:column>
 
                                     <p:column headerText="#{msg.percent}">
-                                        <h:outputText value="#{submittedResult.votePct}" >
+                                        <h:outputText value="#{result.votePct}" >
                                             <f:convertNumber pattern="#,##0.0 %" />
                                         </h:outputText>
                                     </p:column>
 
-
-
-                                    <p:column headerText="#{msg.action}" rendered="false">
-                                        <h:commandLink value="#{msg.edit}" styleClass="delete"
-                                                       action="#{counterpartyController.editCounterparty(counterparty)}"/>
-                                    </p:column>
                                 </p:dataTable>
 
                             </h:form>
@@ -154,7 +148,10 @@
 
 
                 </c:forEach>
-
+                
+                <h:form>
+                    
+                    
                 <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty pollingStationCollationController.selectedConstituencyElection}">
                     <h:outputText value="Result Source" />
 
@@ -175,6 +172,9 @@
                 </h:panelGrid>
 
                  <p:commandButton value="Re-Run" ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                    
+                </h:form>
+
 
 
 

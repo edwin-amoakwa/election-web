@@ -114,6 +114,7 @@ public class PollingStationCollationController implements Serializable {
     public void updateResultSource()
     {
         electionResultService.updatePollingStationSourceChange(selectedConstituencyElection);
+        updateConstituecyFigures();
     }
     
       public void updateConstituecyFigures()
