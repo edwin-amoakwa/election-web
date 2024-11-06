@@ -56,7 +56,7 @@
                         </p:tab>
 
                         <p:tab title="Finalised - #{pollingStationCollationController.completedPollingStationsList.size()}">
-      <p:dataTable value="#{pollingStationCollationController.completedPollingStationsList}" var="pollingStation" 
+                            <p:dataTable value="#{pollingStationCollationController.completedPollingStationsList}" var="pollingStation" 
                                          rows="10" paginator="true" paginatorPosition="bottom">
 
                                 <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
@@ -79,103 +79,104 @@
 
 
                 </h:form>
-                
-                
+
+
                 <br />
                 <br />
-                
-                
+
+
                 <h2>Current Tabulation Result</h2>
-           
-                         
-                                 <c:forEach items="#{pollingStationCollationController.constituencyResultList}" var="electionTypeContainer">
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <div class="panel-title">
-                                    #{electionTypeContainer.electionType}
-                                </div>
-                            </div>
-                            <div class="panel-body">
-
-                                <h:form>
-
-                                    <p:dataTable value="#{electionTypeContainer.votingsList}" var="pollingStationResult" 
-                                                 rowKey="#{pollingStationResult.id}">
-
-                                        <p:column rendered="false">
-                                            <p:rowToggler />
-                                        </p:column>
-
-                                        <p:rowExpansion>
-                                            #{pollingStationResult.id}
-                                        </p:rowExpansion>
-
-                                        <p:column headerText="#{msg.party}">
-                                            <h:outputText value="#{pollingStationResult.electionContestant.party.initials}" />
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.name}">
-                                            <h:outputText value="#{pollingStationResult.candidateName}" />
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.votes}">
-                                            <h:outputText value="#{pollingStationResult.acceptedResult}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        
-                                        <p:column headerText="#{msg.position}">
-                                            <h:outputText value="#{submittedResult.position}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.percent}">
-                                            <h:outputText value="#{submittedResult.votePct}" >
-                                                <f:convertNumber pattern="#,##0.0 %" />
-                                            </h:outputText>
-                                        </p:column>
 
 
+                <c:forEach items="#{pollingStationCollationController.constituencyResultList}" var="electionTypeContainer">
 
-                                        <p:column headerText="#{msg.action}" rendered="false">
-                                            <h:commandLink value="#{msg.edit}" styleClass="delete"
-                                                           action="#{counterpartyController.editCounterparty(counterparty)}"/>
-                                        </p:column>
-                                    </p:dataTable>
-
-                                </h:form>
-
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                #{electionTypeContainer.electionType}
                             </div>
                         </div>
+                        <div class="panel-body">
+
+                            <h:form>
+
+                                <p:dataTable value="#{electionTypeContainer.contestantsList}" var="result" 
+                                             rowKey="#{pollingStationResult.id}">
+
+                                    <p:column rendered="false">
+                                        <p:rowToggler />
+                                    </p:column>
+
+                                    <p:rowExpansion>
+                                        #{result.id}
+                                    </p:rowExpansion>
+
+                                    <p:column headerText="#{msg.party}">
+                                        <h:outputText value="#{result.party.initials}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.name}">
+                                        <h:outputText value="#{result.candidateName}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.votes}">
+                                        <h:outputText value="#{result.acceptedResult}" >
+                                            <f:convertNumber pattern="#,##0" />
+                                        </h:outputText>
+                                    </p:column>
+
+
+                                    <p:column headerText="#{msg.position}">
+                                        <h:outputText value="#{result.position}" >
+                                            <f:convertNumber pattern="#,##0" />
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.percent}">
+                                        <h:outputText value="#{result.votePct}" >
+                                            <f:convertNumber pattern="#,##0.0 %" />
+                                        </h:outputText>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                            </h:form>
+
+                        </div>
+                    </div>
 
 
 
-                    </c:forEach>
+                </c:forEach>
                 
-                     <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty pollingStationCollationController.selectedConstituencyElection}">
-                            <h:outputText value="Result Source" />
-                            
-                            <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection.resultSource}">
-                                <f:selectItems value="#{commonOptions.resultSourceList}" />
-                            </p:selectOneMenu>
-                            
-                            <p:commandButton value="Update" />
-                            
-                                 <h:outputText value="Status" />
-                            
-                                 <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection.resultStatus}">
-                                <f:selectItems value="#{commonOptions.resultStatusList}" />
-                            </p:selectOneMenu>
-                            
-                            <p:commandButton value="Update" />
-                            
-                        </h:panelGrid>
-                         
-                
-                
+                <h:form>
+                    
+                    
+                <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty pollingStationCollationController.selectedConstituencyElection}">
+                    <h:outputText value="Result Source" />
+
+                    <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection.resultSource}">
+                        <f:selectItems value="#{commonOptions.resultSourceList}" />
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Update" ajax="false" action="#{pollingStationCollationController.updateResultSource()}" />
+
+                    <h:outputText value="Status" />
+
+                    <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection.resultStatus}">
+                        <f:selectItems value="#{commonOptions.resultStatusList}" />
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Update" ajax="false" action="#{pollingStationCollationController.updateConstituencyElectionStatus()}" />
+
+                </h:panelGrid>
+
+                 <p:commandButton value="Re-Run" ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                    
+                </h:form>
+
+
+
 
                 <h:form rendered="false">
                     <election:pollingStationSearch selectAction="#{pollingStationCollationController.searchPollingStation()}"
@@ -272,152 +273,152 @@
 
 
                     </c:forEach>
-                    
+
                     <center>
                         <h:form rendered="#{not empty pollingStationCollationController.electionPollingStation.resultStatus}">
-                               <h:panelGrid columns="3" styleClass="spaced-table">
-                            <h:outputText value="Status" />
-                            
-                            <p:selectOneMenu value="#{pollingStationCollationController.electionPollingStation.resultStatus}">
-                                <f:selectItems value="#{commonOptions.resultStatusList}" />
-                            </p:selectOneMenu>
-                            
-                            <p:commandButton value="Update" action="#{pollingStationCollationController.updatePollingStatationStatus()}"/>
-                            
-                        </h:panelGrid>
-                            
+                            <h:panelGrid columns="3" styleClass="spaced-table">
+                                <h:outputText value="Status" />
+
+                                <p:selectOneMenu value="#{pollingStationCollationController.electionPollingStation.resultStatus}">
+                                    <f:selectItems value="#{commonOptions.resultStatusList}" />
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Update" action="#{pollingStationCollationController.updatePollingStatationStatus()}"/>
+
+                            </h:panelGrid>
+
                         </h:form>
-                        
-                     
-                        
+
+
+
                     </center>
 
 
 
                 </h:panelGroup>
-                
+
                 <br />
                 <br />
-                
-                        <div class="row">
-            <div class="col-lg-12">
+
+                <div class="row">
+                    <div class="col-lg-12">
 
 
-                <center>
-                    <h:form>
+                        <center>
+                            <h:form>
 
-                        <p:commandButton value="Load Submissions" styleClass="ui-button-help " 
-                                         action="#{pollingStationCollationController.loadSubmissions()}"
-                                         update=":submittedResultPanel"/>
+                                <p:commandButton value="Load Submissions" styleClass="ui-button-help " 
+                                                 action="#{pollingStationCollationController.loadSubmissions()}"
+                                                 update=":submittedResultPanel"/>
 
-                    </h:form>
+                            </h:form>
 
-                </center>
-
-
+                        </center>
 
 
-                <div class="card">
 
 
-                    <h:panelGroup id="submittedResultPanel">
+                        <div class="card">
 
 
-                        <p:carousel value="#{pollingStationCollationController.submissionsList}" var="submission" numVisible="3" numScroll="3" >
-                            <f:facet name="header">
-                                <h5>#{submission.volunteer.volunteerName}</h5>
-                            </f:facet>
-
-                            <div class="card" style="margin-left: 10px;">
+                            <h:panelGroup id="submittedResultPanel">
 
 
-                                <ui:repeat value="#{submission.electionResultsList}" var="electionTypeResult">
+                                <p:carousel value="#{pollingStationCollationController.submissionsList}" var="submission" numVisible="3" numScroll="3" >
+                                    <f:facet name="header">
+                                        <h5>#{submission.volunteer.volunteerName}</h5>
+                                    </f:facet>
 
-                                    <div class="panel panel-primary">
-                                        <div class="panel-heading">
-                                            <div class="panel-title">
-                                                #{electionTypeResult.electionType}
+                                    <div class="card" style="margin-left: 10px;">
+
+
+                                        <ui:repeat value="#{submission.electionResultsList}" var="electionTypeResult">
+
+                                            <div class="panel panel-primary">
+                                                <div class="panel-heading">
+                                                    <div class="panel-title">
+                                                        #{electionTypeResult.electionType}
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body">
+
+
+                                                    <p:dataTable value="#{electionTypeResult.submittedResultsList}" var="submittedResult" 
+                                                                 rowKey="#{submittedResult.id}">
+
+                                                        <p:column>
+                                                            <p:rowToggler />
+                                                        </p:column>
+
+                                                        <p:rowExpansion>
+                                                            #{submittedResult.id}
+                                                        </p:rowExpansion>
+
+                                                        <p:column headerText="#{msg.party}">
+                                                            <h:outputText value="#{submittedResult.electionContestant.party.initials}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="#{msg.name}">
+                                                            <h:outputText value="#{submittedResult.candidateName}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="#{msg.votes}">
+                                                            <h:outputText value="#{submittedResult.inputResult}" >
+                                                                <f:convertNumber pattern="#,##0" />
+                                                            </h:outputText>
+                                                        </p:column>
+
+                                                        <p:column headerText="#{msg.position}">
+                                                            <h:outputText value="#{submittedResult.position}" >
+                                                                <f:convertNumber pattern="#,##0" />
+                                                            </h:outputText>
+                                                        </p:column>
+
+                                                        <p:column headerText="#{msg.percent}">
+                                                            <h:outputText value="#{submittedResult.votePct}" >
+                                                                <f:convertNumber pattern="#,##0.0 %" />
+                                                            </h:outputText>
+                                                        </p:column>
+
+
+                                                    </p:dataTable>
+
+
+
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="panel-body">
-
-
-                                            <p:dataTable value="#{electionTypeResult.submittedResultsList}" var="submittedResult" 
-                                                         rowKey="#{submittedResult.id}">
-
-                                                <p:column>
-                                                    <p:rowToggler />
-                                                </p:column>
-
-                                                <p:rowExpansion>
-                                                    #{submittedResult.id}
-                                                </p:rowExpansion>
-
-                                                <p:column headerText="#{msg.party}">
-                                                    <h:outputText value="#{submittedResult.electionContestant.party.initials}" />
-                                                </p:column>
-
-                                                <p:column headerText="#{msg.name}">
-                                                    <h:outputText value="#{submittedResult.candidateName}" />
-                                                </p:column>
-
-                                                <p:column headerText="#{msg.votes}">
-                                                    <h:outputText value="#{submittedResult.inputResult}" >
-                                                        <f:convertNumber pattern="#,##0" />
-                                                    </h:outputText>
-                                                </p:column>
-
-                                                <p:column headerText="#{msg.position}">
-                                                    <h:outputText value="#{submittedResult.position}" >
-                                                        <f:convertNumber pattern="#,##0" />
-                                                    </h:outputText>
-                                                </p:column>
-
-                                                <p:column headerText="#{msg.percent}">
-                                                    <h:outputText value="#{submittedResult.votePct}" >
-                                                        <f:convertNumber pattern="#,##0.0 %" />
-                                                    </h:outputText>
-                                                </p:column>
-
-
-                                            </p:dataTable>
 
 
 
-                                        </div>
+                                        </ui:repeat>
+
+
+                                        <center>
+                                            <h:form>
+                                                <p:commandButton value="Accept this from #{submission.volunteer.volunteerName}" ajax="true"
+                                                                 action="#{pollingStationCollationController.acceptSubmission(submission)}"
+                                                                 icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                            </h:form>
+                                        </center>
+
+
+
+
                                     </div>
 
+                                </p:carousel>
 
 
-                                </ui:repeat>
 
+                            </h:panelGroup>
 
-                                <center>
-                                    <h:form>
-                                        <p:commandButton value="Accept this from #{submission.volunteer.volunteerName}" ajax="true"
-                                                         action="#{pollingStationCollationController.acceptSubmission(submission)}"
-                                                         icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
-                                    </h:form>
-                                </center>
+                        </div>
 
 
 
 
-                            </div>
-
-                        </p:carousel>
-
-
-
-                    </h:panelGroup>
-
+                    </div>
                 </div>
-
-
-
-
-            </div>
-        </div>
 
 
 

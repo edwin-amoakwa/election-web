@@ -64,4 +64,15 @@ public class ElectionService {
                   .buildQry().getResultList();
       }
       
+           public List<ElectionContestant> consititueny(ConstituencyElection constituencyElection, ElectionType electionType)
+      {
+         
+          return QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+                  .addObjectParam(ElectionContestant._electionType, electionType)
+                  .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
+                  .orderByAsc(ElectionContestant._viewOrder)
+//                  .printQryInfo()
+                  .buildQry().getResultList();
+      }
+      
 }

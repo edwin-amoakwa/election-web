@@ -126,6 +126,7 @@ public class UpdateStatsService {
         if (stationResult == null) {
             stationResult = new PollingStationResult();
             stationResult.setElection(eps.getElection());
+            stationResult.setConstituencyElection(contestant.getConstituencyElection());
             stationResult.setElectionContestant(contestant);
             stationResult.setElectionPollingStation(eps);
             stationResult.setElectionType(contestant.getElectionType());

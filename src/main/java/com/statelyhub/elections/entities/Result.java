@@ -25,6 +25,7 @@ public class Result extends UniqueEntityModel3 {
 
     public static final String _electionContestant = "electionContestant";
     public static final String _electionContestant_electionType = _electionContestant + "." + ElectionContestant._electionType;
+    public static final String _electionContestant_id = _electionContestant + "." + ElectionContestant._id;
     @JoinColumn(name = "election_contestant")
     @ManyToOne
     private ElectionContestant electionContestant;
@@ -52,10 +53,10 @@ public class Result extends UniqueEntityModel3 {
     @Enumerated(EnumType.STRING)
     private ElectionType electionType;
 
-    public static final String _resultSource = "resultSource";
-    @Column(name = "result_source")
-    @Enumerated(EnumType.STRING)
-    private ResultSource resultSource;
+//    public static final String _resultSource = "resultSource";
+//    @Column(name = "result_source")
+//    @Enumerated(EnumType.STRING)
+//    private ResultSource resultSource;
 
     public static final String _resultStatus = "resultStatus";
     @Column(name = "result_status")
@@ -145,13 +146,13 @@ public class Result extends UniqueEntityModel3 {
         this.acceptedResult = acceptedResult;
     }
 
-    public ResultSource getResultSource() {
-        return resultSource;
-    }
-
-    public void setResultSource(ResultSource resultSource) {
-        this.resultSource = resultSource;
-    }
+//    public ResultSource getResultSource() {
+//        return resultSource;
+//    }
+//
+//    public void setResultSource(ResultSource resultSource) {
+//        this.resultSource = resultSource;
+//    }
 
     public ResultStatus getResultStatus() {
         return resultStatus;
@@ -209,20 +210,11 @@ public class Result extends UniqueEntityModel3 {
         this.votePct = votePct;
     }
 
-//    public ResultSubmission getResultSubmission() {
-//        return resultSubmission;
-//    }
-//
-//    public void setResultSubmission(ResultSubmission resultSubmission) {
-//        this.resultSubmission = resultSubmission;
-//    }
-
-//    public SubmittedResult getVolunteerResult() {
-//        return volunteerResult;
-//    }
-//
-//    public void setVolunteerResult(SubmittedResult volunteerResult) {
-//        this.volunteerResult = volunteerResult;
-//    }
-
+    @Override
+    public String toString() {
+        return "Result{" + "electionContestant=" + electionContestant + ", viewOrder=" + viewOrder + ", constituencyElection=" + constituencyElection + ", candidateName=" + candidateName + ", candidate=" + candidate + ", electionType=" + electionType + ", resultStatus=" + resultStatus + ", officialResult=" + officialResult + ", submittedResult=" + submittedResult + ", inputResult=" + inputResult + ", acceptedResult=" + acceptedResult + ", position=" + position + ", votePct=" + votePct + '}';
+    }
+    
+    
+    
 }

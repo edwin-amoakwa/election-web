@@ -5,6 +5,7 @@
 package com.statelyhub.elections.model;
 
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.SubmittedResult;
 import java.util.List;
@@ -20,6 +21,8 @@ public class ElectionTypeResult {
     private List<PollingStationResult> votingsList;
     
     private List<SubmittedResult> submittedResultsList;
+    
+     private List<ElectionContestant> contestantsList;
 
     public ElectionType getElectionType() {
         return electionType;
@@ -43,6 +46,19 @@ public class ElectionTypeResult {
 
     public void setSubmittedResultsList(List<SubmittedResult> submittedResultsList) {
         this.submittedResultsList = submittedResultsList;
+    }
+
+    public List<ElectionContestant> getContestantsList() {
+        return contestantsList;
+    }
+
+    public void setContestantsList(List<ElectionContestant> contestantsList) {
+        this.contestantsList = contestantsList;
+    }
+
+    @Override
+    public String toString() {
+        return "ElectionTypeResult{" + "electionType=" + electionType + ", votingsList=" + votingsList + ", submittedResultsList=" + submittedResultsList + ", contestantsList=" + contestantsList + '}';
     }
     
 
