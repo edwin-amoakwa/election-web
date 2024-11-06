@@ -156,7 +156,8 @@
                 
                 <h:form>
                     
-                    
+                    <center>
+                             
                 <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty pollingStationCollationController.selectedConstituencyElection}">
                     <h:outputText value="Result Source" />
 
@@ -176,7 +177,11 @@
 
                 </h:panelGrid>
 
-                 <p:commandButton value="Re-Run" ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                    <br />
+                    <p:commandButton value="#{msg.analyse_update}" 
+                                     styleClass="ui-button-success " 
+                                     ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                    </center>
                     
                 </h:form>
 

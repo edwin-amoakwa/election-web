@@ -108,18 +108,25 @@ public class PollingStationCollationController implements Serializable {
       public void updateConstituencyElectionStatus()
     {
         crudService.save(selectedConstituencyElection);
+        JsfMsg.msg(true);
     }
     
     public void updateResultSource()
     {
         electionResultService.updatePollingStationSourceChange(selectedConstituencyElection);
         updateConstituecyFigures();
+//        JsfMsg.msg(true);
     }
     
       public void updateConstituecyFigures()
     {
+        if(selectedConstituencyElection == null)
+        {
+            return;
+        }
         electionResultService.runConstituency(selectedConstituencyElection);
         loadConstituencyResult();
+        JsfMsg.msg(true);
     }
 
     
