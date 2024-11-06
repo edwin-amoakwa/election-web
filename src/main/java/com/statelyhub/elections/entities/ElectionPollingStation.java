@@ -6,8 +6,11 @@
 package com.statelyhub.elections.entities;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
+import com.statelyhub.elections.constants.ResultStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -69,6 +72,11 @@ public class ElectionPollingStation extends UniqueEntityModel3 {
     @JoinColumn(name = "result_submission")
     @ManyToOne
     private ResultSubmission resultSubmission;
+    
+      public static final String _resultStatus = "resultStatus";
+    @Column(name = "result_status")
+    @Enumerated(EnumType.STRING)
+    private ResultStatus resultStatus;
 
     public int getVotersCount() {
         return votersCount;
@@ -148,6 +156,14 @@ public class ElectionPollingStation extends UniqueEntityModel3 {
 
     public void setVoterTurnout(int voterTurnout) {
         this.voterTurnout = voterTurnout;
+    }
+
+    public ResultStatus getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(ResultStatus resultStatus) {
+        this.resultStatus = resultStatus;
     }
 
     

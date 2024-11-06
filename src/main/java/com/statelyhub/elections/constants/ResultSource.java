@@ -16,9 +16,9 @@ import com.stately.common.api.MessageResolvable;
 public enum ResultSource implements MessageResolvable
 {
 
-    COALLATED("COALLATED","COALLATED"),
+    INPUTTED("COALLATED","Inputted"),
     SUBMITTED("SUBMITTED","SUBMITTED"),
-    OFFICIAL("OFFICIAL","OFFICIAL");
+    OFFICIAL("OFFICIAL","Official (EC)");
 
     private final String code;
     private final String label;

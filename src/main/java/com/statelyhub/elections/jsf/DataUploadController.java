@@ -10,6 +10,7 @@ import com.stately.modules.excel.ExcelDataLoader;
 import com.stately.modules.excel.ExcelExporter;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.entities.Constituency;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.DistrictAssembly;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStation;
@@ -39,8 +40,9 @@ public class DataUploadController implements Serializable {
 
     private @Inject
     UserSession userSession;
-    
-    @Inject private DataUploadService dataUploadService;
+
+    @Inject
+    private DataUploadService dataUploadService;
 
     private UploadedFile uploadFile;
 
@@ -55,7 +57,6 @@ public class DataUploadController implements Serializable {
 //
 //            QryBuilder.get(crudService.getEm(), DistrictAssembly.class).delete();
 //            QryBuilder.get(crudService.getEm(), Region.class).delete();
-
             File bankFile = new File(ExcelExporter.TEMP_DIR, uploadFile.getFileName());
             FileUtils.writeByteArrayToFile(bankFile, uploadFile.getContent());
             List<Object[]> uploadList = ExcelDataLoader.read(bankFile.getAbsolutePath()).getWorkBookData();
@@ -95,29 +96,29 @@ public class DataUploadController implements Serializable {
                 if (regionName.length() < 3) {
                     continue;
                 }
-                
-                   if (regionName.contains("0")) {
+
+                if (regionName.contains("0")) {
                     continue;
                 }
-                   
-                         
-                   if (regionName.contains("Region")) {
+                
+                    if (consistuencyName.contains("1.0")) {
                     continue;
                 }
 
+                if (regionName.contains("Region")) {
+                    continue;
+                }
 
                 Region region = dataUploadService.region(regionName);
-                
-//                if(true)
-//                {
-//                    continue;
-//                }
+
 //                
                 DistrictAssembly assembly = dataUploadService.district(region, districtName);
                 Constituency constituency = dataUploadService.constituency(region, assembly, consistuencyName);
-                
-                dataUploadService.process(userSession.getElectionUR(), region, constituency, stationCode, stationName);
-                
+
+                ConstituencyElection constituencyElection = dataUploadService.initConsElection(constituency, region, userSession.getElectionUR());
+
+                dataUploadService.process(constituencyElection, stationCode, stationName);
+
 //                PollingStation pollingStation = dataUploadService.pollingStation(constituency, stationCode, stationName);
 //
 //                ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
@@ -135,14 +136,11 @@ public class DataUploadController implements Serializable {
 //                }
 //                
 //                dataUploadService.initConsElection(constituency, region, userSession.getElectionUR());
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-
 
     public UploadedFile getUploadFile() {
         return uploadFile;

@@ -5,6 +5,7 @@
 package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.DistrictAssembly;
@@ -29,25 +30,27 @@ public class DataUploadService {
     
     
     @Asynchronous
-    public void process(Election election,Region region, Constituency constituency, String stationCode, String stationName)
+//    public void process(Election election,Region region, Constituency constituency, String stationCode, String stationName)
+    public void process(ConstituencyElection constituencyElection, String stationCode, String stationName)
     {
         
-        PollingStation pollingStation = pollingStation(constituency, stationCode, stationName);
+        PollingStation pollingStation = pollingStation(constituencyElection.getConstituency(), stationCode, stationName);
         
-            ConstituencyElection ce = initConsElection(constituency, region, election);
+          
         
          ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                        .addObjectParam(ElectionPollingStation._constituencyElection, ce)
+                        .addObjectParam(ElectionPollingStation._constituencyElection, constituencyElection)
 //                        .addObjectParam(ElectionPollingStation._election, election)
 //                        .addObjectParam(ElectionPollingStation._pollingStation, pollingStation)
                         .getSingleResult(ElectionPollingStation.class);
 
                 if (eps == null) {
                     eps = new ElectionPollingStation();
-                    eps.setElection(election);
-                    eps.setConstituency(constituency);
+                    eps.setElection(constituencyElection.getElection());
+                    eps.setConstituency(constituencyElection.getConstituency());
                     eps.setPollingStation(pollingStation);
-                    eps.setConstituencyElection(ce);
+                    eps.setConstituencyElection(constituencyElection);
+                    eps.setResultStatus(ResultStatus.PENDING);
 
                     crudService.save(eps);
                 }
@@ -108,9 +111,10 @@ public class DataUploadService {
     }
 
     public Constituency constituency(Region region, DistrictAssembly assembly, String consistuencyName) {
+        consistuencyName = consistuencyName.trim();
         Constituency constituency = QryBuilder.get(crudService.getEm(), Constituency.class)
                 .addObjectParam(Constituency._region, region)
-                .addObjectParam(Constituency._constituencyName, consistuencyName.trim())
+                .addObjectParam(Constituency._constituencyName, consistuencyName)
                 .getSingleResult(Constituency.class);
 
         if (constituency == null) {
@@ -134,7 +138,7 @@ public class DataUploadService {
 
         if (station == null) {
             station = new PollingStation();
-            station.setStationCode(stationCode);
+            station.setStationCode(stationCode.trim());
             station.setStationName(stationName);
             station.setConstituency(constituency);
             crudService.save(station);

@@ -5,6 +5,8 @@
  */
 package com.statelyhub.elections.jsf;
 
+import com.statelyhub.elections.constants.ResultSource;
+import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.old.constants.AccountStatus;
 import com.statelyhub.old.constants.AccountType;
 import com.statelyhub.old.constants.UserAccountCategory;
@@ -48,6 +50,20 @@ public class CommonOptions
         return Arrays.asList(AccountStatus.values());
     }
     
+    
+       
+    public List<ResultStatus> getResultStatusList()
+    {
+        return Arrays.asList(ResultStatus.values());
+    }
+    
+    
+     
+       
+    public List<ResultSource> getResultSourceList()
+    {
+        return Arrays.asList(ResultSource.values());
+    }
     
     
 }
