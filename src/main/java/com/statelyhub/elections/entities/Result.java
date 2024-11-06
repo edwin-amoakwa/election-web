@@ -25,6 +25,7 @@ public class Result extends UniqueEntityModel3 {
 
     public static final String _electionContestant = "electionContestant";
     public static final String _electionContestant_electionType = _electionContestant + "." + ElectionContestant._electionType;
+    public static final String _electionContestant_id = _electionContestant + "." + ElectionContestant._id;
     @JoinColumn(name = "election_contestant")
     @ManyToOne
     private ElectionContestant electionContestant;
@@ -209,20 +210,11 @@ public class Result extends UniqueEntityModel3 {
         this.votePct = votePct;
     }
 
-//    public ResultSubmission getResultSubmission() {
-//        return resultSubmission;
-//    }
-//
-//    public void setResultSubmission(ResultSubmission resultSubmission) {
-//        this.resultSubmission = resultSubmission;
-//    }
+    @Override
+    public String toString() {
+        return "Result{" + "electionContestant=" + electionContestant + ", viewOrder=" + viewOrder + ", constituencyElection=" + constituencyElection + ", candidateName=" + candidateName + ", candidate=" + candidate + ", electionType=" + electionType + ", resultSource=" + resultSource + ", resultStatus=" + resultStatus + ", officialResult=" + officialResult + ", submittedResult=" + submittedResult + ", inputResult=" + inputResult + ", acceptedResult=" + acceptedResult + ", position=" + position + ", votePct=" + votePct + '}';
+    }
 
-//    public SubmittedResult getVolunteerResult() {
-//        return volunteerResult;
-//    }
-//
-//    public void setVolunteerResult(SubmittedResult volunteerResult) {
-//        this.volunteerResult = volunteerResult;
-//    }
-
+    
+    
 }

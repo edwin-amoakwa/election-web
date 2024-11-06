@@ -102,8 +102,27 @@ public class PollingStationCollationController implements Serializable {
     }
 
     public void loadConstituencyResult() {
-        constituencyResultList = electionResultService.pollingStationBucket(electionPollingStation);
+        constituencyResultList = electionResultService.constituency(selectedConstituencyElection);
+        System.out.println(constituencyResultList);
     }
+    
+      public void updateConstituencyElectionStatus()
+    {
+        crudService.save(selectedConstituencyElection);
+    }
+    
+    public void updateResultSource()
+    {
+        electionResultService.updatePollingStationSourceChange(selectedConstituencyElection);
+    }
+    
+      public void updateConstituecyFigures()
+    {
+        electionResultService.runConstituency(selectedConstituencyElection);
+        loadConstituencyResult();
+    }
+
+    
 
     public void loadSubmissions() {
         submissionsList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
