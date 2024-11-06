@@ -16,7 +16,7 @@ public class AttachmentDto {
     private ElectionType electionType; // not neccary
     private String id;
     private String fileDataBase64;
-    private LocalDateTime dateTime = LocalDateTime.now();
+    private String dateTime = "";
 
     public String getId() {
         return id;
@@ -42,11 +42,11 @@ public class AttachmentDto {
         this.electionType = electionType;
     }
 
-    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
