@@ -7,7 +7,7 @@
                 xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
 
     <ui:define name="pageTitle">
-        #{msg.counterparty}
+        Volunteers 
     </ui:define>
 
     <ui:define name="content">
@@ -15,18 +15,25 @@
         <h:form>
             <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
                 
-                <h:outputText value="#{msg.code}" />
-                <p:inputText value="#{counterpartyController.counterparty.counterpartyCode}" />
+                <h:outputText value="Volunteer Name" styleClass="field-label-required"/>
+                <p:inputText value="#{volunteerController.volunteer.volunteerName}" />
                 
-                <h:outputText value="#{msg.name}" />
-                <p:inputText value="#{counterpartyController.counterparty.counterpartyName}" />
+                <h:outputText value="Phone Contact"  styleClass="field-label-required" />
+                <p:inputText value="#{volunteerController.volunteer.mobileNo}" />
                 
+                <h:outputText value="Email Address" />
+                <p:inputText value="#{volunteerController.volunteer.emailAddress}" />
                 
+                <h:outputText value="Constituency"  styleClass="field-label-required"/>
+                <p:selectOneMenu value="#{volunteerController.volunteer.constituency}">
+                    <f:selectItem itemLabel="#{msg.select_one}" />
+                    <f:selectItems value="#{userCommonOptions.constituenciesList}" />
+                </p:selectOneMenu>
                 
                 <f:facet name="footer">
                     <center style="margin: 10px">
-                        <stately:formControl saveButtonAction="#{counterpartyController.saveCounterparty()}" 
-                                             cancelButtonAction="#{counterpartyController.clear()}"/>
+                        <stately:formControl saveButtonAction="#{volunteerController.saveVolunteer()}" 
+                                             cancelButtonAction="#{volunteerController.initVolunteer()}"/>
                     </center>
                 </f:facet>
                 
@@ -34,16 +41,58 @@
         </h:form>
         
         <h:form style="margin-top: 20px;">
-            <p:dataTable value="#{counterpartyController.counterpartiesList}" var="counterparty">
-                <p:column headerText="#{msg.code}">
-                    <h:outputText value="#{counterparty.counterpartyCode}" />
+            <p:dataTable value="#{volunteerController.volunteersList}" var="record">
+                
+                <p:column headerText="Volunteer Name">
+                    <h:outputText value="#{record.volunteerName}" />
                 </p:column>
-                <p:column headerText="#{msg.name}">
-                    <h:outputText value="#{counterparty.counterpartyName}" />
+                
+                <p:column headerText="Phone Contact">
+                    <h:outputText value="#{record.mobileNo}" />
                 </p:column>
-                <p:column headerText="#{msg.action}">
-                    <h:commandLink value="#{msg.edit}" styleClass="delete"
-                                   action="#{counterpartyController.editCounterparty(counterparty)}"/>
+                
+                <p:column headerText="Email Address">
+                    <h:outputText value="#{record.emailAddress}" />
+                </p:column>
+                
+                <p:column headerText="Region">
+                    <h:outputText value="#{record.constituency.region.regionName}" />
+                </p:column>
+                
+                <p:column headerText="Constituency">
+                    <h:outputText value="#{record.constituency.constituencyName}" />
+                </p:column>
+                
+                <p:column headerText="#{msg.edit}">
+                    <h:commandLink value="#{msg.edit}" styleClass="select"
+                                   action="#{volunteerController.selectVolunteer(record)}"/>
+                 </p:column>
+                <p:column headerText="#{msg.delete}">
+                    <h:commandLink value="#{msg.delete}" styleClass="delete"
+                                   action="#{volunteerController.deleteVolunteer(record)}"
+                                   onclick="return confirm('Delete Volunteer?');"/>
+                </p:column>
+                <p:column headerText="Verified">
+                    <h:commandLink value="Verify" styleClass="primary"
+                         rendered="#{!record.verified}"
+                        action="#{volunteerController.verifyVolunteer(record)}"
+                        onclick="return confirm('Verify Volunteer?');"/>
+                    <h:commandLink value="Unverify" styleClass="primary"
+                         rendered="#{record.verified}"
+                        action="#{volunteerController.unverifyVolunteer(record)}"
+                        onclick="return confirm('Unverify Volunteer?');"/>
+                    <!--<h:outputText value="verified" rendered="{record.verified}"/>-->
+                </p:column>
+                <p:column headerText="Approved">
+                    <h:commandLink value="Approve" styleClass="primary"
+                         rendered="#{!record.approved}"
+                        action="#{volunteerController.approveVolunteer(record)}"
+                        onclick="return confirm('Approve Volunteer?');"/>
+                    <h:commandLink value="Disapprove" styleClass="primary"
+                         rendered="#{record.approved}"
+                        action="#{volunteerController.disapproveVolunteer(record)}"
+                        onclick="return confirm('Diapprove Volunteer?');"/>
+                    <!--<h:outputText value="approved" rendered="{record.approved}"/>-->
                 </p:column>
                 
                 
