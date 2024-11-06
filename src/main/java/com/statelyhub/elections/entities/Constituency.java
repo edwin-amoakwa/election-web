@@ -25,6 +25,7 @@ public class Constituency extends UniqueEntityModel3 {
     private String constituencyName;
 
     public static final String _region = "region";
+    public static final String _region_id = _region+"."+Region._id;
     @JoinColumn(name = "region")
     @ManyToOne
     private Region region;
