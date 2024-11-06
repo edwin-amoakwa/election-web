@@ -17,6 +17,7 @@ public class ResultSubmissionDto extends BaseDto
     private String epsId;
     
     private List<ElectionTypeResultDto> votingsList;
+    private List<AttachmentDto> attachmentsList;
 
     public String getVolunteerId() {
         return volunteerId;
@@ -48,6 +49,14 @@ public class ResultSubmissionDto extends BaseDto
 
     public void setVotingsList(List<ElectionTypeResultDto> votingsList) {
         this.votingsList = votingsList;
+    }
+
+    public List<AttachmentDto> getAttachmentsList() {
+        return attachmentsList;
+    }
+
+    public void setAttachmentsList(List<AttachmentDto> attachmentsList) {
+        this.attachmentsList = attachmentsList;
     }
     
     
