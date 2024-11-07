@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.statelyhub.old.constants;
+package com.statelyhub.elections.constants;
 
 import com.stately.common.api.MessageResolvable;
 

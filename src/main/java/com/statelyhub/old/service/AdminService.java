@@ -8,7 +8,7 @@ package com.statelyhub.old.service;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.entities.UserAccount;
 import com.stately.modules.jpa2.QryBuilder;
-import com.statelyhub.old.constants.UserAccessLevel;
+import com.statelyhub.elections.constants.UserAccessLevel;
 import com.statelyhub.old.entities.Institution;
 import java.util.LinkedList;
 import java.util.List;

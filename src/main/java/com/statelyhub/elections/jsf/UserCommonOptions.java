@@ -18,7 +18,7 @@ import com.statelyhub.old.constants.AmtInWords;
 import com.statelyhub.old.entities.BillStatus;
 import com.statelyhub.old.entities.ReceivedStatus;
 import com.statelyhub.old.constants.AuthorisationRequirement;
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccountCategory;
 import com.statelyhub.old.constants.VoucherCurrency;
 import java.io.Serializable;
 import java.util.Arrays;

@@ -9,16 +9,14 @@ import com.statelyhub.elections.constants.PartyType;
 import com.statelyhub.elections.constants.ResultSource;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.old.constants.AccountStatus;
-import com.statelyhub.old.constants.AccountType;
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccountCategory;
 import com.statelyhub.elections.services.CrudService;
-import com.statelyhub.old.constants.UserDomain;
+import com.statelyhub.elections.constants.UserDomain;
 import jakarta.enterprise.context.RequestScoped;
 import java.util.Arrays;
 import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.util.Collections;
 
 /**
  *
@@ -29,17 +27,6 @@ import java.util.Collections;
 public class CommonOptions
 {
     @Inject private CrudService crudService;
-    
-    
-       public List<AccountType> getAccountTypesList()
-    {
-        return Arrays.asList(AccountType.values());
-    }
-    
-    public CommonOptions()
-    {
-    }
-    
     
     public List<UserAccountCategory> getUserAccountCategorysList()
     {

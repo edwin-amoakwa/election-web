@@ -10,7 +10,7 @@ import com.statelyhub.elections.services.CrudService;
 import com.stately.common.security.SecurityHash;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.stately.modules.web.jsf.JsfUtil;
-import com.statelyhub.old.constants.UserAccessLevel;
+import com.statelyhub.elections.constants.UserAccessLevel;
 import com.statelyhub.old.service.AdminService;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
@@ -59,18 +59,18 @@ public class AdminLoginController implements Serializable {
 
         newPassword = "";
 
-        if (!userSession.getAccountUR().isSuperUser()) {
-            userAccount.setInstitution(userSession.getAccountUR().getInstitution());
-        }
+//        if (!userSession.getAccountUR().isSuperUser()) {
+//            userAccount.setInstitution(userSession.getAccountUR().getInstitution());
+//        }
 
         JsfUtil.resetViewRoot();
 
     }
 
     public void saveUserAccount() {
-        if (userAccount.isSuperUser()) {
-//            userAccount.setInstitution(null);
-        }
+//        if (userAccount.isSuperUser()) {
+////            userAccount.setInstitution(null);
+//        }
 
         if (crudService.save(userAccount) != null) {
             JsfMsg.msg(true);

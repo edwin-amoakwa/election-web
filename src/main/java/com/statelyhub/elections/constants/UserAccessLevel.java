@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.statelyhub.old.constants;
+package com.statelyhub.elections.constants;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
 import com.statelyhub.elections.entities.UserAccount;
@@ -34,7 +34,7 @@ public class UserAccessLevel extends UniqueEntityModel3
     public static final String _userGroup = "userGroup";
     @Column(name = "user_group")
     @Enumerated(EnumType.STRING)
-    private UserAccountCategory userGroup;
+    private UserGroup userGroup;
     
     public static final String _staffRole = "userRole";
     @Column(name = "user_role")
@@ -58,12 +58,12 @@ public class UserAccessLevel extends UniqueEntityModel3
         this.userAccount = userAccount;
     }
 
-    public UserAccountCategory getUserGroup()
+    public UserGroup getUserGroup()
     {
         return userGroup;
     }
 
-    public void setUserGroup(UserAccountCategory userGroup)
+    public void setUserGroup(UserGroup userGroup)
     {
         this.userGroup = userGroup;
     }

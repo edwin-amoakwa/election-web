@@ -5,9 +5,9 @@
  */
 package com.statelyhub.elections.entities;
 
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccountCategory;
 import com.stately.modules.jpa2.UniqueEntityModel2;
-import com.statelyhub.old.constants.UserDomain;
+import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.old.entities.Institution;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,10 +74,10 @@ public class UserAccount extends UniqueEntityModel2
     private Constituency constituency;
     
 
-    public boolean isSuperUser()
-    {
-        return accountCategory == UserAccountCategory.SUPER_ADMIN;
-    }
+//    public boolean isSuperUser()
+//    {
+//        return accountCategory == UserAccountCategory.SUPER_ADMIN;
+//    }
 
     public boolean isViewerUser()
     {
