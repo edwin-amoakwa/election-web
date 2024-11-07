@@ -14,7 +14,7 @@ import com.stately.common.api.MessageResolvable;
  */
 public enum UserDomain implements MessageResolvable {
 
-    NATIONAL_USER("National User", "National User"),
+    NATIONAL("National User", "National User"),
     //    ELECTORIAL_AREA("Viewer","Viewer"),
     //    ADMINISTRATIVE_AREA("Viewer","Viewer"),
     CONSTITUENCY("Consistuency", "Consistuency"),
@@ -37,7 +37,7 @@ public enum UserDomain implements MessageResolvable {
     }
 
     public boolean isNationalUser() {
-        return this == NATIONAL_USER;
+        return this == NATIONAL;
     }
 
     @Override
