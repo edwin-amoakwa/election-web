@@ -167,7 +167,7 @@ public class ResultSubmissionEndpoint {
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
                 submittedResult.setInputResult(submittedResultDto.getVotes());
                 resultsList.add(submittedResult);
-                crudService.save(submittedResult);
+//                crudService.save(submittedResult);
             }
 
             for (SubmittedResult compare : resultsList) 

@@ -90,7 +90,7 @@ public class VolunteerEndpoint
             e.printStackTrace();
         } 
         
-        if(StringUtil.isNullOrEmpty(dto.getPollingStationId()))
+        if(!StringUtil.isNullOrEmpty(dto.getPollingStationId()))
         {
             try{ 
                 PollingStation pollingStation = QryBuilder.get(crudService.getEm(), PollingStation.class)
@@ -101,7 +101,7 @@ public class VolunteerEndpoint
                 record.setPollingStation(pollingStation);
             } catch (Exception e) {
                 e.printStackTrace();
-            } 
+            }   
             
             if(record.getPollingStation() == null)
             {
