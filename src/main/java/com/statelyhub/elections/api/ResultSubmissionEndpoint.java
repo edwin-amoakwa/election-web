@@ -72,7 +72,8 @@ public class ResultSubmissionEndpoint {
                 .addObjectParam(ResultSubmission._electionPollingStation, eps)
                 .getSingleResult(ResultSubmission.class);
 
-        if (resultSubmission == null) {
+        if (resultSubmission == null) 
+        {
             resultSubmission = new ResultSubmission();
             resultSubmission.setElectionPollingStation(eps);
             resultSubmission.setVolunteer(volunteer);

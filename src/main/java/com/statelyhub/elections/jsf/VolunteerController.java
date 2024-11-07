@@ -10,6 +10,7 @@ import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.statelyhub.elections.constants.VolunteerApprovalStatus;
 import com.statelyhub.elections.constants.VolunteerClassification;
+import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.CrudService;
 import jakarta.annotation.PostConstruct;
@@ -17,6 +18,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Collections;
 
@@ -33,6 +35,8 @@ public class VolunteerController implements Serializable
     
     private List<Volunteer> volunteersList;
     private Volunteer volunteer;
+    
+    private List<PollingStation> pollingStationsList = new LinkedList<>();
     
     @PostConstruct
     public void init()
@@ -93,9 +97,33 @@ public class VolunteerController implements Serializable
         this.initVolunteer();
     }
     
+    public void onConstituencyChange()
+    {
+        System.out.println("here hre");
+        if(this.volunteer == null)return;
+        if(this.volunteer.getConstituency()== null)
+        { 
+            System.out.println("here hre null");
+            this.pollingStationsList.clear();
+            return;
+        } 
+        System.out.println("here hre not null");
+        
+        try {
+            pollingStationsList = QryBuilder.get(crudService.getEm(), PollingStation.class)
+                .addObjectParam(PollingStation._constituency, this.volunteer.getConstituency())
+                .orderByAsc(PollingStation._stationName)
+                .printQryInfo().buildQry().getResultList(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            pollingStationsList = Collections.EMPTY_LIST;
+        }
+    }
+    
     public void selectVolunteer(Volunteer volunteer)
     {
         this.volunteer = volunteer;
+        this.onConstituencyChange(); 
     }
     
     public void deleteVolunteer(Volunteer volunteer)
@@ -179,6 +207,14 @@ public class VolunteerController implements Serializable
 
     public void setVolunteer(Volunteer volunteer) {
         this.volunteer = volunteer;
+    }
+
+    public List<PollingStation> getPollingStationsList() {
+        return pollingStationsList;
+    }
+
+    public void setPollingStationsList(List<PollingStation> pollingStationsList) {
+        this.pollingStationsList = pollingStationsList;
     }
     
 }
