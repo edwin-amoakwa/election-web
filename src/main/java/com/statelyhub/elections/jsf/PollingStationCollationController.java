@@ -69,6 +69,8 @@ public class PollingStationCollationController implements Serializable {
 
     private ConstituencyElection selectedConstituencyElection;
     
+    private boolean inputVotes;
+    
     public void searchPollingStation() {
         selectPollingStation(pollingStationSearch.getPollingStation());
     }
@@ -195,6 +197,36 @@ public class PollingStationCollationController implements Serializable {
 
         JsfMsg.msg(true);
     }
+    
+    public void recordUpdated(PollingStationResult result)
+    {
+         System.out.println( 
+                        result.getPartyDetails()+" -"
+                                +"--result.getInputResult() = "+result.getInputResult()
+                                +"--result.getOfficialResult() = "+result.getOfficialResult());
+         crudService.save(result);   
+    }
+    
+    public void saveResults()
+    {
+        if(resultsList == null) return;
+        
+        for(ElectionTypeResult record: resultsList)
+        {
+            System.out.println("\n--record.getElectionType() = "+record.getElectionType());
+            for (PollingStationResult result : record.getVotingsList()) 
+            {
+                System.out.println( 
+                        result.getPartyDetails()+" -"
+                                +"--result.getInputResult() = "+result.getInputResult()
+                                +"--result.getOfficialResult() = "+result.getOfficialResult());
+                crudService.save(result);
+            }
+        }
+        
+        JsfMsg.successSave();
+        this.inputVotes = false;
+    }
 
     public List<PollingStationResult> getPresidentialList() {
         return presidentialList;
@@ -258,6 +290,14 @@ public class PollingStationCollationController implements Serializable {
 
     public void setConstituencyResultList(List<ElectionTypeResult> constituencyResultList) {
         this.constituencyResultList = constituencyResultList;
+    }
+
+    public boolean isInputVotes() {
+        return inputVotes;
+    }
+
+    public void setInputVotes(boolean inputVotes) {
+        this.inputVotes = inputVotes;
     }
 
 }
