@@ -11,8 +11,10 @@ import java.util.List;
  *
  * @author edwin
  */
-public class ElectionTypeResultDto {
+public class ElectionTypeResultDto 
+{
     private ElectionType electionType;
+    private int totalBallots;
     private int rejectedBallots;
     private int spoiltBallots;
     
@@ -48,6 +50,14 @@ public class ElectionTypeResultDto {
 
     public void setSpoiltBallots(int spoiltBallots) {
         this.spoiltBallots = spoiltBallots;
+    }
+
+    public int getTotalBallots() {
+        return totalBallots;
+    }
+
+    public void setTotalBallots(int totalBallots) {
+        this.totalBallots = totalBallots;
     }
     
 }
