@@ -5,6 +5,7 @@
 package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ResultSource;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
@@ -70,6 +71,8 @@ public class DataUploadService {
             ce.setConstituency(constituency);
             ce.setElection(election);
             ce.setRegion(region);
+            ce.setResultStatus(ResultStatus.PENDING);
+            ce.setResultSource(ResultSource.SUBMITTED);
             crudService.save(ce);
         }
         

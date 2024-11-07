@@ -170,12 +170,12 @@ public class ElectionResultService {
         }
 
         List<ElectionContestant> contestantsList = electionService.cecs(ce, electionType);
-          System.out.println("map >>>>>>>>> " + map);
+//          System.out.println("map >>>>>>>>> " + map);
         for (ElectionContestant contestant : contestantsList) {
            
             Integer votes = map.get(contestant);
             
-             System.out.println(contestant.getId() + "   ...... " + votes );
+//             System.out.println(contestant.getId() + "   ...... " + votes );
             if (votes != null) {
                 contestant.setAcceptedResult(votes);
             }
@@ -185,7 +185,7 @@ public class ElectionResultService {
         
           for (ElectionContestant electionContestant : contestantsList) {
               
-              System.out.println(electionContestant.getParty() + " ........ " + electionContestant.getAcceptedResult());
+//              System.out.println(electionContestant.getParty() + " ........ " + electionContestant.getAcceptedResult());
               crudService.save(electionContestant);
           }
      

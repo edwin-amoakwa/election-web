@@ -1,0 +1,226 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+                xmlns:election="jakarta.faces.composite/election"
+                xmlns:c="jakarta.tags.core">
+
+    <ui:define name="pageTitle">
+        National Collation
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <div class="row">
+
+            <div class="col-lg-5">
+                <h:form>
+
+                    <h:panelGrid columns="6" styleClass="spaced-table">
+                        <h:outputText value="#{msg.region}" />
+                        <p:selectOneMenu value="#{nationalViewController.selectedRegion}" 
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.regionsList}" />
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Load" ajax="false"
+                                         action="#{nationalViewController.loadConstituency()}"/>
+                    </h:panelGrid>
+
+                </h:form>
+
+                <h:form>
+
+                    <p:tabView>
+
+                        <p:tab title="Pending - #{nationalViewController.pendingConstituencyElectionList.size()}">
+
+                            <p:dataTable value="#{nationalViewController.pendingConstituencyElectionList}" var="constituencyElection" 
+                                         rows="25" paginator="true" paginatorPosition="bottom">
+
+                                <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains">
+                                    <h:outputText value="#{constituencyElection.region.regionName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.polling_stations}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
+                                    <p:commandLink value="#{constituencyElection.constituency.constituencyName}" 
+                                                   action="#{nationalViewController.loadConstituencyResult(constituencyElection)}"
+                                                   update=":constituencyResultPanel"/>
+                                </p:column>
+
+                                <p:column headerText="#{msg.result}" >
+                                    <h:outputText value="#{constituencyElection.resultSource}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:tab>
+
+                        <p:tab title="Finalised - #{nationalViewController.completedConstituencyElectionList.size()}">
+                            <p:dataTable value="#{nationalViewController.completedConstituencyElectionList}" var="pollingStation" 
+                                         rows="25" paginator="true" paginatorPosition="bottom">
+
+                                <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains">
+                                    <h:outputText value="#{constituencyElection.region.regionName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.polling_stations}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
+                                    <h:commandLink value="#{constituencyElection.constituency.constituencyName}" 
+                                                   action="#{nationalViewController.loadConstituencyResult(constituencyElection)}"/>
+                                </p:column>
+
+
+                            </p:dataTable>
+
+                        </p:tab>
+
+
+                    </p:tabView>
+
+
+
+                </h:form>
+
+
+
+
+
+
+            </div>
+
+            <div class="col-lg-7">
+                <h:panelGroup id="constituencyResultPanel">
+
+
+                    <h3>#{nationalViewController.selectedConstituencyElection.constituency.constituencyName}</h3>
+
+
+                    <c:forEach items="#{nationalViewController.constituencyResultList}" var="electionTypeContainer">
+
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    #{electionTypeContainer.electionType}
+                                </div>
+                            </div>
+                            <div class="panel-body">
+
+                                <h:form>
+
+                                    <p:dataTable value="#{electionTypeContainer.contestantsList}" var="result" 
+                                                 rowKey="#{pollingStationResult.id}">
+
+                                        <p:column rendered="false">
+                                            <p:rowToggler />
+                                        </p:column>
+
+                                        <p:rowExpansion>
+                                            #{result.id}
+                                        </p:rowExpansion>
+
+                                        <p:column headerText="#{msg.party}">
+                                            <h:outputText value="#{result.party.initials}" />
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.name}">
+                                            <h:outputText value="#{result.candidateName}" />
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.votes}">
+                                            <h:outputText value="#{result.acceptedResult}" >
+                                                <f:convertNumber pattern="#,##0" />
+                                            </h:outputText>
+                                        </p:column>
+
+
+                                        <p:column headerText="#{msg.position}">
+                                            <h:outputText value="#{result.position}" >
+                                                <f:convertNumber pattern="#,##0" />
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.percent}">
+                                            <h:outputText value="#{result.votePct}" >
+                                                <f:convertNumber pattern="#,##0.0 %" />
+                                            </h:outputText>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                </h:form>
+
+                            </div>
+                        </div>
+
+
+
+                    </c:forEach>
+
+
+
+
+                    <center>
+
+                        <h:form>
+
+                            <p:commandButton value="Re-Run" ajax="false" action="#{nationalViewController.updateConstituecyFigures()}" />
+
+                        </h:form>
+
+
+
+                    </center>
+
+
+
+                </h:panelGroup>
+
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+
+
+
+
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+
+
+        <hr />
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+    </ui:define>
+
+</ui:composition>
+

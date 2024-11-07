@@ -9,7 +9,7 @@
                 xmlns:c="jakarta.tags.core">
 
     <ui:define name="pageTitle">
-        Polling Station Collation
+        #{msg.constituency} Collation Center
     </ui:define>
 
     <ui:define name="content">
@@ -19,8 +19,10 @@
 
             <div class="col-lg-5">
                 <h:form>
-
-                    <h:outputText value="#{msg.constituency}" />
+                    
+                    <h:panelGrid columns="6" styleClass="spaced-table">
+                        
+                         <h:outputText value="#{msg.constituency}" />
                     <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection}" 
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="#{msg.select_one}" />
@@ -29,6 +31,9 @@
 
                     <p:commandButton value="Load" ajax="false"
                                      action="#{pollingStationCollationController.loadPollingStation()}"/>
+                    </h:panelGrid>
+
+                   
 
                 </h:form>
 
@@ -85,7 +90,7 @@
                 <br />
 
 
-                <h2>Current Tabulation Result</h2>
+                <h2>Current #{msg.constituency} Result</h2>
 
 
                 <c:forEach items="#{pollingStationCollationController.constituencyResultList}" var="electionTypeContainer">
@@ -151,7 +156,8 @@
                 
                 <h:form>
                     
-                    
+                    <center>
+                             
                 <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty pollingStationCollationController.selectedConstituencyElection}">
                     <h:outputText value="Result Source" />
 
@@ -171,7 +177,11 @@
 
                 </h:panelGrid>
 
-                 <p:commandButton value="Re-Run" ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                    <br />
+                    <p:commandButton value="#{msg.analyse_update}" 
+                                     styleClass="ui-button-success " 
+                                     ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                    </center>
                     
                 </h:form>
 
@@ -202,7 +212,7 @@
 
                                 <h:form>
 
-                                    <p:dataTable value="#{electionTypeContainer.votingsList}" var="pollingStationResult" 
+                                    <p:dataTable value="#{electionTypeContainer.votingsList}" var="result" 
                                                  rowKey="#{pollingStationResult.id}">
 
                                         <p:column>
@@ -210,59 +220,54 @@
                                         </p:column>
 
                                         <p:rowExpansion>
-                                            #{pollingStationResult.id}
+                                            #{result.id}
                                         </p:rowExpansion>
 
                                         <p:column headerText="#{msg.party}">
-                                            <h:outputText value="#{pollingStationResult.electionContestant.party.initials}" />
+                                            <h:outputText value="#{result.electionContestant.party.initials}" />
                                         </p:column>
 
                                         <p:column headerText="#{msg.name}">
-                                            <h:outputText value="#{pollingStationResult.candidateName}" />
+                                            <h:outputText value="#{result.candidateName}" />
                                         </p:column>
 
                                         <p:column headerText="#{msg.accepted}">
-                                            <h:outputText value="#{pollingStationResult.acceptedResult}" >
+                                            <h:outputText value="#{result.acceptedResult}" >
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column headerText="#{msg.input_result}">
-                                            <h:outputText value="#{pollingStationResult.inputResult}" >
+                                            <h:outputText value="#{result.inputResult}" >
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column headerText="#{msg.official}">
-                                            <h:outputText value="#{pollingStationResult.officialResult}" >
+                                            <h:outputText value="#{result.officialResult}" >
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column headerText="#{msg.submitted}">
-                                            <h:outputText value="#{pollingStationResult.submittedResult}" >
+                                            <h:outputText value="#{result.submittedResult}" >
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column headerText="#{msg.position}">
-                                            <h:outputText value="#{submittedResult.position}" >
+                                            <h:outputText value="#{result.position}" >
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column headerText="#{msg.percent}">
-                                            <h:outputText value="#{submittedResult.votePct}" >
+                                            <h:outputText value="#{result.votePct}" >
                                                 <f:convertNumber pattern="#,##0.0 %" />
                                             </h:outputText>
                                         </p:column>
 
 
-
-                                        <p:column headerText="#{msg.action}" rendered="false">
-                                            <h:commandLink value="#{msg.edit}" styleClass="delete"
-                                                           action="#{counterpartyController.editCounterparty(counterparty)}"/>
-                                        </p:column>
                                     </p:dataTable>
 
                                 </h:form>

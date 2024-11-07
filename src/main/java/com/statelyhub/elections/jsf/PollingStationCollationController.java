@@ -68,7 +68,7 @@ public class PollingStationCollationController implements Serializable {
     private List<ElectionPollingStation> pendingPollingStationsList;
 
     private ConstituencyElection selectedConstituencyElection;
-
+    
     public void searchPollingStation() {
         selectPollingStation(pollingStationSearch.getPollingStation());
     }
@@ -93,7 +93,7 @@ public class PollingStationCollationController implements Serializable {
         for (ElectionPollingStation eps : pollingStationsList) {
             if (eps.getResultStatus() == ResultStatus.FINALISED) {
                 completedPollingStationsList.add(eps);
-            } else if (eps.getResultStatus() == ResultStatus.PENDING) {
+            } else  {
                 pendingPollingStationsList.add(eps);
             }
         }
@@ -103,24 +103,30 @@ public class PollingStationCollationController implements Serializable {
 
     public void loadConstituencyResult() {
         constituencyResultList = electionResultService.constituency(selectedConstituencyElection);
-        System.out.println(constituencyResultList);
     }
     
       public void updateConstituencyElectionStatus()
     {
         crudService.save(selectedConstituencyElection);
+        JsfMsg.msg(true);
     }
     
     public void updateResultSource()
     {
         electionResultService.updatePollingStationSourceChange(selectedConstituencyElection);
         updateConstituecyFigures();
+//        JsfMsg.msg(true);
     }
     
       public void updateConstituecyFigures()
     {
+        if(selectedConstituencyElection == null)
+        {
+            return;
+        }
         electionResultService.runConstituency(selectedConstituencyElection);
         loadConstituencyResult();
+        JsfMsg.msg(true);
     }
 
     
@@ -185,7 +191,7 @@ public class PollingStationCollationController implements Serializable {
         crudService.saveEntity(resultSubmission);
         crudService.saveEntity(electionPollingStation);
 
-        System.out.println("ress ..... " + resultSubmission);
+//        System.out.println("ress ..... " + resultSubmission);
 
         JsfMsg.msg(true);
     }
