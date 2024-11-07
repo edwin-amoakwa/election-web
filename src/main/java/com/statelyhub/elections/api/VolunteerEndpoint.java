@@ -14,6 +14,7 @@ import com.statelyhub.elections.constants.VolunteerApprovalStatus;
 import com.statelyhub.elections.constants.VolunteerClassification;
 import com.statelyhub.elections.dto.VolunteerDto;
 import com.statelyhub.elections.entities.Constituency;
+import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.CrudService;
 import jakarta.ejb.Stateless;
@@ -94,6 +95,25 @@ public class VolunteerEndpoint
         } catch (Exception e) {
             e.printStackTrace();
         } 
+        
+        if(StringUtil.isNullOrEmpty(dto.getPollingStationId()))
+        {
+            try{ 
+                PollingStation pollingStation = QryBuilder.get(crudService.getEm(), PollingStation.class)
+                    .addObjectParam(PollingStation._id, dto.getPollingStationId())
+                    .addObjectParam(PollingStation._constituency_id, dto.getConstituencyId())
+                    .addObjectParam(PollingStation._constituency_region_id, dto.getRegionId())
+                    .getSingleResult(PollingStation.class);
+                record.setPollingStation(pollingStation);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } 
+            
+            if(record.getPollingStation() == null)
+            {
+                return result.addError("Specified Polling Station Not Found");
+            }
+        }
         
         if(StringUtil.isNullOrEmpty(dto.getVolunteerName()))
         {

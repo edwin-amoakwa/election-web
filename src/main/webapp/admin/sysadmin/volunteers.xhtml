@@ -63,6 +63,10 @@
                     <h:outputText value="#{record.constituency.constituencyName}" />
                 </p:column>
                 
+                <p:column headerText="Polling Station">
+                    <h:outputText value="#{record.pollingStation.stationName}" />
+                </p:column>
+                
                 <p:column headerText="#{msg.edit}">
                     <h:commandLink value="#{msg.edit}" styleClass="select"
                                    action="#{volunteerController.selectVolunteer(record)}"/>

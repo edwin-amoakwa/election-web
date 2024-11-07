@@ -131,6 +131,15 @@ public class ResultSubmissionEndpoint {
         }
         ResultSubmissionDto submissionDto = new ResultSubmissionDto();
         submissionDto.setId(resultSubmission.getId());
+        try {
+            submissionDto.setVolunteerId(resultSubmission.getVolunteer().getId());
+        } catch (Exception e) {
+        }
+        try {
+            submissionDto.setEpsId(resultSubmission.getElectionPollingStation().getId());
+            submissionDto.setPollingStationId(resultSubmission.getElectionPollingStation().getPollingStation().getId());
+        } catch (Exception e) {
+        }
         submissionDto.setVotingsList(dtos);
 
         return ApiResponse.ok(submissionDto);
@@ -151,56 +160,45 @@ public class ResultSubmissionEndpoint {
 //            return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
         }
 
-        
-        
-        
-        for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) 
-        {
+        for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) {
             List<SubmittedResult> resultsList = new LinkedList<>();
-            
-            for (SubmittedResultDto submittedResultDto : electionTypeResultDto.getCandidatesList()) {
 
+            for (SubmittedResultDto submittedResultDto : electionTypeResultDto.getCandidatesList()) {
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
                 submittedResult.setInputResult(submittedResultDto.getVotes());
                 resultsList.add(submittedResult);
-//                crudService.save(submittedResult);
+                crudService.save(submittedResult);
             }
-            
-            
-             for (SubmittedResult compare : resultsList) {
-           
-            int counter = 0;
-            for (SubmittedResult submitted : resultsList) {
-                if(submitted.getInputResult() > compare.getInputResult())
+
+            for (SubmittedResult compare : resultsList) 
+            {
+                int counter = 0;
+                for (SubmittedResult submitted : resultsList) {
+                    if (submitted.getInputResult() > compare.getInputResult()) {
+                        counter++;
+                    }
+                }
+                compare.setPosition(counter + 1);
+            }
+
+            if (resultSubmission.getElectionPollingStation().getVotersCount() != 0) 
+            {
+                double totalVotes = resultSubmission.getElectionPollingStation().getVotersCount();
+                for (SubmittedResult submittedResult : resultsList) 
                 {
-                    counter++;
+                    double pct = submittedResult.getInputResult() / totalVotes;
+                    submittedResult.setVotePct(pct);
                 }
             }
-            compare.setPosition(counter+1);
-        }
-        
-        if(resultSubmission.getElectionPollingStation().getVotersCount() != 0)
-        {
-            double totalVotes = resultSubmission.getElectionPollingStation().getVotersCount();
-            for (SubmittedResult submittedResult : resultsList) {
-                double pct = submittedResult.getInputResult() / totalVotes;
-                submittedResult.setVotePct(pct);
-                
-            }
-        }
-        
-        for (SubmittedResult submittedResult : resultsList) {
-            crudService.save(submittedResult);
-        }
-            
-        }
-        
-        //run position logic;
-        
-        
-       
-        
 
+            for (SubmittedResult submittedResult : resultsList) 
+            {
+                crudService.save(submittedResult);
+            }
+
+        }
+
+        //run position logic;
         resultSubmission.setSubmissionStatus(SubmissionStatus.OPEN);
 
         crudService.save(resultSubmission);
