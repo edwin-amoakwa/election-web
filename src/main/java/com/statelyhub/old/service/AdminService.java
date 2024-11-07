@@ -47,7 +47,7 @@ public class AdminService
 
     }
     
-    public List<UserAccount> getFundingSourceList(Institution institution)
+    public List<UserAccount> getUserAccountList(Institution institution)
      {
          try
          {

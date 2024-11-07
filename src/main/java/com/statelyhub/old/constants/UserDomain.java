@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.statelyhub.old.constants;
 
 import com.stately.common.api.MessageResolvable;
@@ -13,44 +12,47 @@ import com.stately.common.api.MessageResolvable;
  * @email edwin.amoakwa@gmail.com
  * @contact 0277115150
  */
-public enum UserDomain implements MessageResolvable
-{
+public enum UserDomain implements MessageResolvable {
 
-    POLLING_STATION("Admin","Admin"),
-    ELECTORIAL_AREA("Viewer","Viewer"),
-    ADMINISTRATIVE_AREA("Viewer","Viewer"),
-    CONSTITUENCY("Inputter","Inputter"),
-    REGION("Authoriser","Authoriser");
+    NATIONAL_USER("National User", "National User"),
+    //    ELECTORIAL_AREA("Viewer","Viewer"),
+    //    ADMINISTRATIVE_AREA("Viewer","Viewer"),
+    CONSTITUENCY("Consistuency", "Consistuency"),
+    REGION("Region", "Region");
 
     private final String code;
     private final String label;
-    
-    private UserDomain(String code, String label)
-    {
+
+    private UserDomain(String code, String label) {
         this.code = code;
         this.label = label;
     }
 
+    public boolean isRegionUser() {
+        return this == REGION;
+    }
+
+    public boolean isConstituencyUser() {
+        return this == CONSTITUENCY;
+    }
+
+    public boolean isNationalUser() {
+        return this == NATIONAL_USER;
+    }
+
     @Override
-    public String getCode()
-    {
+    public String getCode() {
         return code;
     }
 
     @Override
-    public String getLabel()
-    {
+    public String getLabel() {
         return label;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return label;
     }
-    
-    
-    
-    
 
 }

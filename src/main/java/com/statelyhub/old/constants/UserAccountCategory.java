@@ -18,7 +18,7 @@ public enum UserAccountCategory implements MessageResolvable
     ADMIN("Admin","Admin"),
     VIEWER("Viewer","Viewer"),
     INPUTER("Inputter","Inputter"),
-    AUTHORISER("Authoriser","Authoriser"),
+//    AUTHORISER("Authoriser","Authoriser"),
     SUPER_ADMIN("SUPER_ADMIN","Super Admin");
 
     private final String code;

@@ -58,6 +58,21 @@ public class UserAccount extends UniqueEntityModel2
     @Column(name = "account_category")
     @Enumerated(EnumType.STRING)
     private UserAccountCategory accountCategory;
+    
+    
+      
+    public static final String _region = "region";
+    @JoinColumn(name = "region")
+    @ManyToOne
+    private Region region;
+    
+    
+      
+    public static final String _constituency = "constituency";
+    @JoinColumn(name = "constituency")
+    @ManyToOne
+    private Constituency constituency;
+    
 
     public boolean isSuperUser()
     {
@@ -74,10 +89,10 @@ public class UserAccount extends UniqueEntityModel2
         return accountCategory == UserAccountCategory.ADMIN;
     }
     
-    public boolean isAuthoriserUser()
-    {
-        return accountCategory == UserAccountCategory.AUTHORISER;
-    }
+//    public boolean isAuthoriserUser()
+//    {
+//        return accountCategory == UserAccountCategory.AUTHORISER;
+//    }
     
     public boolean isInputterUser()
     {
@@ -149,6 +164,24 @@ public class UserAccount extends UniqueEntityModel2
     public void setUserDomain(UserDomain userDomain) {
         this.userDomain = userDomain;
     }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public Constituency getConstituency() {
+        return constituency;
+    }
+
+    public void setConstituency(Constituency constituency) {
+        this.constituency = constituency;
+    }
+    
+    
 
     @Override
     public String toString()

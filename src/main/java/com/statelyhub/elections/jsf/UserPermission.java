@@ -35,10 +35,10 @@ public class UserPermission implements Serializable
     }
     
         
-    public boolean isAuthoriser()
-    {
-        return categorys.contains(UserAccountCategory.AUTHORISER);
-    }
+//    public boolean isAuthoriser()
+//    {
+//        return categorys.contains(UserAccountCategory.AUTHORISER);
+//    }
     
         
     public boolean isAdmin()

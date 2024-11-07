@@ -108,25 +108,7 @@ public class UserCommonOptions implements Serializable
         
     }
     
-    public List<UserAccountCategory> getUserAccountCategorysList()
-    {
-        try
-        {
-            if(userSession.getAccountUR().isSuperUser())
-            {
-                return Arrays.asList(UserAccountCategory.values());
-            }
-            else
-            {
-                return Arrays.asList(UserAccountCategory.ADMIN,UserAccountCategory.INPUTER,UserAccountCategory.AUTHORISER, UserAccountCategory.VIEWER);
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return Collections.EMPTY_LIST;
-    }
+   
     
     public List<String> getCurrencysList()
     {

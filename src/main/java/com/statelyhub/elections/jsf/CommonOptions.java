@@ -5,17 +5,20 @@
  */
 package com.statelyhub.elections.jsf;
 
+import com.statelyhub.elections.constants.PartyType;
 import com.statelyhub.elections.constants.ResultSource;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.old.constants.AccountStatus;
 import com.statelyhub.old.constants.AccountType;
 import com.statelyhub.old.constants.UserAccountCategory;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.old.constants.UserDomain;
 import jakarta.enterprise.context.RequestScoped;
 import java.util.Arrays;
 import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.util.Collections;
 
 /**
  *
@@ -57,13 +60,39 @@ public class CommonOptions
         return Arrays.asList(ResultStatus.values());
     }
     
-    
-     
-       
     public List<ResultSource> getResultSourceList()
     {
         return Arrays.asList(ResultSource.values());
     }
     
-    
+        public List<PartyType> getPartyTypeList()
+    {
+        return Arrays.asList(PartyType.values());
+    }
+        
+             public List<UserDomain> getUserDomainsList()
+    {
+        return Arrays.asList(UserDomain.values());
+    }
+             
+             
+//              public List<UserAccountCategory> getUserAccountCategorysList()
+//    {
+//        try
+//        {
+//            if(userSession.getAccountUR().isSuperUser())
+//            {
+//                return Arrays.asList(UserAccountCategory.values());
+//            }
+//            else
+//            {
+//                return Arrays.asList(UserAccountCategory.ADMIN,UserAccountCategory.INPUTER,UserAccountCategory.AUTHORISER, UserAccountCategory.VIEWER);
+//            }
+//        } catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//        
+//        return Collections.EMPTY_LIST;
+//    }
 }
