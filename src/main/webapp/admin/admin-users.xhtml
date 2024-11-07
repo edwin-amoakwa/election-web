@@ -25,30 +25,65 @@
                         <h:outputText value="#{msg.email}" />
                         <p:inputText value="#{adminLoginController.userAccount.emailAddress}" required="true"/>
 
-
-                        <h:outputText value="#{msg.user_domain}" />
-                        <p:selectOneMenu value="#{adminLoginController.userAccount.userDomain}" required="true" >
-                            <f:selectItem value="#{msg.select_one}" />
-                            <f:selectItems value="#{commonOptions.userDomainsList}" />
-                        </p:selectOneMenu>
                         
-                        
-                        <h:outputText value="#{msg.category}" />
+                            <h:outputText value="#{msg.category}" />
                         <p:selectOneMenu value="#{adminLoginController.userAccount.accountCategory}" required="true" >
-                            <f:selectItem value="#{msg.select_one}" />
+                            <f:selectItem itemLabel="#{msg.select_one}" />
                             <f:selectItems value="#{commonOptions.userAccountCategorysList}" />
                         </p:selectOneMenu>
 
 
+                        <h:outputText value="#{msg.user_domain}" />
+                        <p:selectOneMenu value="#{adminLoginController.userAccount.userDomain}" required="true" >
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{commonOptions.userDomainsList}" />
+                            <p:ajax update="userDomainTable" process="@this" /> 
+                        </p:selectOneMenu>
+
+
+               
+                    
+
                         
-                        <f:facet name="footer">
-                            <center style="margin: 10px">
+
+                    </p:panelGrid>
+                    
+                    <h:panelGroup id="userDomainTable">
+                        
+                             <h:panelGrid columns="4" styleClass="spaced-table" 
+                                   rendered="#{adminLoginController.userAccount.userDomain.constituencyUser}">
+                        
+                        <h:outputText value="#{msg.constituency}" />
+                        <p:selectOneMenu value="#{adminLoginController.userAccount.constituency}" required="true" >
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.constituenciesList}" />
+                        </p:selectOneMenu>
+                        
+                    </h:panelGrid>
+                        
+                        
+                             <h:panelGrid columns="4" styleClass="spaced-table" 
+                                          rendered="#{adminLoginController.userAccount.userDomain.regionUser}">
+                        
+                                 <h:outputText value="#{msg.region}" />
+                                 <p:selectOneMenu value="#{adminLoginController.userAccount.region}" required="true" >
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.regionsList}" />
+                        </p:selectOneMenu>
+                        
+                    </h:panelGrid>
+                        
+                    </h:panelGroup>
+                    
+               
+                    
+                       <center style="margin: 10px">
                                 <stately:formControl saveButtonAction="#{adminLoginController.saveUserAccount()}" 
                                                      cancelButtonAction="#{adminLoginController.clear()}"/>
                             </center>
-                        </f:facet>
-
-                    </p:panelGrid>
+                    
+                    
+                    
                 </h:form>
 
 
@@ -58,30 +93,38 @@
             <div class="row">
                 <div class="col-lg-9">
                     <h:form style="margin-top: 20px;">
-                        <p:dataTable value="#{adminLoginController.userAccountsList}" var="collector" 
+                        <p:dataTable value="#{adminLoginController.userAccountsList}" var="user" 
                                      paginator="true" paginatorPosition="bottom" rows="20">
 
-                            <p:column headerText="#{msg.name}" filterBy="#{collector.accountName}">
-                                <h:outputText value="#{collector.accountName}" />
+                            <p:column headerText="#{msg.name}" filterBy="#{user.accountName}">
+                                <h:outputText value="#{user.accountName}" />
                             </p:column>
 
                             <p:column headerText="#{msg.email}">
-                                <h:outputText value="#{collector.emailAddress}" />
+                                <h:outputText value="#{user.emailAddress}" />
                             </p:column>
 
                             <p:column headerText="#{msg.category}">
-                                <h:outputText value="#{collector.accountCategory.label}" />
+                                <h:outputText value="#{user.accountCategory.label}" />
+                            </p:column>
+                            
+                            <p:column headerText="#{msg.user_domain}">
+                                <h:outputText value="#{user.userDomain.label}" />
+                            </p:column>
+                            
+                              <p:column headerText="#{msg.user_domain}">
+                                  <h:outputText value="#{user.domainName}" />
                             </p:column>
 
 
                             <p:column headerText="#{msg.action}">
                                 <h:commandLink value="Delete" styleClass="delete"
-                                               action="#{adminLoginController.deleteAdminLogin(collector)}"/>
+                                               action="#{adminLoginController.deleteAdminLogin(user)}"/>
                             </p:column>
 
                             <p:column headerText="#{msg.action}">
                                 <h:commandLink value="#{msg.edit} / Set Password" 
-                                               action="#{adminLoginController.editUserAccount(collector)}"/>
+                                               action="#{adminLoginController.editUserAccount(user)}"/>
                             </p:column>
 
 
@@ -98,7 +141,7 @@
                             <h:panelGrid columns="2"  styleClass="spaced-table">
                                 <h:outputText value="Group" />
                                 <stately:selectOne value="#{adminLoginController.accessLevel.userGroup}" 
-                                                   items="#{commonOptions.userAccountCategorysList}" />
+                                                   items="#{commonOptions.userGroupList}" />
 
 
                                 <f:facet name="footer">

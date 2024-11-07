@@ -12,6 +12,7 @@ import com.statelyhub.old.constants.AccountStatus;
 import com.statelyhub.elections.constants.UserAccountCategory;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.constants.UserDomain;
+import com.statelyhub.elections.constants.UserGroup;
 import jakarta.enterprise.context.RequestScoped;
 import java.util.Arrays;
 import java.util.List;
@@ -24,45 +25,39 @@ import jakarta.inject.Named;
  */
 @Named(value = "commonOptions")
 @RequestScoped
-public class CommonOptions
-{
-    @Inject private CrudService crudService;
-    
-    public List<UserAccountCategory> getUserAccountCategorysList()
-    {
+public class CommonOptions {
+
+    @Inject
+    private CrudService crudService;
+
+    public List<UserAccountCategory> getUserAccountCategorysList() {
         return Arrays.asList(UserAccountCategory.values());
     }
-    
-    
-    
-    public List<AccountStatus> getAccountStatusList()
-    {
+
+    public List<AccountStatus> getAccountStatusList() {
         return Arrays.asList(AccountStatus.values());
     }
-    
-    
-       
-    public List<ResultStatus> getResultStatusList()
-    {
+
+    public List<ResultStatus> getResultStatusList() {
         return Arrays.asList(ResultStatus.values());
     }
-    
-    public List<ResultSource> getResultSourceList()
-    {
+
+    public List<ResultSource> getResultSourceList() {
         return Arrays.asList(ResultSource.values());
     }
-    
-        public List<PartyType> getPartyTypeList()
-    {
+
+    public List<PartyType> getPartyTypeList() {
         return Arrays.asList(PartyType.values());
     }
-        
-             public List<UserDomain> getUserDomainsList()
-    {
+
+    public List<UserDomain> getUserDomainsList() {
         return Arrays.asList(UserDomain.values());
     }
-             
-             
+    
+        public List<UserGroup> getUserGroupList() {
+        return Arrays.asList(UserGroup.values());
+    }
+
 //              public List<UserAccountCategory> getUserAccountCategorysList()
 //    {
 //        try
