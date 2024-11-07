@@ -5,13 +5,12 @@
  */
 package com.statelyhub.elections.jsf;
 
-import com.statelyhub.elections.jsf.UserSession;
 import com.statelyhub.elections.entities.UserAccount;
 import com.statelyhub.elections.services.CrudService;
 import com.stately.common.security.SecurityHash;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.stately.modules.web.jsf.JsfUtil;
-import com.statelyhub.old.constants.UserAccessLevel;
+import com.statelyhub.elections.constants.UserAccessLevel;
 import com.statelyhub.old.service.AdminService;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
@@ -34,46 +33,46 @@ public class AdminLoginController implements Serializable {
     private UserSession userSession;
     @Inject
     private AdminService adminService;
-    private List<UserAccount> collectorsList;
+    private List<UserAccount> userAccountsList;
 
-    private UserAccount collector = new UserAccount();
+    private UserAccount userAccount = new UserAccount();
 
     private UserAccessLevel accessLevel = new UserAccessLevel();
 
     private String newPassword = "";
 
-    public void editCollector(UserAccount collector) {
-        this.collector = collector;
+    public void editUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
-    public void deleteAdminLogin(UserAccount collector) {
+    public void deleteAdminLogin(UserAccount userAccount) {
         try {
-            crudService.delete(collector);
-            collectorsList.remove(collector);
+            crudService.delete(userAccount);
+            userAccountsList.remove(userAccount);
         } catch (Exception e) {
         }
     }
 
     @PostConstruct
     public void clear() {
-        collector = new UserAccount();
+        userAccount = new UserAccount();
 
         newPassword = "";
 
-        if (!userSession.getAccountUR().isSuperUser()) {
-            collector.setInstitution(userSession.getAccountUR().getInstitution());
-        }
+//        if (!userSession.getAccountUR().isSuperUser()) {
+//            userAccount.setInstitution(userSession.getAccountUR().getInstitution());
+//        }
 
         JsfUtil.resetViewRoot();
 
     }
 
-    public void saveCollector() {
-        if (collector.isSuperUser()) {
-            collector.setInstitution(null);
-        }
+    public void saveUserAccount() {
+//        if (userAccount.isSuperUser()) {
+////            userAccount.setInstitution(null);
+//        }
 
-        if (crudService.save(collector) != null) {
+        if (crudService.save(userAccount) != null) {
             JsfMsg.msg(true);
             clear();
         } else {
@@ -83,8 +82,8 @@ public class AdminLoginController implements Serializable {
 
     public void saveNewPassword() {
         try {
-            collector.setUserPassword(SecurityHash.getInstance().shaHash(newPassword));
-            crudService.save(collector);
+            userAccount.setUserPassword(SecurityHash.getInstance().shaHash(newPassword));
+            crudService.save(userAccount);
 
             clear();
 
@@ -99,7 +98,7 @@ public class AdminLoginController implements Serializable {
     }
 
     public void addStaffAccessLevel() {
-        accessLevel.setUserAccount(collector);
+        accessLevel.setUserAccount(userAccount);
 //        accessLevel.set(userSession.getCompanyUR());
 //        accessLevel.setBranch(userSession.getBranchUR());
         crudService.save(accessLevel);
@@ -109,20 +108,20 @@ public class AdminLoginController implements Serializable {
     }
 
     public List<UserAccessLevel> getStaffAccessLevelList() {
-        return adminService.staffAccessLevel(collector);
+        return adminService.staffAccessLevel(userAccount);
     }
 
-    public List<UserAccount> getCollectorsList() {
-        collectorsList = adminService.getFundingSourceList(userSession.getAccountUR().getInstitution());
-        return collectorsList;
+    public List<UserAccount> getUserAccountsList() {
+        userAccountsList = adminService.getUserAccountList(userSession.getAccountUR().getInstitution());
+        return userAccountsList;
     }
 
-    public UserAccount getCollector() {
-        return collector;
+    public UserAccount getUserAccount() {
+        return userAccount;
     }
 
-    public void setCollector(UserAccount collector) {
-        this.collector = collector;
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     public String getNewPassword() {

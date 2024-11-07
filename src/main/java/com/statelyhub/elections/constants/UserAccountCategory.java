@@ -4,32 +4,27 @@
  * and open the template in the editor.
  */
 
-package com.statelyhub.old.constants;
+package com.statelyhub.elections.constants;
 
 import com.stately.common.api.MessageResolvable;
 
 /**
- *
  * @author Edwin Kwame Amoakwa
  * @email edwin.amoakwa@gmail.com
  * @contact 0277115150
  */
-public enum Role implements MessageResolvable
-{    
-    GUEST("RN","guest"),
-    MEMBER("CL","member"),
-    ADMIN("CL","admin");
-    
+public enum UserAccountCategory implements MessageResolvable
+{
+    ADMIN("Admin","Admin"),
+    VIEWER("Viewer","Viewer"),
+    INPUTER("Inputter","Inputter");
+//    AUTHORISER("Authoriser","Authoriser"),
+//    SUPER_ADMIN("SUPER_ADMIN","Super Admin");
+
     private final String code;
     private final String label;
     
-//    public static final List<Status> accountTypes = new LinkedList<>();
-//    static{
-//        accountTypes.add(SAVINGS);
-//        accountTypes.add(SUSU);
-//    }
-    
-    private Role(String code, String label)
+    private UserAccountCategory(String code, String label)
     {
         this.code = code;
         this.label = label;
@@ -52,6 +47,9 @@ public enum Role implements MessageResolvable
     {
         return label;
     }
+    
+    
+    
     
 
 }

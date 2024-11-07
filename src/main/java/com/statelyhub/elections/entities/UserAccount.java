@@ -5,9 +5,9 @@
  */
 package com.statelyhub.elections.entities;
 
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccountCategory;
 import com.stately.modules.jpa2.UniqueEntityModel2;
-import com.statelyhub.old.constants.UserDomain;
+import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.old.entities.Institution;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,11 +58,26 @@ public class UserAccount extends UniqueEntityModel2
     @Column(name = "account_category")
     @Enumerated(EnumType.STRING)
     private UserAccountCategory accountCategory;
+    
+    
+      
+    public static final String _region = "region";
+    @JoinColumn(name = "region")
+    @ManyToOne
+    private Region region;
+    
+    
+      
+    public static final String _constituency = "constituency";
+    @JoinColumn(name = "constituency")
+    @ManyToOne
+    private Constituency constituency;
+    
 
-    public boolean isSuperUser()
-    {
-        return accountCategory == UserAccountCategory.SUPER_ADMIN;
-    }
+//    public boolean isSuperUser()
+//    {
+//        return accountCategory == UserAccountCategory.SUPER_ADMIN;
+//    }
 
     public boolean isViewerUser()
     {
@@ -74,10 +89,10 @@ public class UserAccount extends UniqueEntityModel2
         return accountCategory == UserAccountCategory.ADMIN;
     }
     
-    public boolean isAuthoriserUser()
-    {
-        return accountCategory == UserAccountCategory.AUTHORISER;
-    }
+//    public boolean isAuthoriserUser()
+//    {
+//        return accountCategory == UserAccountCategory.AUTHORISER;
+//    }
     
     public boolean isInputterUser()
     {
@@ -149,6 +164,24 @@ public class UserAccount extends UniqueEntityModel2
     public void setUserDomain(UserDomain userDomain) {
         this.userDomain = userDomain;
     }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public Constituency getConstituency() {
+        return constituency;
+    }
+
+    public void setConstituency(Constituency constituency) {
+        this.constituency = constituency;
+    }
+    
+    
 
     @Override
     public String toString()

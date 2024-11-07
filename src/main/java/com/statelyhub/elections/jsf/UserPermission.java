@@ -5,9 +5,9 @@
  */
 package com.statelyhub.elections.jsf;
 
-import com.statelyhub.old.constants.UserAccessLevel;
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccessLevel;
 import com.statelyhub.elections.entities.UserAccount;
+import com.statelyhub.elections.constants.UserGroup;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ public class UserPermission implements Serializable
     
     private UserAccount accountUR;
     
-    private List<UserAccountCategory> categorys = new LinkedList<>();
+    private List<UserGroup> categorys = new LinkedList<>();
     
     public void init(List<UserAccessLevel> accessLevels)
     {
@@ -35,35 +35,35 @@ public class UserPermission implements Serializable
     }
     
         
-    public boolean isAuthoriser()
-    {
-        return categorys.contains(UserAccountCategory.AUTHORISER);
-    }
+//    public boolean isAuthoriser()
+//    {
+//        return categorys.contains(UserAccountCategory.AUTHORISER);
+//    }
     
         
-    public boolean isAdmin()
-    {
-        return categorys.contains(UserAccountCategory.ADMIN);
-    }
-    
-     
-    public boolean isInputter()
-    {
-        return categorys.contains(UserAccountCategory.INPUTER);
-    }
+//    public boolean isAdmin()
+//    {
+//        return categorys.contains(UserGroup.ADMIN);
+//    }
+//    
+//     
+//    public boolean isInputter()
+//    {
+//        return categorys.contains(UserGroup.INPUTER);
+//    }
     
     
     public boolean isSuperAdmin()
     {
-        return categorys.contains(UserAccountCategory.SUPER_ADMIN);
+        return categorys.contains(UserGroup.SYSTEM_ADMINSTRATORS);
     }
     
     
-    public boolean isViewer()
-    {
-        return categorys.contains(UserAccountCategory.VIEWER);
-    }
-    
+//    public boolean isViewer()
+//    {
+//        return categorys.contains(UserGroup.VIEWER);
+//    }
+//    
    
     
     

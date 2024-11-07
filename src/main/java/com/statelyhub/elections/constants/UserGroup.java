@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.statelyhub.old.constants;
+package com.statelyhub.elections.constants;
 
 import com.stately.common.api.MessageResolvable;
 
@@ -13,19 +13,18 @@ import com.stately.common.api.MessageResolvable;
  * @email edwin.amoakwa@gmail.com
  * @contact 0277115150
  */
-public enum UserDomain implements MessageResolvable
+public enum UserGroup implements MessageResolvable
 {
-
-    POLLING_STATION("Admin","Admin"),
-    ELECTORIAL_AREA("Viewer","Viewer"),
-    ADMINISTRATIVE_AREA("Viewer","Viewer"),
-    CONSTITUENCY("Inputter","Inputter"),
-    REGION("Authoriser","Authoriser");
+    SYSTEM_ADMINSTRATORS("Admin","Admin");
+//    VIEWER("Viewer","Viewer"),
+//    INPUTER("Inputter","Inputter"),
+////    AUTHORISER("Authoriser","Authoriser"),
+//    SUPER_ADMIN("SUPER_ADMIN","Super Admin");
 
     private final String code;
     private final String label;
     
-    private UserDomain(String code, String label)
+    private UserGroup(String code, String label)
     {
         this.code = code;
         this.label = label;

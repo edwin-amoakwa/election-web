@@ -6,8 +6,11 @@
 package com.statelyhub.elections.entities;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
+import com.statelyhub.elections.constants.PartyType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 /**
@@ -18,6 +21,12 @@ import jakarta.persistence.Table;
 @Table(name = "political_party")
 public class PoliticalParty extends UniqueEntityModel3 {
 
+        public static final String _partyType = "partyType";
+    @Column(name = "party_type")
+    @Enumerated(EnumType.STRING)
+    private PartyType partyType;
+
+    
      public static final String _initials = "initials";
     @Column(name = "initials")
     private String initials;
@@ -27,6 +36,17 @@ public class PoliticalParty extends UniqueEntityModel3 {
     @Column(name = "party_name")
     private String partyName;
 
+    public PartyType getPartyType() {
+        return partyType;
+    }
+
+    public void setPartyType(PartyType partyType) {
+        this.partyType = partyType;
+    }
+
+    
+    
+    
     public String getInitials() {
         return initials;
     }

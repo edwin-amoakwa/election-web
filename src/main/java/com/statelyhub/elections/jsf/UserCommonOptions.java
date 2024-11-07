@@ -18,7 +18,7 @@ import com.statelyhub.old.constants.AmtInWords;
 import com.statelyhub.old.entities.BillStatus;
 import com.statelyhub.old.entities.ReceivedStatus;
 import com.statelyhub.old.constants.AuthorisationRequirement;
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccountCategory;
 import com.statelyhub.old.constants.VoucherCurrency;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -108,25 +108,7 @@ public class UserCommonOptions implements Serializable
         
     }
     
-    public List<UserAccountCategory> getUserAccountCategorysList()
-    {
-        try
-        {
-            if(userSession.getAccountUR().isSuperUser())
-            {
-                return Arrays.asList(UserAccountCategory.values());
-            }
-            else
-            {
-                return Arrays.asList(UserAccountCategory.ADMIN,UserAccountCategory.INPUTER,UserAccountCategory.AUTHORISER, UserAccountCategory.VIEWER);
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return Collections.EMPTY_LIST;
-    }
+   
     
     public List<String> getCurrencysList()
     {

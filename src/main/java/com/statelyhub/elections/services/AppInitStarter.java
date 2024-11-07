@@ -5,11 +5,10 @@
  */
 package com.statelyhub.elections.services;
 
-import com.statelyhub.elections.services.CrudService;
 import com.stately.common.security.SecurityHash;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.entities.UserAccount;
-import com.statelyhub.old.constants.UserAccountCategory;
+import com.statelyhub.elections.constants.UserAccountCategory;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
@@ -51,7 +50,7 @@ public class AppInitStarter
             userAccount.setEmailAddress(UserAccount.SUPER_USER_NAME);
             userAccount.setAccountName("Super User");
             userAccount.setUserPassword(passord);
-            userAccount.setAccountCategory(UserAccountCategory.SUPER_ADMIN);
+            userAccount.setAccountCategory(UserAccountCategory.ADMIN);
 
             crudService.save(userAccount);
 
