@@ -7,10 +7,12 @@ package com.statelyhub.elections.api;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.entities.Constituency;
+import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.elections.services.ElectionService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -19,6 +21,7 @@ import jakarta.json.JsonObjectBuilder;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
@@ -34,6 +37,7 @@ import java.util.List;
 public class LookupEndpoint 
 {
     @Inject private CrudService crudService;
+    @Inject private ElectionService electionService;
     
     @GET
     @Path("/regions")
@@ -133,6 +137,52 @@ public class LookupEndpoint
              .add("success", true)
              .add("statusCode", 200)
              .add("data", dataArray);
+                 
+         return Response.status(Response.Status.OK).entity(result.build()).build(); 
+    }
+    
+    
+    @GET
+    @Path("/polling-station/{pollingStationCode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findByPollingCode(@PathParam("pollingStationCode") String pollingStationCode)
+    {
+        ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+            .addObjectParam(ElectionPollingStation._election, electionService.getCurrentElection())
+            .addObjectParam(ElectionPollingStation._pollingStation_stationCode, pollingStationCode)
+            .printQryInfo()
+            .getSingleResult(ElectionPollingStation.class);
+        if (eps == null) {
+            return ApiResponse.badRequest("Polling Station Not Found " + pollingStationCode);
+        }
+        
+        Constituency con = null;
+        Region reg = null;
+        PollingStation ps = eps.getPollingStation();
+        if(ps != null)
+        {
+            con = eps.getConstituency();
+             if(con != null)
+            {
+                reg = con.getRegion();  
+            }
+        }
+        
+        JsonObjectBuilder object = Json.createObjectBuilder()
+                   .add("id", eps.getId())
+                   .add("itemName", eps.getPollingStation()== null ? "":eps.getPollingStation().getStationName())
+                   .add("stationName", ps== null ? "":ps.getStationName())
+                   .add("stationCode", ps== null ? "":ps.getStationCode())
+                   .add("stationId",   ps== null ? "":ps.getId())
+                   .add("constituencyId", con== null ? "":con.getId())
+                   .add("constituencyName", con== null ? "":con.getConstituencyName())
+                   .add("regionId",   reg== null ? "":reg.getId())
+                   .add("regionName", reg== null ? "":reg.getRegionName());
+        
+         JsonObjectBuilder result =  Json.createObjectBuilder()
+             .add("success", true)
+             .add("statusCode", 200)
+             .add("data", object);
                  
          return Response.status(Response.Status.OK).entity(result.build()).build(); 
     }

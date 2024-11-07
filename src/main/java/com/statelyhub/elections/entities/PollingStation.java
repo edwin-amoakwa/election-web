@@ -39,6 +39,9 @@ public class PollingStation extends UniqueEntityModel3 {
     private AdministrativeArea  administrativeArea;
 
     public static final String _constituency = "constituency";
+    public static final String _constituency_id = _constituency+"."+Constituency._id;
+    public static final String _constituency_region = _constituency+"."+Constituency._region;
+    public static final String _constituency_region_id = _constituency+"."+Constituency._region_id;
     @JoinColumn(name = "constituency")
     @ManyToOne
     private Constituency constituency;
