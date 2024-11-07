@@ -5,6 +5,8 @@
 package com.statelyhub.elections.api;
 
 import com.stately.common.data.MappingResult;
+import com.stately.common.sms.SmsProvider;
+import com.stately.common.sms.SmsService;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
@@ -58,6 +60,10 @@ public class VolunteerEndpoint
             volunteer = crudService.save(volunteer);
             if(volunteer != null)
             {
+                
+                String msg = "Thank you for Registering. We will revert when you application is processed";
+                 new SmsService().sendSms(SmsProvider.ROUTEE, "AstraERP", volunteer.getMobileNo(), msg);
+                
                 return ApiResponse.ok(toDto(volunteer));
             }
             

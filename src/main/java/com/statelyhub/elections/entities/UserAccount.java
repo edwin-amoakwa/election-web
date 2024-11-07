@@ -73,6 +73,23 @@ public class UserAccount extends UniqueEntityModel2
     @ManyToOne
     private Constituency constituency;
     
+    public String getDomainName()
+    {
+        if(null != userDomain)
+        switch (userDomain) {
+            case NATIONAL:
+                return "National";
+            case REGION:
+                return region +"";
+            case CONSTITUENCY:
+                return constituency + "";
+            default:
+                break;
+        }
+        
+        return "";
+    }
+    
 
 //    public boolean isSuperUser()
 //    {

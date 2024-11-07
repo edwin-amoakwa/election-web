@@ -8,8 +8,8 @@ package com.statelyhub.old.service;
 
 import com.statelyhub.elections.services.CrudService;
 import com.google.common.base.Strings;
-import com.stately.common.SmsMessage;
-import com.stately.common.SmsProvider;
+import com.stately.common.sms.SmsMessage;
+import com.stately.common.sms.SmsProvider;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import jakarta.annotation.PostConstruct;
