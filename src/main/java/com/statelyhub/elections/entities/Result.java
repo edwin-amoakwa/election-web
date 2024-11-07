@@ -7,7 +7,6 @@ package com.statelyhub.elections.entities;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
 import com.statelyhub.elections.constants.ElectionType;
-import com.statelyhub.elections.constants.ResultSource;
 import com.statelyhub.elections.constants.ResultStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
