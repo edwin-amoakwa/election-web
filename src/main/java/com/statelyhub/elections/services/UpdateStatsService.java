@@ -6,6 +6,7 @@ package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.PartyType;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
@@ -85,14 +86,21 @@ public class UpdateStatsService {
         for (ConstituencyElection constituency : constituencys) 
         {
             for (PartyElection partyElection : partyElectionsList) {
-                add(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
-                add(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
+                initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
+                initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
             }
             
         }
     }
     
-    public void add(ConstituencyElection constituency, PoliticalParty party, ElectionType electionType) {
+    public void initConstituencyContestants(ConstituencyElection constituency, PoliticalParty party, ElectionType electionType) {
+        
+        if(party.getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY)
+        {
+            //independent parties will not be added to eah consituency
+            return;
+        }
+        
         ElectionContestant contestant = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._party, party)
                 .addObjectParam(ElectionContestant._electionType, electionType)
@@ -112,12 +120,12 @@ public class UpdateStatsService {
                 .addObjectParam(ElectionPollingStation._constituencyElection, constituency).buildQry().getResultList();
         
         for (ElectionPollingStation electionPollingStation : epsesList) {
-            add(contestant, electionPollingStation);
+            initPollingStationContestants(contestant, electionPollingStation);
         }
         
     }
     
-    public void add(ElectionContestant contestant, ElectionPollingStation eps) {
+    public void initPollingStationContestants(ElectionContestant contestant, ElectionPollingStation eps) {
         PollingStationResult stationResult = QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                 .addObjectParam(PollingStationResult._electionContestant, contestant)
                 .addObjectParam(PollingStationResult._electionPollingStation, eps)
