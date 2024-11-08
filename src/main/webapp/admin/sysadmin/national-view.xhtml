@@ -73,8 +73,8 @@
                                     <h:commandLink value="#{constituencyElection.constituency.constituencyName}" 
                                                    action="#{nationalViewController.loadConstituencyResult(constituencyElection)}"/>
                                 </p:column>
-                                
-                                  <p:column headerText="#{msg.result_source}" >
+
+                                <p:column headerText="#{msg.result_source}" >
                                     <h:outputText value="#{constituencyElection.resultSource.label}" />
                                 </p:column>
 
@@ -93,19 +93,97 @@
 
 
                 <br />
-                
-                  <center>
 
-                        <h:form>
+                <center>
 
-                            <p:commandButton value="Update National Result" ajax="false" action="#{nationalViewController.updateConstituecyFigures()}" />
+                    <h:form>
 
-                        </h:form>
+                        <p:commandButton value="Update National Result" ajax="false" action="#{nationalViewController.updateNationalStats()}" />
+
+                    </h:form>
+                </center>
+                <br />
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            Presidential
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p:dataTable value="#{nationalViewController.mainResultList}" var="mainResult">
+
+                            <p:column headerText="#{msg.party}">
+                                <h:outputText value="#{mainResult.partyName}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.votes}">
+                                <h:outputText value="#{mainResult.presidentialVotes}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="#{msg.position}">
+                                <h:outputText value="#{mainResult.position}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
 
 
+                            <p:column headerText="President %">
+                                <h:outputText value="#{mainResult.presidentialPct}" >
+                                    <f:convertNumber pattern="#,##0.00" />
+                                </h:outputText>
+                            </p:column>
 
-                    </center>
+                        </p:dataTable>
+                    </div>
+                </div>
 
+                <br />
+                <br />
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            Parliamentary
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p:dataTable value="#{nationalViewController.parliamenSummaryList}" var="mainResult">
+
+                            <p:column headerText="#{msg.party}">
+                                <h:outputText value="#{mainResult.partyName}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.votes}">
+                                <h:outputText value="#{mainResult.presidentialVotes}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+                            
+                                <p:column headerText="#{msg.wins}">
+                                    <h:outputText value="#{mainResult.seatCount}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="#{msg.position}">
+                                <h:outputText value="#{mainResult.position}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+
+
+                            <p:column headerText=" %">
+                                <h:outputText value="#{mainResult.presidentialPct}" >
+                                    <f:convertNumber pattern="#,##0.00" />
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </div> 
 
 
 

@@ -4,14 +4,25 @@
  */
 package com.statelyhub.elections.jsf;
 
+import com.stately.common.formating.NumberFormattingUtils;
+import com.stately.common.formating.ObjectValue;
+import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.ConstituencyElection;
+import com.statelyhub.elections.entities.ElectionContestant;
+import com.statelyhub.elections.entities.PartyElection;
+import com.statelyhub.elections.entities.PoliticalParty;
 import com.statelyhub.elections.entities.Region;
+import com.statelyhub.elections.entities.Result;
 import com.statelyhub.elections.model.ElectionTypeResult;
+import com.statelyhub.elections.model.PresidentialResult;
+import com.statelyhub.elections.services.AppConfigService;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -32,6 +43,9 @@ public class NationalViewController implements Serializable {
 
     @Inject
     private ElectionService electionService;
+    
+      @Inject
+    private AppConfigService appConfigService;
 
     @Inject
     private ElectionResultService electionResultService;
@@ -45,6 +59,16 @@ public class NationalViewController implements Serializable {
     
     private Region selectedRegion;
     
+    private List<PartyElection>  partyElectionsList;
+    
+    private List<PresidentialResult>  mainResultList;
+    private List<PresidentialResult>  parliamenSummaryList;
+    
+    @PostConstruct
+    public void init()
+    {
+        partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class).buildQry().getResultList();
+    }
 
 
     public void loadConstituency() {
@@ -81,9 +105,134 @@ public class NationalViewController implements Serializable {
     
     public void updateNationalStats()
     {
-//        dd
+        mainResultList = presiddentail(ElectionType.PRESIDENTIAL);
+        parliamenSummaryList = parliament(ElectionType.PARLIAMENTARY);
     }
     
+    
+       public List<PresidentialResult> presiddentail(ElectionType electionType)
+    {
+        mainResultList = new LinkedList<>();
+        List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(),ElectionContestant.class)
+                .addReturnField("e."+ElectionContestant._party)
+                .addReturnField("SUM(e."+ElectionContestant._acceptedResult+")")
+                .addObjectParam(ElectionContestant._electionType,electionType)
+                .addGroupBy(ElectionContestant._party)
+                .buildQry().getResultList();
+        
+        StringUtil.printObjectListArray(presidentialList);
+        
+        for (Object[] objects : presidentialList) 
+        {
+            PoliticalParty party = (PoliticalParty) objects[0];
+            
+            PresidentialResult result = new PresidentialResult();
+            result.setPartyName(party.getPartyName());
+            result.setPresidentialVotes(ObjectValue.get_intValue(objects[1]));
+            
+            mainResultList.add(result);
+        }
+        
+        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
+        for (PresidentialResult presidentialResult : mainResultList) {
+            double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
+            pct = pct * 100;
+            presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
+        }
+        
+        
+        
+         for (PresidentialResult compare : mainResultList) {
+
+            int counter = 0;
+            for (PresidentialResult submitted : mainResultList) {
+                if (submitted.getPresidentialVotes()> compare.getPresidentialVotes()) {
+                    counter++;
+                }
+            }
+            compare.setPosition(counter + 1);
+        }
+         
+        return mainResultList;
+    }
+       
+         
+       public List<PresidentialResult> parliament(ElectionType electionType)
+    {
+        mainResultList = new LinkedList<>();
+        List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(),ElectionContestant.class)
+                .addReturnField("e."+ElectionContestant._party)
+                .addReturnField("SUM(e."+ElectionContestant._won+")")
+                .addReturnField("SUM(e."+ElectionContestant._acceptedResult+")")
+                 
+                .addObjectParam(ElectionContestant._electionType,electionType)
+                .addGroupBy(ElectionContestant._party)
+                .buildQry().getResultList();
+        
+        StringUtil.printObjectListArray(presidentialList);
+        
+        for (Object[] objects : presidentialList) 
+        {
+            PoliticalParty party = (PoliticalParty) objects[0];
+            
+            PresidentialResult result = new PresidentialResult();
+            result.setPartyName(party.getPartyName());
+            result.setSeatCount(ObjectValue.get_intValue(objects[1]));
+            result.setPresidentialVotes(ObjectValue.get_intValue(objects[2]));
+            
+            mainResultList.add(result);
+        }
+        
+        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
+        for (PresidentialResult presidentialResult : mainResultList) {
+            double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
+            pct = pct * 100;
+            presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
+        }
+        
+        
+        
+         for (PresidentialResult compare : mainResultList) {
+
+            int counter = 0;
+            for (PresidentialResult submitted : mainResultList) {
+                if (submitted.getPresidentialVotes()> compare.getPresidentialVotes()) {
+                    counter++;
+                }
+            }
+            compare.setPosition(counter + 1);
+        }
+         
+        return mainResultList;
+    }
+    
+    
+       
+       public void updateNationalStats(List<PresidentialResult> mainResultList)
+    {
+        
+        
+        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
+        for (PresidentialResult presidentialResult : mainResultList) {
+            double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
+            pct = pct * 100;
+            presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
+        }
+        
+        
+        
+         for (PresidentialResult compare : mainResultList) {
+
+            int counter = 0;
+            for (PresidentialResult submitted : mainResultList) {
+                if (submitted.getPresidentialVotes()> compare.getPresidentialVotes()) {
+                    counter++;
+                }
+            }
+            compare.setPosition(counter + 1);
+        }
+         
+    }
     
     
 
@@ -109,6 +258,14 @@ public class NationalViewController implements Serializable {
 
     public ConstituencyElection getSelectedConstituencyElection() {
         return selectedConstituencyElection;
+    }
+
+    public List<PresidentialResult> getMainResultList() {
+        return mainResultList;
+    }
+
+    public List<PresidentialResult> getParliamenSummaryList() {
+        return parliamenSummaryList;
     }
 
     
