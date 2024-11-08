@@ -135,6 +135,8 @@
                                     <f:convertNumber pattern="#,##0.00" />
                                 </h:outputText>
                             </p:column>
+                            
+                        
 
                         </p:dataTable>
                     </div>
@@ -245,6 +247,11 @@
                                                 <f:convertNumber pattern="#,##0.0 %" />
                                             </h:outputText>
                                         </p:column>
+                                        
+                                            <p:column headerText="#{msg.status}">
+                                                <h:outputText value="YES" rendered="#{result.won !=0 }" />
+                                <h:outputText value="NO"  rendered="#{result.won ==0 }"/>
+                            </p:column>
 
                                     </p:dataTable>
 
