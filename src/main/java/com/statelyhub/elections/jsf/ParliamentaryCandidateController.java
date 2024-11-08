@@ -5,6 +5,7 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.stately.modules.web.jsf.JsfMsg;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
@@ -13,6 +14,7 @@ import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
+import com.statelyhub.elections.services.UpdateStatsService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -36,6 +38,9 @@ public class ParliamentaryCandidateController implements Serializable {
 
     @Inject
     private ElectionResultService electionResultService;
+    
+     @Inject
+    private UpdateStatsService updateStatsService;
 
     private List<ElectionContestant> electionContestantsList;
 
@@ -66,9 +71,13 @@ public class ParliamentaryCandidateController implements Serializable {
     }
 
 
-    public void updateConstituecyFigures()
+    public void initialise()
     {
-        electionResultService.runConstituency(selectedConstituencyElection);
+        for (ElectionContestant electionContestant : electionContestantsList) {
+             updateStatsService.addContestant(selectedConstituencyElection, electionContestant);
+        }
+        JsfMsg.msg(true);
+//        electionResultService.runConstituency(selectedConstituencyElection);
     }
 
     public Region getSelectedRegion() {

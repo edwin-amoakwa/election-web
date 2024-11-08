@@ -14,10 +14,12 @@ import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStation;
+import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.Region;
 import jakarta.ejb.Asynchronous;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.util.List;
 
 /**
  *
@@ -153,13 +155,43 @@ public class DataUploadService {
     
     public void deleteConsituency(Constituency constituency)
     {
-        QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+        try {
+            
+              QryBuilder.get(crudService.getEm(), PollingStationResult.class)
+                .addObjectParam(PollingStationResult._electionPollingStation_constituency, constituency).delete();
+            
+            QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                 .addObjectParam(ElectionPollingStation._constituency, constituency).delete();
+            
+            
+              QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+                .addObjectParam(ElectionContestant._constituencyElection_constituency, constituency).delete();
         
          QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._constituency, constituency).delete();
         
         
         crudService.delete(constituency);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+     public void deleteRegion(Region region)
+    {
+        try {
+             List<Constituency> constituencysList = QryBuilder.get(crudService.getEm(), Constituency.class)
+                .addObjectParam(Constituency._region, region).buildQry().getResultList();
+        
+        for (Constituency constituency : constituencysList) {
+            deleteConsituency(constituency);
+        }
+        
+        
+        crudService.delete(region);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

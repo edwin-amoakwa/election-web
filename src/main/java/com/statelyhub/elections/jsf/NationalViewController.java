@@ -77,6 +77,15 @@ public class NationalViewController implements Serializable {
     {
         electionResultService.runConstituency(selectedConstituencyElection);
     }
+    
+    
+    public void updateNationalStats()
+    {
+        dd
+    }
+    
+    
+    
 
     public Region getSelectedRegion() {
         return selectedRegion;

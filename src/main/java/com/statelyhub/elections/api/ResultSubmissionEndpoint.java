@@ -4,7 +4,6 @@ import com.stately.common.utils.StringUtil;
 import com.statelyhub.elections.dto.ResultSubmissionDto;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
-import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.dto.ElectionResultSetDto;
@@ -120,7 +119,7 @@ public class ResultSubmissionEndpoint {
             ElectionResultSetDto electionResultSetDto = new ElectionResultSetDto();
             electionResultSetDto.setElectionType(volunteerBucket.getElectionType());
             
-            SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+            SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultSet.class)
                     .addObjectParam(SubmittedResultSet._electionType, volunteerBucket.getElectionType())
                     .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
                     .getSingleResult(SubmittedResultSet.class);
@@ -195,20 +194,19 @@ public class ResultSubmissionEndpoint {
         for (ElectionResultSetDto resultSetDto : submissionDto.getVotingsList()) {
             List<SubmittedResult> resultsList = new LinkedList<>();
             
-             SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+             SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultSet.class)
                     .addObjectParam(SubmittedResultSet._electionType, resultSetDto.getElectionType())
                     .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
                     .getSingleResult(SubmittedResultSet.class);
             
-//            if(resultSetDto.getElectionType() == ElectionType.PARLIAMENTARY)
-//            {
+
                 resultSet.setRejectedBallots(resultSetDto.getRejectedBallots());
                 resultSet.setSpoiltBallots(resultSetDto.getSpoiltBallots());
                 resultSet.setValidVotes(resultSetDto.getValidVotes());
                 resultSet.setTotalVotesCast(resultSetDto.getVotesCast());
                 
                 crudService.save(resultSet);
-//            }
+                
 
             for (SubmittedResultDto submittedResultDto : resultSetDto.getCandidatesList()) {
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());

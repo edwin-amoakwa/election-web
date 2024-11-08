@@ -41,6 +41,11 @@
                                         <f:convertNumber pattern="#,##0" />
                                     </h:outputText>
                                 </p:column>
+                                
+                                  <p:column headerText="Del" >
+                                      <h:commandLink value="del" 
+                                                     action="#{electionDetailController.deleteRegion(region)}"/>
+                                </p:column>
 
 
                             </p:dataTable>
@@ -56,7 +61,7 @@
                     <p:dataTable value="#{electionDetailController.constituencyList}" var="consElection"
                                  rows="10" paginator="true" paginatorPosition="bottom">
                         
-                        <p:column headerText="#{msg.constituency}">
+                        <p:column headerText="#{msg.constituency}" filterBy="#{consElection.constituency.constituencyName}" filterMatchMode="contains">
                             <h:commandLink value="#{consElection.constituency.constituencyName}" 
                                            action="#{electionDetailController.selectConstituency(consElection)}"/>
                         </p:column>
@@ -81,11 +86,11 @@
                     <p:dataTable value="#{electionDetailController.pollingStationsList}" var="pollingStation" 
                                  rows="10" paginator="true" paginatorPosition="bottom">
 
-                        <p:column headerText="#{msg.code}">
+                        <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                             <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
                         </p:column>
                         
-                          <p:column headerText="#{msg.polling_stations}">
+                          <p:column headerText="#{msg.polling_stations}" filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains">
                             <h:outputText value="#{pollingStation.pollingStation.stationName}" />
                         </p:column>
 
