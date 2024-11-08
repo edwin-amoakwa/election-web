@@ -4,13 +4,13 @@
  */
 package com.statelyhub.elections.jsf;
 
+import com.stately.common.collection.CollectionUtils;
+import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
-import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.Region;
-import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
@@ -19,7 +19,6 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -51,7 +50,7 @@ public class ParliamentaryCandidateController implements Serializable {
     
     private Region selectedRegion;
     
-
+    private ElectionContestant electionContestant;
 
     public void loadConstituency() {
         constituencyElectionList = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
@@ -63,7 +62,7 @@ public class ParliamentaryCandidateController implements Serializable {
 
     public void loadConstituencyResult(ConstituencyElection constituencyElection) {
         this.selectedConstituencyElection = constituencyElection;
-        
+        this.clearElectionContestant();
         electionContestantsList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .buildQry().getResultList();
@@ -80,6 +79,67 @@ public class ParliamentaryCandidateController implements Serializable {
 //        electionResultService.runConstituency(selectedConstituencyElection);
     }
 
+    
+    public void editElectionContestant(ElectionContestant electionContestant)
+    {
+        this.electionContestant = electionContestant;
+    }
+    
+    public void clearElectionContestant()
+    {
+        this.electionContestant = new ElectionContestant();
+    }
+    
+    public void saveElectionContestant()
+    {
+        if(StringUtil.isNullOrEmpty(electionContestant.getCandidateName()))
+        {
+            JsfMsg.error("Specify Candidate Name");
+            return;
+        }
+        
+        if(electionContestant.getCandidateType() == null)
+        {
+            JsfMsg.error("Specify Candidate Type");
+            return;
+        }
+        
+        if(electionContestant.isPoliticalParty() && electionContestant.getParty() == null)
+        {
+            JsfMsg.error("Specify Political Party Affiliated To");
+            return;
+        }
+        
+        electionContestant = crudService.save(electionContestant);
+        if(electionContestant == null)
+        {
+            JsfMsg.error("Error Updating Record");
+            return;
+        }
+        
+        CollectionUtils.checkAdd(electionContestantsList, electionContestant);
+        JsfMsg.info("Record Updated Successfully");
+    }
+    
+    public void updateElectionContestant(ElectionContestant electionContestant)
+    {
+        if(StringUtil.isNullOrEmpty(electionContestant.getCandidateName()))
+        {
+            JsfMsg.error("Specify Candidate Name");
+            return;
+        }
+        
+        electionContestant = crudService.save(electionContestant);
+        if(electionContestant == null)
+        {
+            JsfMsg.error("Error Updating Record");
+            return;
+        }
+        
+        CollectionUtils.checkAdd(electionContestantsList, electionContestant);
+        JsfMsg.info("Record Updated Successfully");
+    }
+    
     public Region getSelectedRegion() {
         return selectedRegion;
     }
@@ -99,6 +159,14 @@ public class ParliamentaryCandidateController implements Serializable {
 
     public List<ElectionContestant> getElectionContestantsList() {
         return electionContestantsList;
+    }
+
+    public ElectionContestant getElectionContestant() {
+        return electionContestant;
+    }
+
+    public void setElectionContestant(ElectionContestant electionContestant) {
+        this.electionContestant = electionContestant;
     }
 
     
