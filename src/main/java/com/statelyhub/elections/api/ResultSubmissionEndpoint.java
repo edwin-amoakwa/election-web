@@ -115,7 +115,8 @@ public class ResultSubmissionEndpoint {
 
         List<ElectionResultSetDto> dtos = new LinkedList<>();
 
-        for (ElectionTypeResult volunteerBucket : volunteerBuckets) {
+        for (ElectionTypeResult volunteerBucket : volunteerBuckets) 
+        {
             ElectionResultSetDto electionResultSetDto = new ElectionResultSetDto();
             electionResultSetDto.setElectionType(volunteerBucket.getElectionType());
             
@@ -126,7 +127,7 @@ public class ResultSubmissionEndpoint {
             
             if(resultSet == null)
             {
-                 resultSet = new SubmittedResultSet();
+                resultSet = new SubmittedResultSet();
                 resultSet.setResultSubmissionId(resultSubmission.getId());
                 resultSet.setElectionType(volunteerBucket.getElectionType());
                 crudService.save(resultSet);
