@@ -5,6 +5,7 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.common.collection.CollectionUtils;
+import com.stately.common.data.ProcResponse;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
@@ -13,6 +14,7 @@ import com.statelyhub.elections.constants.VolunteerClassification;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.elections.services.VolunteerService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -32,6 +34,7 @@ public class VolunteerController implements Serializable
 {
     @Inject private UserSession userSession;
     @Inject private CrudService crudService;
+    @Inject private VolunteerService volunteerService;
     
     private List<Volunteer> volunteersList;
     private Volunteer volunteer;
@@ -156,13 +159,14 @@ public class VolunteerController implements Serializable
     
     public void approveVolunteer(Volunteer volunteer)
     {
-        volunteer.setApprovalStatus(VolunteerApprovalStatus.APPROVED);
-        volunteer.setProcessedBy(userSession.getAccountUR());
-        if(crudService.save(volunteer) == null)
+        ProcResponse response = volunteerService.approveVolunteer(volunteer);
+        if(!response.isSuccess())
         {
-            JsfMsg.error("Error Updating Record");
+            JsfMsg.error("Error Approving Record");
             return;
         }
+        
+        volunteer = (Volunteer)response.getData();
         JsfMsg.info("Volunteer Approved Successfully");
         CollectionUtils.checkAdd(volunteersList, volunteer);
     }

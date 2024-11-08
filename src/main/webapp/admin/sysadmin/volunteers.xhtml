@@ -59,6 +59,11 @@
             <h:form style="margin-top: 20px;">
                 <p:dataTable value="#{volunteerController.volunteersList}" var="record">
 
+                    <f:facet name="header">
+                        <p:commandButton value="Reload" ajax="false"
+                                     action="#{volunteerController.loadVolunteers()}"/>
+                    </f:facet>
+                    
                     <p:column headerText="Volunteer Name">
                         <h:outputText value="#{record.volunteerName}" />
                     </p:column>
@@ -90,6 +95,7 @@
                     <p:column headerText="#{msg.delete}">
                         <h:commandLink value="#{msg.delete}" styleClass="delete"
                                        action="#{volunteerController.deleteVolunteer(record)}"
+                                       rendered="#{!record.approved}"
                                        onclick="return confirm('Delete Volunteer?');"/>
                     </p:column>
                     <p:column headerText="Verified">

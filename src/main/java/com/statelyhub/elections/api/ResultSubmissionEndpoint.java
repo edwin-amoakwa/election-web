@@ -131,7 +131,7 @@ public class ResultSubmissionEndpoint {
                 resultSet.setElectionType(volunteerBucket.getElectionType());
                 crudService.save(resultSet);
             }
-            
+             
             electionResultSetDto.setResultSetId(resultSet.getId());
             
             electionResultSetDto.setValidVotes(resultSet.getValidVotes());
