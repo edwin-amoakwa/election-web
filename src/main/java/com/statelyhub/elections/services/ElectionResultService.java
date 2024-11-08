@@ -16,6 +16,7 @@ import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.Result;
 import com.statelyhub.elections.entities.ResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
+import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.entities.SubmittedResultSet;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import jakarta.ejb.Stateless;
@@ -258,11 +259,21 @@ public class ElectionResultService {
     }
 
     public void runPct(List<? extends Result> resultsList, int total) {
-        if (total != 0) {
-            double totalVotes = total;
+        
+        
+          double totalVotes = resultsList.stream().mapToInt(Result::getAcceptedResult).sum();
+//                if(totalVotes != 0)
+//                {
+//        
+//System.out.println("........ " + totalVotes);
+        
+        if (totalVotes != 0) {
+//            double totalVotes = total;
 
+            
+            
             for (Result submittedResult : resultsList) {
-                double pct = submittedResult.getInputResult() / totalVotes;
+                double pct = submittedResult.getAcceptedResult() / totalVotes;
                 submittedResult.setVotePct(pct);
 
             }
@@ -295,6 +306,7 @@ public class ElectionResultService {
                 resultSet = new PollingStationResultSet();
                 resultSet.setElectionType(electionType);
                 resultSet.setElectionPollingStation(electionPollingStation);
+//                resultSet
             }
             /// add the rest
             resultSet.setRejectedBallots(submittedResultSet.getRejectedBallots());

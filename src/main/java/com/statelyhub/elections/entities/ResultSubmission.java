@@ -43,6 +43,7 @@ public class ResultSubmission extends UniqueEntityModel3 {
     private Volunteer volunteer;
 
     public static final String _electionPollingStation = "electionPollingStation";
+    public static final String _electionPollingStation_constituencyElection =_electionPollingStation +  "." + ElectionPollingStation._constituencyElection;
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;

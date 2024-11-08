@@ -231,15 +231,19 @@ public class ResultSubmissionEndpoint {
                 compare.setPosition(counter + 1);
             }
 
-            if (resultSubmission.getElectionPollingStation().getVotersCount() != 0) 
-            {
-                double totalVotes = resultSubmission.getElectionPollingStation().getVotersCount();
-                for (SubmittedResult submittedResult : resultsList) 
+//            if (resultSubmission.getElectionPollingStation().getVotersCount() != 0) 
+//            {
+                double totalVotes = resultsList.stream().mapToInt(SubmittedResult::getInputResult).sum();
+                if(totalVotes != 0)
+                {
+                     for (SubmittedResult submittedResult : resultsList) 
                 {
                     double pct = submittedResult.getInputResult() / totalVotes;
                     submittedResult.setVotePct(pct);
                 }
-            }
+                }
+               
+//            }
 
             for (SubmittedResult submittedResult : resultsList) 
             {

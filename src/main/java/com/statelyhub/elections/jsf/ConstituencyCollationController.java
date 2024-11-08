@@ -61,6 +61,7 @@ public class ConstituencyCollationController implements Serializable {
     private List<ElectionTypeResult> constituencyResultList;
 
     private List<ResultSubmission> submissionsList;
+    private List<ResultSubmission> unprocessedSubmissionsList;
 
     private List<ElectionPollingStation> pollingStationsList;
 
@@ -79,8 +80,22 @@ public class ConstituencyCollationController implements Serializable {
         this.electionPollingStation = station;
 
         resultsList = electionResultService.pollingStationBucket(station);
+        
+        
 
         loadSubmissions();
+    }
+    
+    public void pickSubmission(ResultSubmission resultSubmission)
+    {
+        selectPollingStation(resultSubmission.getElectionPollingStation());
+    }
+    
+    public void loadUnProcessedSubmissions()
+    {
+        unprocessedSubmissionsList  = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
+                .addObjectParam(ResultSubmission._electionPollingStation_constituencyElection, selectedConstituencyElection)
+                .buildQry().getResultList();
     }
 
     public void loadPollingStation() {
@@ -101,6 +116,8 @@ public class ConstituencyCollationController implements Serializable {
         }
 
         loadConstituencyResult();
+        
+        loadUnProcessedSubmissions();
     }
 
     public void loadConstituencyResult() {
@@ -300,6 +317,10 @@ public class ConstituencyCollationController implements Serializable {
 
     public void setInputVotes(boolean inputVotes) {
         this.inputVotes = inputVotes;
+    }
+
+    public List<ResultSubmission> getUnprocessedSubmissionsList() {
+        return unprocessedSubmissionsList;
     }
 
 }

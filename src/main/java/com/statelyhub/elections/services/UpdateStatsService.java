@@ -13,6 +13,7 @@ import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionPollingStation;
+import com.statelyhub.elections.entities.PartyElection;
 import com.statelyhub.elections.entities.PoliticalParty;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.Region;
@@ -92,17 +93,17 @@ public class UpdateStatsService {
 //        }
 //    }
     @Asynchronous
-    public void initConstituencyContestants(ConstituencyElection constituency, PoliticalParty party, ElectionType electionType) {
+    public void initConstituencyContestants(ConstituencyElection constituency, PartyElection partyElection, ElectionType electionType) {
 
 //        System.out.println("--doing "+electionType+" for "+party.getInitials()+" : party.getPartyType() = "+party.getPartyType()+" : constituency = "+constituency.getConstituency().getConstituencyName());
-        if (party.getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY) {
+        if (partyElection.getParty().getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY) {
             //independent parties will not be added to eah consituency
             return;
         }
 //        System.out.println("--here here passed");
 
         ElectionContestant contestant = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
-                .addObjectParam(ElectionContestant._party, party)
+                .addObjectParam(ElectionContestant._party, partyElection.getParty())
                 .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituency)
                 .getSingleResult(ElectionContestant.class);
@@ -110,9 +111,10 @@ public class UpdateStatsService {
         if (contestant == null) 
         {
             contestant = new ElectionContestant();
-            contestant.setParty(party);
+            contestant.setParty(partyElection.getParty());
             contestant.setConstituencyElection(constituency);
             contestant.setElectionType(electionType);
+            contestant.setViewOrder(partyElection.getViewOrder());
 //            contestant.setResultStatus(ResultStatus.PENDING);
 //            crudService.save(contestant);
         } 
@@ -156,6 +158,7 @@ public class UpdateStatsService {
             stationResult.setElectionPollingStation(eps);
             stationResult.setElectionType(contestant.getElectionType());
             stationResult.setResultStatus(ResultStatus.PENDING);
+            stationResult.setViewOrder(contestant.getViewOrder());
             crudService.save(stationResult);
         }
 

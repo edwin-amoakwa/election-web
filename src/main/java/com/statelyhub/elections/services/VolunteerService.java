@@ -55,9 +55,15 @@ public class VolunteerService {
             String token = crudService.generateId().substring(0, 6);
             
             System.out.println("TOKEN:::::::" + token);
-            String msg =
+            
+//            String msg =
+//                "Congratulations! Your Account Has Been Approved. You can Login with this PIN "
+//                    + token + ". Kindly reset your password after login";
+            
+            
+             String msg =
                 "Congratulations! Your Account Has Been Approved. You can Login with this PIN "
-                    + token + ". Kindly reset your password after login";
+                    + token + ". Click to login https://electionshub.netlify.app/login";
 
             // send email
             System.out.println("Password Token: " + token);

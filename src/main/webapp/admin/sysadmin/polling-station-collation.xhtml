@@ -15,26 +15,28 @@
 
     <ui:define name="content">
 
-
+        <h:panelGroup id="collationBoad">
+            
+            
         <div class="row">
 
             <div class="col-lg-5">
                 <h:form>
-                    
-                    <h:panelGrid columns="6" styleClass="spaced-table">
-                        
-                         <h:outputText value="#{msg.constituency}" />
-                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
-                                     filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="#{msg.select_one}" />
-                        <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
-                    </p:selectOneMenu>
 
-                    <p:commandButton value="Load" ajax="false"
-                                     action="#{constituencyCollationController.loadPollingStation()}"/>
+                    <h:panelGrid columns="6" styleClass="spaced-table">
+
+                        <h:outputText value="#{msg.constituency}" />
+                        <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Load" ajax="false"
+                                         action="#{constituencyCollationController.loadPollingStation()}"/>
                     </h:panelGrid>
 
-                   
+
 
                 </h:form>
 
@@ -72,6 +74,36 @@
                                 <p:column headerText="#{msg.polling_stations}"  filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
                                     <p:commandLink value="#{pollingStation.pollingStation.stationName}" update=":stationResult"
                                                    action="#{constituencyCollationController.selectPollingStation(pollingStation)}"/>
+                                </p:column>
+
+
+                            </p:dataTable>
+
+                        </p:tab>
+                        
+                          <p:tab title="Unprocessed Submissions - #{constituencyCollationController.unprocessedSubmissionsList.size()}">
+                            <p:dataTable value="#{constituencyCollationController.unprocessedSubmissionsList}" var="submission" 
+                                         rows="10" paginator="true" paginatorPosition="bottom">
+
+                                <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+                                    <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
+                                                   update=":stationResult, :submittedResultPanel"
+                                                   action="#{constituencyCollationController.pickSubmission(submission)}"/>
+                                </p:column>
+                                
+                                <p:column headerText="#{msg.name}" filterBy="#{submission.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains">
+                                    <h:outputText value="#{submission.electionPollingStation.pollingStation.stationName}" />
+                                </p:column>
+                                
+                                 <p:column headerText="Submitter" filterBy="#{submission.volunteer.volunteerName}" filterMatchMode="contains">
+                                     <h:outputText value="#{submission.volunteer.volunteerName}" />
+                                </p:column>
+
+
+                                <p:column headerText="#{msg.polling_stations}" rendered="false"
+                                          filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
+                                    <p:commandLink value="#{pollingStation.pollingStation.stationName}" update=":stationResult, :submittedResultPanel"
+                                                   action="#{constituencyCollationController.pickSubmission(submission)}"/>
                                 </p:column>
 
 
@@ -154,36 +186,36 @@
 
 
                 </c:forEach>
-                
+
                 <h:form>
-                    
+
                     <center>
-                             
-                <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedConstituencyElection}">
-                    <h:outputText value="Result Source" />
 
-                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultSource}">
-                        <f:selectItems value="#{commonOptions.resultSourceList}" />
-                    </p:selectOneMenu>
+                        <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedConstituencyElection}">
+                            <h:outputText value="Result Source" />
 
-                    <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateResultSource()}" />
+                            <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultSource}">
+                                <f:selectItems value="#{commonOptions.resultSourceList}" />
+                            </p:selectOneMenu>
 
-                    <h:outputText value="Status" />
+                            <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateResultSource()}" />
 
-                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultStatus}">
-                        <f:selectItems value="#{commonOptions.resultStatusList}" />
-                    </p:selectOneMenu>
+                            <h:outputText value="Status" />
 
-                    <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateConstituencyElectionStatus()}" />
+                            <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultStatus}">
+                                <f:selectItems value="#{commonOptions.resultStatusList}" />
+                            </p:selectOneMenu>
 
-                </h:panelGrid>
+                            <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateConstituencyElectionStatus()}" />
 
-                    <br />
-                    <p:commandButton value="#{msg.analyse_update}" 
-                                     styleClass="ui-button-success " 
-                                     ajax="false" action="#{constituencyCollationController.updateConstituecyFigures()}" />
+                        </h:panelGrid>
+
+                        <br />
+                        <p:commandButton value="#{msg.analyse_update}" 
+                                         styleClass="ui-button-success " 
+                                         ajax="false" action="#{constituencyCollationController.updateConstituecyFigures()}" />
                     </center>
-                    
+
                 </h:form>
 
 
@@ -212,16 +244,16 @@
                             <p:ajax update="stationResult"/>
                         </p:toggleSwitch>
                         <p:commandButton value="Save Changes" 
-                                style="margin-left:3px;"
-                                action="#{constituencyCollationController.saveResults()}"
-                                rendered="false"/>
+                                         style="margin-left:3px;"
+                                         action="#{constituencyCollationController.saveResults()}"
+                                         rendered="false"/>
                         <span style="margin-left:3px;" jsf:rendered="#{constituencyCollationController.inputVotes}">
                             <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
                             <i>Press the Enter Key to Update Record After Input</i>
                         </span>
                     </h:form>
                     <br/>
-                    
+
                     <c:forEach items="#{constituencyCollationController.resultsList}" var="electionTypeContainer">
 
                         <div class="panel panel-primary">
@@ -261,22 +293,22 @@
 
                                         <p:column headerText="#{msg.input_result}">
                                             <h:outputText value="#{result.inputResult}" 
-                                                rendered="#{!constituencyCollationController.inputVotes}">
+                                                          rendered="#{!constituencyCollationController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                             <p:inputNumber value="#{result.inputResult}"
-                                                    rendered="#{constituencyCollationController.inputVotes}" >
+                                                           rendered="#{constituencyCollationController.inputVotes}" >
                                                 <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
                                             </p:inputNumber>
                                         </p:column>
 
                                         <p:column headerText="#{msg.official}">
                                             <h:outputText value="#{result.officialResult}" 
-                                                rendered="#{!constituencyCollationController.inputVotes}">
+                                                          rendered="#{!constituencyCollationController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                             <p:inputNumber value="#{result.officialResult}"
-                                                    rendered="#{constituencyCollationController.inputVotes}" >
+                                                           rendered="#{constituencyCollationController.inputVotes}" >
                                                 <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
                                             </p:inputNumber>
                                         </p:column> 
@@ -468,6 +500,9 @@
 
             </div>
         </div>
+            
+        </h:panelGroup>
+
 
 
         <hr />

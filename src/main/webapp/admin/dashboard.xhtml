@@ -15,7 +15,11 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-                <h3>#{dashboardController.totalPollingStation}</h3>
+                <h3>
+                    <h:outputText value="#{dashboardController.totalPollingStation}">
+                        <f:convertNumber pattern="#,##0" />
+                    </h:outputText>
+                </h3>
 
               <p>Total Polling Stations</p>
             </div>

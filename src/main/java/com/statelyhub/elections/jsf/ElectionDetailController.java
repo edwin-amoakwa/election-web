@@ -90,8 +90,8 @@ public class ElectionDetailController implements Serializable {
             
             for (PartyElection partyElection : partyElectionsList) {
 //                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
-                updateStatsService.initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
-                updateStatsService.initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
+                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
+                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
             }
 
         }
