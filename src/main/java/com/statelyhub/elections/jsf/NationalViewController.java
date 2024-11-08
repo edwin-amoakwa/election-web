@@ -43,8 +43,8 @@ public class NationalViewController implements Serializable {
 
     @Inject
     private ElectionService electionService;
-    
-      @Inject
+
+    @Inject
     private AppConfigService appConfigService;
 
     @Inject
@@ -56,20 +56,18 @@ public class NationalViewController implements Serializable {
     private List<ConstituencyElection> pendingConstituencyElectionList;
 
     private ConstituencyElection selectedConstituencyElection;
-    
+
     private Region selectedRegion;
-    
-    private List<PartyElection>  partyElectionsList;
-    
-    private List<PresidentialResult>  mainResultList;
-    private List<PresidentialResult>  parliamenSummaryList;
-    
+
+    private List<PartyElection> partyElectionsList;
+
+    private List<PresidentialResult> mainResultList;
+    private List<PresidentialResult> parliamenSummaryList;
+
     @PostConstruct
-    public void init()
-    {
+    public void init() {
         partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class).buildQry().getResultList();
     }
-
 
     public void loadConstituency() {
         List<ConstituencyElection> list = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
@@ -83,10 +81,10 @@ public class NationalViewController implements Serializable {
         for (ConstituencyElection eps : list) {
             if (eps.getResultStatus() == ResultStatus.FINALISED) {
                 completedConstituencyElectionList.add(eps);
-            } else{
+            } else {
                 pendingConstituencyElectionList.add(eps);
             }
-            
+
         }
 
     }
@@ -96,145 +94,123 @@ public class NationalViewController implements Serializable {
         constituencyResultList = electionResultService.constituency(selectedConstituencyElection);
     }
 
-
-    public void updateConstituecyFigures()
-    {
+    public void updateConstituecyFigures() {
         electionResultService.runConstituency(selectedConstituencyElection);
     }
-    
-    
-    public void updateNationalStats()
-    {
+
+    public void updateNationalStats() {
         mainResultList = presiddentail(ElectionType.PRESIDENTIAL);
         parliamenSummaryList = parliament(ElectionType.PARLIAMENTARY);
+
     }
-    
-    
-       public List<PresidentialResult> presiddentail(ElectionType electionType)
-    {
+
+    public List<PresidentialResult> presiddentail(ElectionType electionType) {
         mainResultList = new LinkedList<>();
-        List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(),ElectionContestant.class)
-                .addReturnField("e."+ElectionContestant._party)
-                .addReturnField("SUM(e."+ElectionContestant._acceptedResult+")")
-                .addObjectParam(ElectionContestant._electionType,electionType)
+        List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+                .addReturnField("e." + ElectionContestant._party)
+                .addReturnField("SUM(e." + ElectionContestant._acceptedResult + ")")
+                .addObjectParam(ElectionContestant._electionType, electionType)
                 .addGroupBy(ElectionContestant._party)
                 .buildQry().getResultList();
-        
+
         StringUtil.printObjectListArray(presidentialList);
-        
-        for (Object[] objects : presidentialList) 
-        {
+
+        for (Object[] objects : presidentialList) {
             PoliticalParty party = (PoliticalParty) objects[0];
-            
+
             PresidentialResult result = new PresidentialResult();
             result.setPartyName(party.getPartyName());
             result.setPresidentialVotes(ObjectValue.get_intValue(objects[1]));
-            
+
             mainResultList.add(result);
         }
-        
+
         double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
         for (PresidentialResult presidentialResult : mainResultList) {
             double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
             pct = pct * 100;
             presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
         }
-        
-        
-        
-         for (PresidentialResult compare : mainResultList) {
+
+        for (PresidentialResult compare : mainResultList) {
 
             int counter = 0;
             for (PresidentialResult submitted : mainResultList) {
-                if (submitted.getPresidentialVotes()> compare.getPresidentialVotes()) {
+                if (submitted.getPresidentialVotes() > compare.getPresidentialVotes()) {
                     counter++;
                 }
             }
             compare.setPosition(counter + 1);
         }
-         
+
         return mainResultList;
     }
-       
-         
-       public List<PresidentialResult> parliament(ElectionType electionType)
-    {
+
+    public List<PresidentialResult> parliament(ElectionType electionType) {
         mainResultList = new LinkedList<>();
-        List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(),ElectionContestant.class)
-                .addReturnField("e."+ElectionContestant._party)
-                .addReturnField("SUM(e."+ElectionContestant._won+")")
-                .addReturnField("SUM(e."+ElectionContestant._acceptedResult+")")
-                 
-                .addObjectParam(ElectionContestant._electionType,electionType)
+        List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+                .addReturnField("e." + ElectionContestant._party)
+                .addReturnField("SUM(e." + ElectionContestant._won + ")")
+                .addReturnField("SUM(e." + ElectionContestant._acceptedResult + ")")
+                .addObjectParam(ElectionContestant._electionType, electionType)
                 .addGroupBy(ElectionContestant._party)
                 .buildQry().getResultList();
-        
+
         StringUtil.printObjectListArray(presidentialList);
-        
-        for (Object[] objects : presidentialList) 
-        {
+
+        for (Object[] objects : presidentialList) {
             PoliticalParty party = (PoliticalParty) objects[0];
-            
+
             PresidentialResult result = new PresidentialResult();
             result.setPartyName(party.getPartyName());
             result.setSeatCount(ObjectValue.get_intValue(objects[1]));
             result.setPresidentialVotes(ObjectValue.get_intValue(objects[2]));
-            
+
             mainResultList.add(result);
         }
+
+        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getSeatCount).sum();
         
-        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
         for (PresidentialResult presidentialResult : mainResultList) {
-            double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
+            double pct = presidentialResult.getSeatCount() / totalPresidential;
             pct = pct * 100;
             presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
         }
-        
-        
-        
-         for (PresidentialResult compare : mainResultList) {
 
+        for (PresidentialResult compare : mainResultList) {
             int counter = 0;
             for (PresidentialResult submitted : mainResultList) {
-                if (submitted.getPresidentialVotes()> compare.getPresidentialVotes()) {
+                if (submitted.getSeatCount() > compare.getSeatCount()) {
                     counter++;
                 }
             }
             compare.setPosition(counter + 1);
         }
-         
+
         return mainResultList;
     }
-    
-    
-       
-       public void updateNationalStats(List<PresidentialResult> mainResultList)
-    {
-        
-        
+
+    public void updateNationalStats(List<PresidentialResult> mainResultList) {
+
         double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
         for (PresidentialResult presidentialResult : mainResultList) {
             double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
             pct = pct * 100;
             presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
         }
-        
-        
-        
-         for (PresidentialResult compare : mainResultList) {
+
+        for (PresidentialResult compare : mainResultList) {
 
             int counter = 0;
             for (PresidentialResult submitted : mainResultList) {
-                if (submitted.getPresidentialVotes()> compare.getPresidentialVotes()) {
+                if (submitted.getPresidentialVotes() > compare.getPresidentialVotes()) {
                     counter++;
                 }
             }
             compare.setPosition(counter + 1);
         }
-         
+
     }
-    
-    
 
     public Region getSelectedRegion() {
         return selectedRegion;
@@ -268,7 +244,4 @@ public class NationalViewController implements Serializable {
         return parliamenSummaryList;
     }
 
-    
-
-      
 }

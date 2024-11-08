@@ -180,6 +180,9 @@ public class ElectionResultService {
 
         for (ElectionContestant electionContestant : contestantsList) {
 
+            
+            System.out.println(electionContestant.getPosition() + " .????.... " + electionContestant.getWon());
+            
 //              System.out.println(electionContestant.getParty() + " ........ " + electionContestant.getAcceptedResult());
             crudService.save(electionContestant);
         }
@@ -227,6 +230,30 @@ public class ElectionResultService {
                 }
             }
             compare.setPosition(counter + 1);
+        }
+        
+        int countWins = 0;
+        for (Result result : pollingStationResultsList) {
+            if(result.getPosition() == 1)
+            {
+                countWins++;
+            }
+        }
+        
+        if(countWins != 1)
+        {
+            return;
+        }
+        
+        for (Result result : pollingStationResultsList) {
+            if(result.getPosition() == 1)
+            {
+                result.setWon(1);
+                
+            }
+            else{
+                result.setWon(0);
+            }
         }
     }
 
