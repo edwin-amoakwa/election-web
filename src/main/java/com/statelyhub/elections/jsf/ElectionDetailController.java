@@ -7,12 +7,12 @@ package com.statelyhub.elections.jsf;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ConstituencyElection;
-import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PartyElection;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.elections.services.DataUploadService;
 import com.statelyhub.elections.services.UpdateStatsService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -33,8 +33,11 @@ public class ElectionDetailController implements Serializable {
 
     private @Inject
     UserSession userSession;
-    private @Inject
+     @Inject private
     UpdateStatsService updateStatsService;
+     
+     @Inject private
+    DataUploadService dataUploadService;
 
     private Region selectedRegion;
     private ConstituencyElection selectedConstituency;
@@ -90,6 +93,11 @@ public class ElectionDetailController implements Serializable {
         }
 
 //        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
+    }
+    
+    public void deleteRegion(Region region)
+    {
+        dataUploadService.deleteRegion(region);
     }
 
     public Region getSelectedRegion() {

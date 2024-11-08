@@ -34,6 +34,7 @@ public class Result extends UniqueEntityModel3 {
     private int viewOrder;
 
     public static final String _constituencyElection = "constituencyElection";
+    public static final String _constituencyElection_constituency = _constituencyElection + "." +ConstituencyElection._constituency;
     @JoinColumn(name = "constituency_election")
     @ManyToOne
     private ConstituencyElection constituencyElection;

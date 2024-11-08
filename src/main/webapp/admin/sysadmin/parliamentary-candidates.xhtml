@@ -9,7 +9,7 @@
                 xmlns:c="jakarta.tags.core">
 
     <ui:define name="pageTitle">
-        National Collation
+        Constituency Parliamentary Candidates
     </ui:define>
 
     <ui:define name="content">
@@ -36,24 +36,24 @@
 
                 <h:form>
 
-                     <p:dataTable value="#{parliamentaryCandidateController.constituencyElectionList}" var="constituencyElection" 
-                                         rows="25" paginator="true" paginatorPosition="bottom">
+                    <p:dataTable value="#{parliamentaryCandidateController.constituencyElectionList}" var="constituencyElection" 
+                                 rows="25" paginator="true" paginatorPosition="bottom">
 
-                                <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains">
-                                    <h:outputText value="#{constituencyElection.region.regionName}" />
-                                </p:column>
+                        <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains">
+                            <h:outputText value="#{constituencyElection.region.regionName}" />
+                        </p:column>
 
-                                <p:column headerText="#{msg.polling_stations}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
-                                    <p:commandLink value="#{constituencyElection.constituency.constituencyName}" 
-                                                   action="#{parliamentaryCandidateController.loadConstituencyResult(constituencyElection)}"
-                                                   update=":constituencyResultPanel"/>
-                                </p:column>
+                        <p:column headerText="#{msg.constituency}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
+                            <p:commandLink value="#{constituencyElection.constituency.constituencyName}" 
+                                           action="#{parliamentaryCandidateController.loadConstituencyResult(constituencyElection)}"
+                                           update=":constituencyResultPanel"/>
+                        </p:column>
 
-                                <p:column headerText="#{msg.result}" >
-                                    <h:outputText value="#{constituencyElection.resultSource}" />
-                                </p:column>
+                        <p:column headerText="#{msg.result_source}" rendered="false" >
+                            <h:outputText value="#{constituencyElection.resultSource.label}" />
+                        </p:column>
 
-                            </p:dataTable>
+                    </p:dataTable>
 
 
                 </h:form>
@@ -72,44 +72,44 @@
                     <h3>#{parliamentaryCandidateController.selectedConstituencyElection.constituency.constituencyName}</h3>
 
 
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <div class="panel-title">
-                                    Candidates
-                                </div>
-                            </div>
-                            <div class="panel-body">
-
-                                <h:form>
-
-                                    <p:dataTable value="#{parliamentaryCandidateController.electionContestantsList}" var="electionContestants" 
-                                                 rowKey="#{electionContestants.id}">
-
-                                        <p:column rendered="false">
-                                            <p:rowToggler />
-                                        </p:column>
-
-                                        <p:rowExpansion>
-                                            #{electionContestants.id}
-                                        </p:rowExpansion>
-
-                                        <p:column headerText="#{msg.party}">
-                                            <h:outputText value="#{electionContestants.party.initials}" />
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.name}">
-                                            <h:outputText value="#{electionContestants.candidateName}" />
-                                        </p:column>
-
-                                       
-                                        
-
-                                    </p:dataTable>
-
-                                </h:form>
-
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                Candidates
                             </div>
                         </div>
+                        <div class="panel-body">
+
+                            <h:form>
+
+                                <p:dataTable value="#{parliamentaryCandidateController.electionContestantsList}" var="electionContestants" 
+                                             rowKey="#{electionContestants.id}">
+
+                                    <p:column rendered="false">
+                                        <p:rowToggler />
+                                    </p:column>
+
+                                    <p:rowExpansion>
+                                        #{electionContestants.id}
+                                    </p:rowExpansion>
+
+                                    <p:column headerText="#{msg.party}">
+                                        <h:outputText value="#{electionContestants.party.initials}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.name}">
+                                        <h:outputText value="#{electionContestants.candidateName}" />
+                                    </p:column>
+
+
+
+
+                                </p:dataTable>
+
+                            </h:form>
+
+                        </div>
+                    </div>
 
 
 
@@ -126,6 +126,13 @@
 
                 <div class="row">
                     <div class="col-lg-12">
+
+
+                        <h:form>
+
+                            <p:commandButton value="Update Polling Stations" ajax="false" action="#{parliamentaryCandidateController.initialise()}" />
+
+                        </h:form>
 
 
 

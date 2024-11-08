@@ -47,14 +47,14 @@
                                     <h:outputText value="#{constituencyElection.region.regionName}" />
                                 </p:column>
 
-                                <p:column headerText="#{msg.polling_stations}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
+                                <p:column headerText="#{msg.constituency}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
                                     <p:commandLink value="#{constituencyElection.constituency.constituencyName}" 
                                                    action="#{nationalViewController.loadConstituencyResult(constituencyElection)}"
                                                    update=":constituencyResultPanel"/>
                                 </p:column>
 
-                                <p:column headerText="#{msg.result}" >
-                                    <h:outputText value="#{constituencyElection.resultSource}" />
+                                <p:column headerText="#{msg.result_source}" >
+                                    <h:outputText value="#{constituencyElection.resultSource.label}" />
                                 </p:column>
 
                             </p:dataTable>
@@ -69,10 +69,15 @@
                                     <h:outputText value="#{constituencyElection.region.regionName}" />
                                 </p:column>
 
-                                <p:column headerText="#{msg.polling_stations}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
+                                <p:column headerText="#{msg.constituency}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
                                     <h:commandLink value="#{constituencyElection.constituency.constituencyName}" 
                                                    action="#{nationalViewController.loadConstituencyResult(constituencyElection)}"/>
                                 </p:column>
+                                
+                                  <p:column headerText="#{msg.result_source}" >
+                                    <h:outputText value="#{constituencyElection.resultSource.label}" />
+                                </p:column>
+
 
 
                             </p:dataTable>
@@ -87,6 +92,19 @@
                 </h:form>
 
 
+                <br />
+                
+                  <center>
+
+                        <h:form>
+
+                            <p:commandButton value="Update National Result" ajax="false" action="#{nationalViewController.updateConstituecyFigures()}" />
+
+                        </h:form>
+
+
+
+                    </center>
 
 
 
@@ -168,7 +186,7 @@
 
                         <h:form>
 
-                            <p:commandButton value="Re-Run" ajax="false" action="#{nationalViewController.updateConstituecyFigures()}" />
+                            <p:commandButton value="#{msg.constituency} Status" ajax="false" action="#{nationalViewController.updateConstituecyFigures()}" />
 
                         </h:form>
 

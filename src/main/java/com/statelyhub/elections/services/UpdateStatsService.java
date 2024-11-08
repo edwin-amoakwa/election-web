@@ -114,12 +114,8 @@ public class UpdateStatsService {
             crudService.save(contestant);
         }
 //        System.out.println("......... " + contestant);
-        List<ElectionPollingStation> epsesList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                .addObjectParam(ElectionPollingStation._constituencyElection, constituency).buildQry().getResultList();
 
-        for (ElectionPollingStation electionPollingStation : epsesList) {
-            initPollingStationContestants(contestant, electionPollingStation);
-        }
+        addContestant(constituency, contestant);
 
     }
 
@@ -141,6 +137,16 @@ public class UpdateStatsService {
         }
 
 //        System.out.println("..... " + stationResult);
+    }
+    
+    public void addContestant(ConstituencyElection constituencyElection, ElectionContestant electionContestant)
+    {
+                List<ElectionPollingStation> epsesList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParam(ElectionPollingStation._constituencyElection, constituencyElection).buildQry().getResultList();
+
+        for (ElectionPollingStation electionPollingStation : epsesList) {
+            initPollingStationContestants(electionContestant, electionPollingStation);
+        }
     }
 
 }

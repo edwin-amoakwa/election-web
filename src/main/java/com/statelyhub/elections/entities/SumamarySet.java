@@ -6,6 +6,7 @@
 package com.statelyhub.elections.entities;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
+import com.statelyhub.elections.constants.ElectionType;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
@@ -16,40 +17,18 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class SumamarySet extends UniqueEntityModel3 {
 
-//    public static final String _election = "election";
-//    @JoinColumn(name = "election")
-//    @ManyToOne
-//    private Election election;
-//
-//    public static final String _constituency = "constituency";
-//    public static final String _constituency_constituencyName = _constituency + "." + Constituency._constituencyName;
-//    @JoinColumn(name = "constituency")
-//    @ManyToOne
-//    private Constituency constituency;
-//
-//    public static final String _region = "region";
-//    @JoinColumn(name = "region")
-//    @ManyToOne
-//    private Region region;
-//
-//    public static final String _resultSource = "resultSource";
-//    @Column(name = "result_source")
-//    @Enumerated(EnumType.STRING)
-//    private ResultSource resultSource;
-
-//    public static final String _resultStatus = "resultStatus";
-//    @Column(name = "result_status")
-//    @Enumerated(EnumType.STRING)
-//    private ResultStatus resultStatus;
-    
-
     public static final String _votersCount = "votersCount";
     @Column(name = "voters_count")
     private int votersCount;
-
+    
+    
     public static final String _validVotesPresidential = "validVotesPresidential";
     @Column(name = "valid_votes_presidential")
     private int validVotesPresidential;
+
+    public static final String _totalVotesCastPresidential = "totalVotesCastPresidential";
+    @Column(name = "total_votes_cost_presidential")
+    private int totalVotesCastPresidential;
 
     public static final String _rejectedBallotsPresidential = "rejectedBallotsPresidential";
     @Column(name = "rejected_ballots_presidential")
@@ -59,7 +38,7 @@ public class SumamarySet extends UniqueEntityModel3 {
     @Column(name = "spoilt_ballots_presidential")
     private int spoiltBallotsPresidential;
     
-      public static final String _votesCastPresidential = "votesCastPresidential";
+    public static final String _votesCastPresidential = "votesCastPresidential";
     @Column(name = "votes_cast_presidential")
     private int votesCastPresidential;
 
@@ -76,9 +55,13 @@ public class SumamarySet extends UniqueEntityModel3 {
     @Column(name = "rejected_ballots_parliamentary")
     private int rejectedBallotsParliamentary;
     
-         public static final String _votesCastParliamentary = "votesCastParliamentary";
+    public static final String _votesCastParliamentary = "votesCastParliamentary";
     @Column(name = "votes_cast_parliamentary")
     private int votesCastParliamentary;
+    
+    public static final String _totalVotesCastParliamentary = "totalVotesCastParliamentary";
+    @Column(name = "total_votes_cost_parliamentary")
+    private int totalVotesCastParliamentary;
 
     public static final String _spoiltBallotsParliamentary = "spoiltBallotsPresidential";
     @Column(name = "spoilt_ballots_parliamentary")
@@ -88,7 +71,25 @@ public class SumamarySet extends UniqueEntityModel3 {
     @Column(name = "voter_turnout_parliamentary")
     private double voterTurnoutParliamentary;
 
-   
+   public void update(ResultSet resultSet)
+   {
+       if(resultSet.getElectionType() == ElectionType.PRESIDENTIAL)
+       {
+           validVotesPresidential = resultSet.getValidVotes();
+           rejectedBallotsPresidential = resultSet.getRejectedBallots();
+           spoiltBallotsPresidential = resultSet.getSpoiltBallots();
+           validVotesPresidential = resultSet.getTotalVotesCast();
+           totalVotesCastPresidential = resultSet.getTotalVotesCast();
+       }
+       else if(resultSet.getElectionType() == ElectionType.PARLIAMENTARY)
+       {
+           validVotesParliamentary = resultSet.getValidVotes();
+           rejectedBallotsParliamentary = resultSet.getRejectedBallots();
+           spoiltBallotsParliamentary = resultSet.getSpoiltBallots();
+           validVotesParliamentary = resultSet.getTotalVotesCast();
+           totalVotesCastParliamentary = resultSet.getTotalVotesCast();
+       }
+   }
     
     public int getVotersCount() {
         return votersCount;
@@ -176,6 +177,22 @@ public class SumamarySet extends UniqueEntityModel3 {
 
     public void setVotesCastParliamentary(int votesCastParliamentary) {
         this.votesCastParliamentary = votesCastParliamentary;
+    }
+
+    public int getTotalVotesCastPresidential() {
+        return totalVotesCastPresidential;
+    }
+
+    public void setTotalVotesCastPresidential(int totalVotesCastPresidential) {
+        this.totalVotesCastPresidential = totalVotesCastPresidential;
+    }
+
+    public int getTotalVotesCastParliamentary() {
+        return totalVotesCastParliamentary;
+    }
+
+    public void setTotalVotesCastParliamentary(int totalVotesCastParliamentary) {
+        this.totalVotesCastParliamentary = totalVotesCastParliamentary;
     }
 
     
