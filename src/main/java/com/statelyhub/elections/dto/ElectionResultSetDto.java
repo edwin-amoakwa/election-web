@@ -11,12 +11,14 @@ import java.util.List;
  *
  * @author edwin
  */
-public class ElectionTypeResultDto 
+public class ElectionResultSetDto 
 {
     private ElectionType electionType;
-    private int totalBallots;
+    private String resultSetId;
+    private int votesCast;
     private int rejectedBallots;
     private int spoiltBallots;
+    private int validVotes;
     
     private List<SubmittedResultDto> candidatesList;
 
@@ -52,12 +54,28 @@ public class ElectionTypeResultDto
         this.spoiltBallots = spoiltBallots;
     }
 
-    public int getTotalBallots() {
-        return totalBallots;
+    public int getVotesCast() {
+        return votesCast;
     }
 
-    public void setTotalBallots(int totalBallots) {
-        this.totalBallots = totalBallots;
+    public void setVotesCast(int votesCast) {
+        this.votesCast = votesCast;
+    }
+
+    public int getValidVotes() {
+        return validVotes;
+    }
+
+    public void setValidVotes(int validVotes) {
+        this.validVotes = validVotes;
+    }
+
+    public String getResultSetId() {
+        return resultSetId;
+    }
+
+    public void setResultSetId(String resultSetId) {
+        this.resultSetId = resultSetId;
     }
     
 }

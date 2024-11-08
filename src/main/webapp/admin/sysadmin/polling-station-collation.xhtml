@@ -23,14 +23,14 @@
                     <h:panelGrid columns="6" styleClass="spaced-table">
                         
                          <h:outputText value="#{msg.constituency}" />
-                    <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection}" 
+                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="#{msg.select_one}" />
                         <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
                     </p:selectOneMenu>
 
                     <p:commandButton value="Load" ajax="false"
-                                     action="#{pollingStationCollationController.loadPollingStation()}"/>
+                                     action="#{constituencyCollationController.loadPollingStation()}"/>
                     </h:panelGrid>
 
                    
@@ -41,9 +41,9 @@
 
                     <p:tabView>
 
-                        <p:tab title="Pending - #{pollingStationCollationController.pendingPollingStationsList.size()}">
+                        <p:tab title="Pending - #{constituencyCollationController.pendingPollingStationsList.size()}">
 
-                            <p:dataTable value="#{pollingStationCollationController.pendingPollingStationsList}" var="pollingStation" 
+                            <p:dataTable value="#{constituencyCollationController.pendingPollingStationsList}" var="pollingStation" 
                                          rows="10" paginator="true" paginatorPosition="bottom">
 
                                 <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
@@ -52,7 +52,7 @@
 
                                 <p:column headerText="#{msg.polling_stations}"  filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
                                     <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
-                                                   action="#{pollingStationCollationController.selectPollingStation(pollingStation)}"/>
+                                                   action="#{constituencyCollationController.selectPollingStation(pollingStation)}"/>
                                 </p:column>
 
 
@@ -60,8 +60,8 @@
 
                         </p:tab>
 
-                        <p:tab title="Finalised - #{pollingStationCollationController.completedPollingStationsList.size()}">
-                            <p:dataTable value="#{pollingStationCollationController.completedPollingStationsList}" var="pollingStation" 
+                        <p:tab title="Finalised - #{constituencyCollationController.completedPollingStationsList.size()}">
+                            <p:dataTable value="#{constituencyCollationController.completedPollingStationsList}" var="pollingStation" 
                                          rows="10" paginator="true" paginatorPosition="bottom">
 
                                 <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
@@ -70,7 +70,7 @@
 
                                 <p:column headerText="#{msg.polling_stations}"  filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
                                     <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
-                                                   action="#{pollingStationCollationController.selectPollingStation(pollingStation)}"/>
+                                                   action="#{constituencyCollationController.selectPollingStation(pollingStation)}"/>
                                 </p:column>
 
 
@@ -93,7 +93,7 @@
                 <h2>Current #{msg.constituency} Result</h2>
 
 
-                <c:forEach items="#{pollingStationCollationController.constituencyResultList}" var="electionTypeContainer">
+                <c:forEach items="#{constituencyCollationController.constituencyResultList}" var="electionTypeContainer">
 
                     <div class="panel panel-success">
                         <div class="panel-heading">
@@ -158,29 +158,29 @@
                     
                     <center>
                              
-                <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty pollingStationCollationController.selectedConstituencyElection}">
+                <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedConstituencyElection}">
                     <h:outputText value="Result Source" />
 
-                    <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection.resultSource}">
+                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultSource}">
                         <f:selectItems value="#{commonOptions.resultSourceList}" />
                     </p:selectOneMenu>
 
-                    <p:commandButton value="Update" ajax="false" action="#{pollingStationCollationController.updateResultSource()}" />
+                    <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateResultSource()}" />
 
                     <h:outputText value="Status" />
 
-                    <p:selectOneMenu value="#{pollingStationCollationController.selectedConstituencyElection.resultStatus}">
+                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultStatus}">
                         <f:selectItems value="#{commonOptions.resultStatusList}" />
                     </p:selectOneMenu>
 
-                    <p:commandButton value="Update" ajax="false" action="#{pollingStationCollationController.updateConstituencyElectionStatus()}" />
+                    <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateConstituencyElectionStatus()}" />
 
                 </h:panelGrid>
 
                     <br />
                     <p:commandButton value="#{msg.analyse_update}" 
                                      styleClass="ui-button-success " 
-                                     ajax="false" action="#{pollingStationCollationController.updateConstituecyFigures()}" />
+                                     ajax="false" action="#{constituencyCollationController.updateConstituecyFigures()}" />
                     </center>
                     
                 </h:form>
@@ -189,7 +189,7 @@
 
 
                 <h:form rendered="false">
-                    <election:pollingStationSearch selectAction="#{pollingStationCollationController.searchPollingStation()}"
+                    <election:pollingStationSearch selectAction="#{constituencyCollationController.searchPollingStation()}"
                                                    update=":stationResult, :submittedResultPanel"/>
                 </h:form>
             </div>
@@ -198,9 +198,9 @@
                 <h:panelGroup id="stationResult">
 
 
-                    <h3>#{pollingStationCollationController.electionPollingStation.pollingStation.stationCode} - #{pollingStationCollationController.electionPollingStation.pollingStation.stationName}</h3>
+                    <h3>#{constituencyCollationController.electionPollingStation.pollingStation.stationCode} - #{constituencyCollationController.electionPollingStation.pollingStation.stationName}</h3>
 
-                    <c:forEach items="#{pollingStationCollationController.resultsList}" var="electionTypeContainer">
+                    <c:forEach items="#{constituencyCollationController.resultsList}" var="electionTypeContainer">
 
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -280,15 +280,15 @@
                     </c:forEach>
 
                     <center>
-                        <h:form rendered="#{not empty pollingStationCollationController.electionPollingStation.resultStatus}">
+                        <h:form rendered="#{not empty constituencyCollationController.electionPollingStation.resultStatus}">
                             <h:panelGrid columns="3" styleClass="spaced-table">
                                 <h:outputText value="Status" />
 
-                                <p:selectOneMenu value="#{pollingStationCollationController.electionPollingStation.resultStatus}">
+                                <p:selectOneMenu value="#{constituencyCollationController.electionPollingStation.resultStatus}">
                                     <f:selectItems value="#{commonOptions.resultStatusList}" />
                                 </p:selectOneMenu>
 
-                                <p:commandButton value="Update" action="#{pollingStationCollationController.updatePollingStatationStatus()}"/>
+                                <p:commandButton value="Update" action="#{constituencyCollationController.updatePollingStatationStatus()}"/>
 
                             </h:panelGrid>
 
@@ -313,7 +313,7 @@
                             <h:form>
 
                                 <p:commandButton value="Load Submissions" styleClass="ui-button-help " 
-                                                 action="#{pollingStationCollationController.loadSubmissions()}"
+                                                 action="#{constituencyCollationController.loadSubmissions()}"
                                                  update=":submittedResultPanel"/>
 
                             </h:form>
@@ -329,7 +329,7 @@
                             <h:panelGroup id="submittedResultPanel">
 
 
-                                <p:carousel value="#{pollingStationCollationController.submissionsList}" var="submission" numVisible="3" numScroll="3" >
+                                <p:carousel value="#{constituencyCollationController.submissionsList}" var="submission" numVisible="3" numScroll="3" >
                                     <f:facet name="header">
                                         <h5>#{submission.volunteer.volunteerName}</h5>
                                     </f:facet>
@@ -401,7 +401,7 @@
                                         <center>
                                             <h:form>
                                                 <p:commandButton value="Accept this from #{submission.volunteer.volunteerName}" ajax="true"
-                                                                 action="#{pollingStationCollationController.acceptSubmission(submission)}"
+                                                                 action="#{constituencyCollationController.acceptSubmission(submission)}"
                                                                  icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
                                             </h:form>
                                         </center>

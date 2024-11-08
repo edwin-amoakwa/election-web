@@ -24,7 +24,7 @@
 
                 <h:outputText value="#{msg.type}" />
                 <p:selectOneMenu value="#{politicalPartyController.party.partyType}" required="true" >
-                    <f:selectItem value="#{msg.select_one}" />
+                    <f:selectItem itemLabel="#{msg.select_one}" />
                     <f:selectItems value="#{commonOptions.partyTypeList}" />
                 </p:selectOneMenu>
 

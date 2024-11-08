@@ -9,12 +9,15 @@ import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultSource;
+import com.statelyhub.elections.dto.SubmittedResultDto;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.Result;
+import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
+import com.statelyhub.elections.entities.SubmittedResultSet;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -218,4 +221,22 @@ public class ElectionResultService {
             }
         }
     }
+    
+    
+    
+    public void updateResultSet(ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation)
+    {
+               SubmittedResultSet presidentail = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+                    .addObjectParam(SubmittedResultSet._electionType, ElectionType.PRESIDENTIAL)
+                    .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
+                    .getSingleResult(SubmittedResultSet.class);
+               
+               
+               if(presidentail != null)
+               {
+//                   electionPollingStation.set
+               }
+    }
+    
+    
 }

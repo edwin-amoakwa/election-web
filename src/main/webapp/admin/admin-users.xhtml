@@ -54,7 +54,8 @@
                                    rendered="#{adminLoginController.userAccount.userDomain.constituencyUser}">
                         
                         <h:outputText value="#{msg.constituency}" />
-                        <p:selectOneMenu value="#{adminLoginController.userAccount.constituency}" required="true" >
+                        <p:selectOneMenu value="#{adminLoginController.userAccount.constituency}" required="true" 
+                                         filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{msg.select_one}" />
                             <f:selectItems value="#{userCommonOptions.constituenciesList}" />
                         </p:selectOneMenu>

@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+                xmlns:election="jakarta.faces.composite/election"
+                xmlns:c="jakarta.tags.core">
+
+    <ui:define name="pageTitle">
+        National Collation
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <div class="row">
+
+            <div class="col-lg-5">
+                <h:form>
+
+                    <h:panelGrid columns="6" styleClass="spaced-table">
+                        <h:outputText value="#{msg.region}" />
+                        <p:selectOneMenu value="#{parliamentaryCandidateController.selectedRegion}" 
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.regionsList}" />
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Load" ajax="false"
+                                         action="#{parliamentaryCandidateController.loadConstituency()}"/>
+                    </h:panelGrid>
+
+                </h:form>
+
+                <h:form>
+
+                     <p:dataTable value="#{parliamentaryCandidateController.constituencyElectionList}" var="constituencyElection" 
+                                         rows="25" paginator="true" paginatorPosition="bottom">
+
+                                <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains">
+                                    <h:outputText value="#{constituencyElection.region.regionName}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.polling_stations}"  filterBy="#{constituencyElection.constituency.constituencyName}" filterMatchMode="contains" >
+                                    <p:commandLink value="#{constituencyElection.constituency.constituencyName}" 
+                                                   action="#{parliamentaryCandidateController.loadConstituencyResult(constituencyElection)}"
+                                                   update=":constituencyResultPanel"/>
+                                </p:column>
+
+                                <p:column headerText="#{msg.result}" >
+                                    <h:outputText value="#{constituencyElection.resultSource}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+
+                </h:form>
+
+
+
+
+
+
+            </div>
+
+            <div class="col-lg-7">
+                <h:panelGroup id="constituencyResultPanel">
+
+
+                    <h3>#{parliamentaryCandidateController.selectedConstituencyElection.constituency.constituencyName}</h3>
+
+
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Candidates
+                                </div>
+                            </div>
+                            <div class="panel-body">
+
+                                <h:form>
+
+                                    <p:dataTable value="#{parliamentaryCandidateController.electionContestantsList}" var="electionContestants" 
+                                                 rowKey="#{electionContestants.id}">
+
+                                        <p:column rendered="false">
+                                            <p:rowToggler />
+                                        </p:column>
+
+                                        <p:rowExpansion>
+                                            #{electionContestants.id}
+                                        </p:rowExpansion>
+
+                                        <p:column headerText="#{msg.party}">
+                                            <h:outputText value="#{electionContestants.party.initials}" />
+                                        </p:column>
+
+                                        <p:column headerText="#{msg.name}">
+                                            <h:outputText value="#{electionContestants.candidateName}" />
+                                        </p:column>
+
+                                       
+                                        
+
+                                    </p:dataTable>
+
+                                </h:form>
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+                </h:panelGroup>
+
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+
+
+
+
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+
+
+        <hr />
+        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+    </ui:define>
+
+</ui:composition>
+

@@ -13,7 +13,6 @@ import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionPollingStation;
-import com.statelyhub.elections.entities.PartyElection;
 import com.statelyhub.elections.entities.PoliticalParty;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.Region;
@@ -28,30 +27,30 @@ import java.util.List;
  */
 @Stateless
 public class UpdateStatsService {
-    
-    private @Inject
-    CrudService crudService;
-    
+
+    @Inject
+    private CrudService crudService;
+
     @Inject
     private DataUploadService dataUploadService;
-    
+
     public void update(Election election) {
-        
+
         List<Region> regionsList = QryBuilder.get(crudService.getEm(), Region.class)
                 .orderByAsc(Region._regionName)
                 .buildQry().getResultList();
-        
+
         for (Region region : regionsList) {
-            
+
             int consituency = QryBuilder.get(crudService.getEm(), Constituency.class)
                     .addObjectParam(Constituency._region, region).count();
-            
+
             int polling = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                     .addObjectParam(ElectionPollingStation._constituency_region, region).count();
-            
+
             region.setConstituencyCount(consituency);
             region.setPollingStationCount(polling);
-            
+
             crudService.save(region);
         }
 
@@ -59,54 +58,53 @@ public class UpdateStatsService {
         List<ConstituencyElection> cesList = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._election, election)
                 .buildQry().getResultList();
-        
+
         for (ConstituencyElection constituencyElection : cesList) {
-            
+
             int polling = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                     .addObjectParam(ElectionPollingStation._constituency, constituencyElection.getConstituency())
                     .addObjectParam(ElectionPollingStation._election, constituencyElection.getElection())
                     .count();
-            
+
             constituencyElection.setPollingStationCount(polling);
             crudService.save(constituencyElection);
-            
+
         }
-        
+
     }
-    
+
+//    @Asynchronous
+//    public void initIaliseDefaultContesttants(Election election) {
+//        List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+//                .addObjectParam(ConstituencyElection._election, election).buildQry().getResultList();
+//        
+//        
+//        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+//                .addObjectParam(PartyElection._election, election).printQryInfo().buildQry().getResultList();
+//        
+//        for (ConstituencyElection constituency : constituencys) 
+//        {
+//            for (PartyElection partyElection : partyElectionsList) {
+//                initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
+//                initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
+//            }
+//            
+//        }
+//    }
     @Asynchronous
-    public void initIaliseDefaultContesttants(Election election) {
-        List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
-                .addObjectParam(ConstituencyElection._election, election).buildQry().getResultList();
-        
-        
-        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
-                .addObjectParam(PartyElection._election, election).printQryInfo().buildQry().getResultList();
-        
-        for (ConstituencyElection constituency : constituencys) 
-        {
-            for (PartyElection partyElection : partyElectionsList) {
-                initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
-                initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
-            }
-            
-        }
-    }
-    
     public void initConstituencyContestants(ConstituencyElection constituency, PoliticalParty party, ElectionType electionType) {
-        
-        if(party.getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY)
-        {
+
+        if (party.getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY) {
             //independent parties will not be added to eah consituency
             return;
         }
-        
+
         ElectionContestant contestant = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._party, party)
                 .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituency)
                 .getSingleResult(ElectionContestant.class);
-        
+
         if (contestant == null) {
             contestant = new ElectionContestant();
             contestant.setParty(party);
@@ -115,22 +113,22 @@ public class UpdateStatsService {
 //            contestant.setResultStatus(ResultStatus.PENDING);
             crudService.save(contestant);
         }
-        
+//        System.out.println("......... " + contestant);
         List<ElectionPollingStation> epsesList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                 .addObjectParam(ElectionPollingStation._constituencyElection, constituency).buildQry().getResultList();
-        
+
         for (ElectionPollingStation electionPollingStation : epsesList) {
             initPollingStationContestants(contestant, electionPollingStation);
         }
-        
+
     }
-    
+
     public void initPollingStationContestants(ElectionContestant contestant, ElectionPollingStation eps) {
         PollingStationResult stationResult = QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                 .addObjectParam(PollingStationResult._electionContestant, contestant)
                 .addObjectParam(PollingStationResult._electionPollingStation, eps)
                 .getSingleResult(PollingStationResult.class);
-        
+
         if (stationResult == null) {
             stationResult = new PollingStationResult();
             stationResult.setElection(eps.getElection());
@@ -141,6 +139,8 @@ public class UpdateStatsService {
             stationResult.setResultStatus(ResultStatus.PENDING);
             crudService.save(stationResult);
         }
+
+//        System.out.println("..... " + stationResult);
     }
-    
+
 }

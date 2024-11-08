@@ -4,14 +4,16 @@ import com.stately.common.utils.StringUtil;
 import com.statelyhub.elections.dto.ResultSubmissionDto;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
-import com.statelyhub.elections.dto.ElectionTypeResultDto;
+import com.statelyhub.elections.dto.ElectionResultSetDto;
 import com.statelyhub.elections.dto.SubmittedResultDto;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
+import com.statelyhub.elections.entities.SubmittedResultSet;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
@@ -84,7 +86,14 @@ public class ResultSubmissionEndpoint {
             List<ElectionTypeResult> template = electionResultService.pollingStationBucket(eps);
 
             List<PollingStationResult> pollingStationResult = new LinkedList<>();
-            for (ElectionTypeResult electionTypeResult : template) {
+            for (ElectionTypeResult electionTypeResult : template) 
+            {
+                SubmittedResultSet resultSet = new SubmittedResultSet();
+                resultSet.setResultSubmissionId(resultSubmission.getId());
+                resultSet.setElectionType(electionTypeResult.getElectionType());
+                
+                crudService.save(resultSet);
+                
                 pollingStationResult.addAll(electionTypeResult.getVotingsList());
             }
 
@@ -104,11 +113,32 @@ public class ResultSubmissionEndpoint {
 
         List<ElectionTypeResult> volunteerBuckets = electionResultService.volunteerEpsBucket(eps);
 
-        List<ElectionTypeResultDto> dtos = new LinkedList<>();
+        List<ElectionResultSetDto> dtos = new LinkedList<>();
 
         for (ElectionTypeResult volunteerBucket : volunteerBuckets) {
-            ElectionTypeResultDto dto = new ElectionTypeResultDto();
-            dto.setElectionType(volunteerBucket.getElectionType());
+            ElectionResultSetDto electionResultSetDto = new ElectionResultSetDto();
+            electionResultSetDto.setElectionType(volunteerBucket.getElectionType());
+            
+            SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+                    .addObjectParam(SubmittedResultSet._electionType, volunteerBucket.getElectionType())
+                    .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
+                    .getSingleResult(SubmittedResultSet.class);
+            
+            if(resultSet == null)
+            {
+                 resultSet = new SubmittedResultSet();
+                resultSet.setResultSubmissionId(resultSubmission.getId());
+                resultSet.setElectionType(volunteerBucket.getElectionType());
+                crudService.save(resultSet);
+            }
+            
+            electionResultSetDto.setResultSetId(resultSet.getId());
+            
+            electionResultSetDto.setValidVotes(resultSet.getValidVotes());
+            electionResultSetDto.setRejectedBallots(resultSet.getRejectedBallots());
+            electionResultSetDto.setSpoiltBallots(resultSet.getSpoiltBallots());
+            electionResultSetDto.setVotesCast(resultSet.getTotalVotesCast());
+            
 
             List<SubmittedResultDto> submittedList = new LinkedList<>();
             for (SubmittedResult submittedResult : volunteerBucket.getSubmittedResultsList()) {
@@ -125,9 +155,9 @@ public class ResultSubmissionEndpoint {
 
                 submittedList.add(submittedDto);
             }
-            dto.setCandidatesList(submittedList);
+            electionResultSetDto.setCandidatesList(submittedList);
 
-            dtos.add(dto);
+            dtos.add(electionResultSetDto);
         }
         ResultSubmissionDto submissionDto = new ResultSubmissionDto();
         submissionDto.setId(resultSubmission.getId());
@@ -151,6 +181,7 @@ public class ResultSubmissionEndpoint {
     public Response submitResult(@BeanParam DefaultHeaders qryparam, ResultSubmissionDto submissionDto) {
 
         ResultSubmission resultSubmission = crudService.find(ResultSubmission.class, submissionDto.getId());
+//        ElectionPollingStation eps = crudService.find(ElectionPollingStation.class, submissionDto.getEpsId());
 
         if (resultSubmission == null) {
             return ApiResponse.ok("Cannot Process Submission. Referesh and try again");
@@ -160,15 +191,34 @@ public class ResultSubmissionEndpoint {
 //            return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
         }
 
-        for (ElectionTypeResultDto electionTypeResultDto : submissionDto.getVotingsList()) {
+        for (ElectionResultSetDto resultSetDto : submissionDto.getVotingsList()) {
             List<SubmittedResult> resultsList = new LinkedList<>();
+            
+             SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+                    .addObjectParam(SubmittedResultSet._electionType, resultSetDto.getElectionType())
+                    .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
+                    .getSingleResult(SubmittedResultSet.class);
+            
+//            if(resultSetDto.getElectionType() == ElectionType.PARLIAMENTARY)
+//            {
+                resultSet.setRejectedBallots(resultSetDto.getRejectedBallots());
+                resultSet.setSpoiltBallots(resultSetDto.getSpoiltBallots());
+                resultSet.setValidVotes(resultSetDto.getValidVotes());
+                resultSet.setTotalVotesCast(resultSetDto.getVotesCast());
+                
+                crudService.save(resultSet);
+//            }
 
-            for (SubmittedResultDto submittedResultDto : electionTypeResultDto.getCandidatesList()) {
+            for (SubmittedResultDto submittedResultDto : resultSetDto.getCandidatesList()) {
                 SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
                 submittedResult.setInputResult(submittedResultDto.getVotes());
                 resultsList.add(submittedResult);
-                crudService.save(submittedResult);
+//                crudService.save(submittedResult);
+                
+//                System.out.println("submittedResult.getInputResult() ...... " + submittedResult.getInputResult());
             }
+            
+           
 
             for (SubmittedResult compare : resultsList) 
             {
@@ -201,6 +251,7 @@ public class ResultSubmissionEndpoint {
         //run position logic;
         resultSubmission.setSubmissionStatus(SubmissionStatus.OPEN);
 
+        crudService.save(resultSubmission);
         crudService.save(resultSubmission);
 
         return ApiResponse.ok(submissionDto);

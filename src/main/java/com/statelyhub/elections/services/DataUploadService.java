@@ -11,6 +11,7 @@ import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.DistrictAssembly;
 import com.statelyhub.elections.entities.Election;
+import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Region;
@@ -42,7 +43,7 @@ public class DataUploadService {
          ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                         .addObjectParam(ElectionPollingStation._constituencyElection, constituencyElection)
 //                        .addObjectParam(ElectionPollingStation._election, election)
-//                        .addObjectParam(ElectionPollingStation._pollingStation, pollingStation)
+                        .addObjectParam(ElectionPollingStation._pollingStation, pollingStation)
                         .getSingleResult(ElectionPollingStation.class);
 
                 if (eps == null) {
@@ -148,5 +149,17 @@ public class DataUploadService {
         }
 
         return station;
+    }
+    
+    public void deleteConsituency(Constituency constituency)
+    {
+        QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParam(ElectionPollingStation._constituency, constituency).delete();
+        
+         QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                .addObjectParam(ConstituencyElection._constituency, constituency).delete();
+        
+        
+        crudService.delete(constituency);
     }
 }

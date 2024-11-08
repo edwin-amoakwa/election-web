@@ -10,13 +10,17 @@ import com.stately.common.sms.SmsService;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.Constant;
 import com.statelyhub.elections.constants.VolunteerApprovalStatus;
 import com.statelyhub.elections.constants.VolunteerClassification;
+import com.statelyhub.elections.dto.LoginResponse;
 import com.statelyhub.elections.dto.VolunteerDto;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Volunteer;
+import com.statelyhub.elections.services.AppConfigService;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.elections.services.VolunteerService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
@@ -36,6 +40,8 @@ import jakarta.ws.rs.core.Response;
 public class VolunteerEndpoint 
 {
     @Inject private CrudService crudService;
+    
+    @Inject private VolunteerService volunteerService;
     
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,10 +67,13 @@ public class VolunteerEndpoint
             if(volunteer != null)
             {
                 
-                String msg = "Thank you for Registering. We will revert when you application is processed";
-                 new SmsService().sendSms(SmsProvider.ROUTEE, "AstraERP", volunteer.getMobileNo(), msg);
+                String msg = "Thank you for Registering. We will revert when you application is processed via SMS";
+                 SmsService.SMS.sendSms(volunteer.getMobileNo(), msg);
                 
-                return ApiResponse.ok(toDto(volunteer));
+                 
+                 
+                 
+                return ApiResponse.ok(msg,volunteerService.loginResponse(volunteer));
             }
             
         } catch (Exception e) {
@@ -103,16 +112,17 @@ public class VolunteerEndpoint
                     .addObjectParam(PollingStation._id, dto.getPollingStationId())
                     .addObjectParam(PollingStation._constituency_id, dto.getConstituencyId())
                     .addObjectParam(PollingStation._constituency_region_id, dto.getRegionId())
+                        .printQryInfo()
                     .getSingleResult(PollingStation.class);
                 record.setPollingStation(pollingStation);
             } catch (Exception e) {
                 e.printStackTrace();
             } 
             
-            if(record.getPollingStation() == null)
-            {
-                return result.addError("Specified Polling Station Not Found");
-            }
+//            if(record.getPollingStation() == null)
+//            {
+//                return result.addError("Specified Polling Station Not Found");
+//            }
         }
         
         if(StringUtil.isNullOrEmpty(dto.getVolunteerName()))
@@ -148,43 +158,5 @@ public class VolunteerEndpoint
         
         return result;
     }
-    
-    public VolunteerDto toDto(Volunteer record)
-    {
-        VolunteerDto dto = new VolunteerDto();
-        dto.setId(record.getId());
-        dto.setEmailAddress(record.getEmailAddress());
-        dto.setMobileNo(record.getMobileNo());
-        dto.setVolunteerName(record.getVolunteerName());
-        
-        try {
-            dto.setApprovalStatus(record.getApprovalStatus());
-            dto.setApprovalStatusName(record.getApprovalStatus().getLabel());
-        } catch (Exception e) {
-        }
-        try {
-            dto.setClassification(record.getClassification());
-            dto.setClassificationName(record.getClassification().getLabel());
-        } catch (Exception e) {
-        }
-        try {
-            dto.setPollingStationId(record.getPollingStation().getId());
-            dto.setPollingStationName(record.getPollingStation().getStationName());
-        } catch (Exception e) {
-        }
-        try {
-            dto.setConstituencyId(record.getConstituency().getId());
-            dto.setConstituencyName(record.getConstituency().getConstituencyName());
-            dto.setRegionId(record.getConstituency().getRegion().getId());
-            dto.setRegionName(record.getConstituency().getRegion().getRegionName());
-        } catch (Exception e) {
-        }
-        try {
-            dto.setProcessedById(record.getProcessedBy().getId());
-            dto.setProcessedByName(record.getProcessedBy().getAccountName());
-        } catch (Exception e) {
-        }
-//        dto.set(record.get);
-        return dto;
-    }
+ 
 }

@@ -5,8 +5,11 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ConstituencyElection;
+import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionPollingStation;
+import com.statelyhub.elections.entities.PartyElection;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.services.CrudService;
@@ -23,45 +26,41 @@ import java.util.List;
  */
 @SessionScoped
 @Named(value = "electionDetailController")
-public class ElectionDetailController implements Serializable{
-    
-        private @Inject CrudService crudService;
+public class ElectionDetailController implements Serializable {
 
-    private @Inject UserSession userSession;
-    private @Inject UpdateStatsService updateStatsService;
-    
+    private @Inject
+    CrudService crudService;
+
+    private @Inject
+    UserSession userSession;
+    private @Inject
+    UpdateStatsService updateStatsService;
+
     private Region selectedRegion;
     private ConstituencyElection selectedConstituency;
     private List<ConstituencyElection> constituencyList;
     private List<ElectionPollingStation> pollingStationsList;
-    
-    
-    
-    public void selectRegion(Region selectedRegion)
-    {
+
+    public void selectRegion(Region selectedRegion) {
         this.selectedRegion = selectedRegion;
-        
+
         constituencyList = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._region, selectedRegion)
                 .buildQry().getResultList();
-        
+
 //        System.out.println("....... " + constituencyList);
     }
-    
-     
-    public void selectConstituency(ConstituencyElection selectedConstituency)
-    {
+
+    public void selectConstituency(ConstituencyElection selectedConstituency) {
         this.selectedConstituency = selectedConstituency;
-        
+
         pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                 .addObjectParam(ElectionPollingStation._constituency, selectedConstituency.getConstituency())
                 .addObjectParam(ElectionPollingStation._election, userSession.getElectionUR())
                 .buildQry().getResultList();
     }
-    
-        
-    public void selectPollingStation(PollingStation pollingStation)
-    {
+
+    public void selectPollingStation(PollingStation pollingStation) {
 //        this.pollingStation = pollingStation;
 //        
 //        pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
@@ -69,15 +68,28 @@ public class ElectionDetailController implements Serializable{
 //                .addObjectParam(ElectionPollingStation._election, userSession.getElectionUR())
 //                .buildQry().getResultList();
     }
-    
-    public void updateStats()
-    {
+
+    public void updateStats() {
         updateStatsService.update(userSession.getElectionUR());
     }
-    
-        public void initIaliseDefaultContesttants()
-    {
-        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
+
+    public void initIaliseDefaultContesttants() {
+
+        List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                .addObjectParam(ConstituencyElection._election, userSession.getElectionUR()).buildQry().getResultList();
+
+        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
+
+        for (ConstituencyElection constituency : constituencys) {
+            for (PartyElection partyElection : partyElectionsList) {
+                updateStatsService.initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
+                updateStatsService.initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
+            }
+
+        }
+
+//        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
     }
 
     public Region getSelectedRegion() {
@@ -95,8 +107,5 @@ public class ElectionDetailController implements Serializable{
     public List<ElectionPollingStation> getPollingStationsList() {
         return pollingStationsList;
     }
-    
-    
-    
-    
+
 }

@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
  * @author edwin
  */
 @SessionScoped
-@Named(value = "pollingStationCollationController")
-public class PollingStationCollationController implements Serializable {
+@Named(value = "constituencyCollationController")
+public class ConstituencyCollationController implements Serializable {
 
     @Inject
     private CrudService crudService;
@@ -184,7 +184,7 @@ public class PollingStationCollationController implements Serializable {
             }
 
         }
-        electionPollingStation.setResultSubmission(resultSubmission);
+        electionPollingStation.setResultSubmissionId(resultSubmission.getId());
 
         resultSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
 

@@ -7,10 +7,12 @@ package com.statelyhub.elections.api;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.entities.Constituency;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.entities.Volunteer;
+import com.statelyhub.elections.services.AppConfigService;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionService;
 import jakarta.ejb.Stateless;
@@ -38,6 +40,8 @@ public class LookupEndpoint
 {
     @Inject private CrudService crudService;
     @Inject private ElectionService electionService;
+    
+        @Inject private AppConfigService appConfigService;
     
     @GET
     @Path("/regions")
@@ -72,19 +76,20 @@ public class LookupEndpoint
     @Produces(MediaType.APPLICATION_JSON)
     public Response getConstituencies(@QueryParam("region")String regionId)
     {
-        List<Constituency> dataList = QryBuilder.get(crudService.getEm(), Constituency.class)
+        List<ConstituencyElection> dataList = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParamWhenNotNull(Constituency._region_id, regionId)
-                .orderByAsc(Constituency._constituencyName)
+                .addObjectParamWhenNotNull(ConstituencyElection._election, appConfigService.getCurrentElection())
+                .orderByAsc(ConstituencyElection._constituency_constituencyName)
                 .printQryInfo().buildQry().getResultList();
         
         JsonArrayBuilder dataArray = Json.createArrayBuilder();
 
-        for (Constituency data : dataList)
+        for (ConstituencyElection data : dataList)
        {
            JsonObjectBuilder object = Json.createObjectBuilder()
-                   .add("id", data.getId())
-                   .add("itemName", data.getConstituencyName()== null ? "":data.getConstituencyName() )
-                   .add("constituencyName", data.getConstituencyName()== null ? "":data.getConstituencyName() )
+                   .add("id", data.getConstituency().getId())
+                   .add("itemName", data.getConstituency().getConstituencyName()== null ? "":data.getConstituency().getConstituencyName() )
+                   .add("constituencyName", data.getConstituency().getConstituencyName()== null ? "":data.getConstituency().getConstituencyName() )
                    .add("regionName", data.getRegion()== null ? "":data.getRegion().getRegionName() )
                    .add("regionId", data.getRegion()== null ? "":data.getRegion().getId());
 
@@ -114,19 +119,19 @@ public class LookupEndpoint
              return ApiResponse.error("Specified Volunteer Not Found");
          }
          
-        List<PollingStation> dataList = QryBuilder.get(crudService.getEm(), PollingStation.class)
-                .addObjectParamWhenNotNull(PollingStation._constituency, volunteer.getConstituency())
-                .orderByAsc(PollingStation._stationName)
+        List<ElectionPollingStation> dataList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParamWhenNotNull(ElectionPollingStation._constituency, volunteer.getConstituency())
+                .orderByAsc(ElectionPollingStation._pollingStation_stationName)
                 .printQryInfo().buildQry().getResultList();
         
         JsonArrayBuilder dataArray = Json.createArrayBuilder();
 
-        for (PollingStation data : dataList)
+        for (ElectionPollingStation data : dataList)
        {
            JsonObjectBuilder object = Json.createObjectBuilder()
-                   .add("id", data.getId())
-                   .add("itemName", data.getStationName()== null ? "":data.getStationName() )
-                   .add("stationCode", data.getStationCode()== null ? "":data.getStationCode() )
+                   .add("id", data.getPollingStation().getId())
+                   .add("itemName", data.getPollingStation().getStationName()== null ? "":data.getPollingStation().getStationName() )
+                   .add("stationCode", data.getPollingStation().getStationCode()== null ? "":data.getPollingStation().getStationCode() )
                    .add("constituencyId", data.getConstituency() == null ? "":data.getConstituency().getId())
                    .add("constituencyName", data.getConstituency() == null ? "":data.getConstituency().getConstituencyName());
 

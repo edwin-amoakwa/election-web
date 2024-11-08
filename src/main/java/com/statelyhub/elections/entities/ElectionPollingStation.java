@@ -21,11 +21,11 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "election_polling_station")
-public class ElectionPollingStation extends UniqueEntityModel3 {
+public class ElectionPollingStation extends SumamarySet {
 
-    public static final String _votersCount = "votersCount";
-    @Column(name = "voters_count")
-    private int votersCount;
+//    public static final String _votersCount = "votersCount";
+//    @Column(name = "voters_count")
+//    private int votersCount;
     
     public static final String _validVotes = "validVotes";
     @Column(name = "valid_votes")
@@ -68,23 +68,22 @@ public class ElectionPollingStation extends UniqueEntityModel3 {
     private ConstituencyElection constituencyElection;
     
     
-      public static final String _resultSubmission = "resultSubmission";
-    @JoinColumn(name = "result_submission")
-    @ManyToOne
-    private ResultSubmission resultSubmission;
+      public static final String _resultSubmission = "resultSubmissionId";
+      @Column(name = "result_submission")
+    private String resultSubmissionId;
     
       public static final String _resultStatus = "resultStatus";
     @Column(name = "result_status")
     @Enumerated(EnumType.STRING)
     private ResultStatus resultStatus;
 
-    public int getVotersCount() {
-        return votersCount;
-    }
-
-    public void setVotersCount(int votersCount) {
-        this.votersCount = votersCount;
-    }
+//    public int getVotersCount() {
+//        return votersCount;
+//    }
+//
+//    public void setVotersCount(int votersCount) {
+//        this.votersCount = votersCount;
+//    }
 
     public Election getElection() {
         return election;
@@ -118,12 +117,12 @@ public class ElectionPollingStation extends UniqueEntityModel3 {
         this.constituencyElection = constituencyElection;
     }
 
-    public ResultSubmission getResultSubmission() {
-        return resultSubmission;
+    public String getResultSubmissionId() {
+        return resultSubmissionId;
     }
 
-    public void setResultSubmission(ResultSubmission resultSubmission) {
-        this.resultSubmission = resultSubmission;
+    public void setResultSubmissionId(String resultSubmissionId) {
+        this.resultSubmissionId = resultSubmissionId;
     }
 
     public int getValidVotes() {
