@@ -120,7 +120,7 @@ public class ResultSubmissionEndpoint {
             ElectionResultSetDto electionResultSetDto = new ElectionResultSetDto();
             electionResultSetDto.setElectionType(volunteerBucket.getElectionType());
             
-            SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+            SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultSet.class)
                     .addObjectParam(SubmittedResultSet._electionType, volunteerBucket.getElectionType())
                     .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
                     .getSingleResult(SubmittedResultSet.class);
@@ -132,7 +132,7 @@ public class ResultSubmissionEndpoint {
                 resultSet.setElectionType(volunteerBucket.getElectionType());
                 crudService.save(resultSet);
             }
-            
+             
             electionResultSetDto.setResultSetId(resultSet.getId());
             
             electionResultSetDto.setValidVotes(resultSet.getValidVotes());

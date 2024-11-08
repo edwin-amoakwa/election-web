@@ -30,6 +30,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import com.google.gson.JsonParser;
+import com.stately.common.data.ProcResponse;
+import com.stately.common.security.SecurityHash;
+import com.statelyhub.elections.utils.JsonUtils;
+import com.statelyhub.elections.utils.ResponseMapper;
 
 /**
  *
@@ -68,11 +73,8 @@ public class VolunteerEndpoint
             {
                 
                 String msg = "Thank you for Registering. We will revert when you application is processed via SMS";
-                 SmsService.SMS.sendSms(volunteer.getMobileNo(), msg);
+                SmsService.SMS.sendSms(volunteer.getMobileNo(), msg);
                 
-                 
-                 
-                 
                 return ApiResponse.ok(msg,volunteerService.loginResponse(volunteer));
             }
             
@@ -81,6 +83,124 @@ public class VolunteerEndpoint
         }
         
         return ApiResponse.error("Error Processing Data!!");
+    }
+    
+    @POST
+    @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(String requestBody) 
+    {
+        com.google.gson.JsonObject jsonObject = new JsonParser().parse(requestBody).getAsJsonObject();
+        String phoneNumber = JsonUtils.getAsString(jsonObject, "phoneNumber");
+        String password = JsonUtils.getAsString(jsonObject, "password");
+        
+        if (StringUtil.isNullOrEmpty(phoneNumber)) {
+            return ApiResponse.error("Input Phone Number");
+        }
+        if (StringUtil.isNullOrEmpty(password)) {
+            return ApiResponse.error("Input Password");
+        }
+        
+        String hashedPassword = SecurityHash.getInstance().shaHash(password);
+        
+        Volunteer volunteer = QryBuilder.get(crudService.getEm(), Volunteer.class)
+                .addObjectParam(Volunteer._mobileNo, phoneNumber)
+                .addObjectParam(Volunteer._userPassword, hashedPassword)
+                .printQryInfo().getSingleResult(Volunteer.class);
+        if (volunteer == null) 
+        { 
+            return ApiResponse.error("Incorrect Login Details");
+        } 
+        
+        LoginResponse response = volunteerService.loginResponse(volunteer);
+        
+        return ApiResponse.ok(response);
+    }
+    
+    @POST
+    @Path("/update-pin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updatePIN(@BeanParam DefaultHeaders qryparam, String requestBody) 
+    {
+        com.google.gson.JsonObject jsonObject = new JsonParser().parse(requestBody).getAsJsonObject();
+//        String phoneNumber = JsonUtils.getAsString(jsonObject, "phoneNumber");
+        String oldPassword = JsonUtils.getAsString(jsonObject, "oldPassword");
+        String newPassword = JsonUtils.getAsString(jsonObject, "newPassword");
+        String confirmPassword = JsonUtils.getAsString(jsonObject, "confirmPassword");
+        
+        if (StringUtil.isNullOrEmpty(oldPassword)) {
+            return ApiResponse.error("Input Current Password");
+        }
+        if (StringUtil.isNullOrEmpty(newPassword)) {
+            return ApiResponse.error("Input New Password");
+        }
+        if (StringUtil.isNullOrEmpty(confirmPassword)) {
+            return ApiResponse.error("Confirm New Password");
+        }
+        
+        if(!newPassword.equals(confirmPassword))
+        {
+            return ApiResponse.error("New and Confirm Passwords Do Not Match");
+        }
+        
+        String hashedPassword_old = SecurityHash.getInstance().shaHash(oldPassword);
+        
+        Volunteer volunteer = QryBuilder.get(crudService.getEm(), Volunteer.class)
+                .addObjectParam(Volunteer._id, qryparam.getUserId())
+                .addObjectParam(Volunteer._userPassword, hashedPassword_old)
+                .getSingleResult(Volunteer.class);
+        if (volunteer == null) 
+        {
+            return ApiResponse.ok("Incorrect Current Passowrd");
+        }
+        
+        String hashedPassword_new = SecurityHash.getInstance().shaHash(newPassword);
+        
+        volunteer.setUserPassword(hashedPassword_new);
+
+        volunteer = crudService.save(volunteer);
+        if(volunteer == null)
+        {
+            return ApiResponse.error("Error Updating PIN");
+        }
+        
+        return ApiResponse.ok("PIN Updated Successfully");
+    }
+    
+    @POST
+    @Path("/reset-pin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response resetPIN(String requestBody) 
+    {
+        com.google.gson.JsonObject jsonObject = new JsonParser().parse(requestBody).getAsJsonObject();
+        String phoneNumber = JsonUtils.getAsString(jsonObject, "phoneNumber");
+        
+        if (StringUtil.isNullOrEmpty(phoneNumber)) {
+            return ApiResponse.error("Input Phone Number");
+        }
+        
+        String msg = "A PIN Reset Confirmation Message Will Be Sent to Your Phone Contact "
+                + "If An Account Exists With The Specified Phone Contact";
+        
+        Volunteer volunteer = QryBuilder.get(crudService.getEm(), Volunteer.class)
+//                .addObjectParam(Volunteer._id, qryparam.getUserId())
+                .addObjectParam(Volunteer._mobileNo, phoneNumber)
+                .getSingleResult(Volunteer.class);
+        if (volunteer == null) 
+        {
+            return ApiResponse.ok(msg);
+        }
+        
+        ProcResponse response = volunteerService.resetVolunteerPassword(volunteer);
+        if(!response.isSuccess())
+        {
+            return ResponseMapper.toResponse(response);
+        }
+        
+        return ApiResponse.ok(msg);
     }
     
     public MappingResult<Volunteer> toEntity(Volunteer record,VolunteerDto dto)
