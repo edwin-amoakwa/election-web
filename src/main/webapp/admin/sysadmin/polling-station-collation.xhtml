@@ -6,7 +6,8 @@
                 template="./../template.xhtml" 
                 xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
                 xmlns:election="jakarta.faces.composite/election"
-                xmlns:c="jakarta.tags.core">
+                xmlns:c="jakarta.tags.core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:define name="pageTitle">
         #{msg.constituency} Collation Center
@@ -197,10 +198,31 @@
             <div class="col-lg-7">
                 <h:panelGroup id="stationResult">
 
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h3>#{pollingStationCollationController.electionPollingStation.pollingStation.stationCode} - #{pollingStationCollationController.electionPollingStation.pollingStation.stationName}</h3>
+                        </div>
+                    </div>
 
-                    <h3>#{constituencyCollationController.electionPollingStation.pollingStation.stationCode} - #{constituencyCollationController.electionPollingStation.pollingStation.stationName}</h3>
-
-                    <c:forEach items="#{constituencyCollationController.resultsList}" var="electionTypeContainer">
+                    <h:form>
+                        <label style="font-size:14px;">Toggle to Input Votes</label>
+                        <p:toggleSwitch value="#{pollingStationCollationController.inputVotes}" style="margin-left:3px;">
+                            <!--<p:ajax listener="{pollingStationCollationController.addMessage}" update="msg"/>-->
+                            <!--<p:ajax process="@this" update="stationResult"/>-->
+                            <p:ajax update="stationResult"/>
+                        </p:toggleSwitch>
+                        <p:commandButton value="Save Changes" 
+                                style="margin-left:3px;"
+                                action="#{pollingStationCollationController.saveResults()}"
+                                rendered="false"/>
+                        <span style="margin-left:3px;" jsf:rendered="#{pollingStationCollationController.inputVotes}">
+                            <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
+                            <i>Press the Enter Key to Update Record After Input</i>
+                        </span>
+                    </h:form>
+                    <br/>
+                    
+                    <c:forEach items="#{pollingStationCollationController.resultsList}" var="electionTypeContainer">
 
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -238,16 +260,26 @@
                                         </p:column>
 
                                         <p:column headerText="#{msg.input_result}">
-                                            <h:outputText value="#{result.inputResult}" >
+                                            <h:outputText value="#{result.inputResult}" 
+                                                rendered="#{!pollingStationCollationController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
+                                            <p:inputNumber value="#{result.inputResult}"
+                                                    rendered="#{pollingStationCollationController.inputVotes}" >
+                                                <p:ajax event="change" process="@this" listener="#{pollingStationCollationController.recordUpdated(result)}"/>
+                                            </p:inputNumber>
                                         </p:column>
 
                                         <p:column headerText="#{msg.official}">
-                                            <h:outputText value="#{result.officialResult}" >
+                                            <h:outputText value="#{result.officialResult}" 
+                                                rendered="#{!pollingStationCollationController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
-                                        </p:column>
+                                            <p:inputNumber value="#{result.officialResult}"
+                                                    rendered="#{pollingStationCollationController.inputVotes}" >
+                                                <p:ajax event="change" process="@this" listener="#{pollingStationCollationController.recordUpdated(result)}"/>
+                                            </p:inputNumber>
+                                        </p:column> 
 
                                         <p:column headerText="#{msg.submitted}">
                                             <h:outputText value="#{result.submittedResult}" >
