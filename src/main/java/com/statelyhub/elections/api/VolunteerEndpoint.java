@@ -5,12 +5,10 @@
 package com.statelyhub.elections.api;
 
 import com.stately.common.data.MappingResult;
-import com.stately.common.sms.SmsProvider;
 import com.stately.common.sms.SmsService;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
-import com.statelyhub.elections.Constant;
 import com.statelyhub.elections.constants.VolunteerApprovalStatus;
 import com.statelyhub.elections.constants.VolunteerClassification;
 import com.statelyhub.elections.dto.LoginResponse;
@@ -18,7 +16,6 @@ import com.statelyhub.elections.dto.VolunteerDto;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.PollingStation;
 import com.statelyhub.elections.entities.Volunteer;
-import com.statelyhub.elections.services.AppConfigService;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.VolunteerService;
 import jakarta.ejb.Stateless;

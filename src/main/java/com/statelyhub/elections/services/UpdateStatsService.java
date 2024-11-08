@@ -94,7 +94,7 @@ public class UpdateStatsService {
     @Asynchronous
     public void initConstituencyContestants(ConstituencyElection constituency, PoliticalParty party, ElectionType electionType) {
 
-        System.out.println("--doing "+electionType+" for "+party.getInitials()+" : party.getPartyType() = "+party.getPartyType());
+        System.out.println("--doing "+electionType+" for "+party.getInitials()+" : party.getPartyType() = "+party.getPartyType()+" : constituency = "+constituency.getConstituency().getConstituencyName());
         if (party.getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY) {
             //independent parties will not be added to eah consituency
             return;

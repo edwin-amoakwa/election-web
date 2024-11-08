@@ -67,8 +67,8 @@ public class ParliamentaryCandidateController implements Serializable {
         this.clearElectionContestant();
         electionContestantsList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
+                .addObjectParam(ElectionContestant._electionType, ElectionType.PARLIAMENTARY)
                 .buildQry().getResultList();
-        
     }
 
 
