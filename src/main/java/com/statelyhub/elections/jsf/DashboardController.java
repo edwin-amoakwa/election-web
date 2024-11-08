@@ -9,12 +9,15 @@ import com.statelyhub.elections.jsf.UserSession;
 import com.statelyhub.old.entities.BillStatus;
 import com.statelyhub.elections.services.CrudService;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.Election;
+import com.statelyhub.elections.entities.ElectionPollingStation;
 import java.io.Serializable;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import java.util.List;
 
 
 /**
@@ -30,28 +33,39 @@ public class DashboardController implements Serializable
     @Inject CrudService crudService;
     @Inject UserSession userSession;
     
-    public DashboardController()
-    {
-    }
     
-    private int totalPvs;
-    private int pendingPvs;
-    private int approvedPvs;
+    private int totalPollingStation;
+    private int pendingPollingStations;
+    private int finalisedPollingStations;
     private int rejectedPvs;
     
     @PostConstruct
     public void init()
     {
-        totalPvs = getTotalMembership(null);
-        pendingPvs = getTotalMembership(BillStatus.PENDING);
-        approvedPvs = getTotalMembership(BillStatus.APPROVED);
-        rejectedPvs = getTotalMembership(BillStatus.REJECTED);
+        totalPollingStation = getTotalMembership(null);
+        pendingPollingStations = getTotalMembership(ResultStatus.PENDING);
+        finalisedPollingStations = getTotalMembership(ResultStatus.FINALISED);
+        
+        
+//        Object[] result = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+//                .addReturnField("COUNT(e.id)")
+//                .addReturnField("e."+ElectionPollingStation._resultStatus)
+//                .addGroupBy(ElectionPollingStation._resultStatus)
+//                .getSingleResult(Object[].class);
+//        
+//        if(result != null)
+//        {
+//            
+//        }
+
+        
+        
     }
     
-    public int getTotalMembership(BillStatus pvStatus)
+    public int getTotalMembership(ResultStatus resultStatus)
     {
-        QryBuilder builder = QryBuilder.get(crudService.getEm(), Election.class);
-//        builder.addObjectParam(Bill._unit, userSession.getInstitution());
+        QryBuilder builder = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class);
+        builder.addObjectParamWhenNotNull(ElectionPollingStation._resultStatus, resultStatus);
 //        
 //        if (pvStatus != null)
 //        {
@@ -61,19 +75,19 @@ public class DashboardController implements Serializable
         return builder.count();
     }
 
-    public int getTotalPvs()
+    public int getTotalPollingStation()
     {
-        return totalPvs;
+        return totalPollingStation;
     }
 
-    public int getPendingPvs()
+    public int getPendingPollingStations()
     {
-        return pendingPvs;
+        return pendingPollingStations;
     }
 
-    public int getApprovedPvs()
+    public int getFinalisedPollingStations()
     {
-        return approvedPvs;
+        return finalisedPollingStations;
     }
 
     public int getRejectedPvs()

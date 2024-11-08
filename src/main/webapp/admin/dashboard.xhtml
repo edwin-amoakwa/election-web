@@ -4,7 +4,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately" >
+      xmlns:stately="jakarta.faces.composite/stately">
     
 
 <!-- Main content -->
@@ -15,9 +15,9 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-                <h3>#{dashboardController.totalPvs}</h3>
+                <h3>#{dashboardController.totalPollingStation}</h3>
 
-              <p>Total PVs</p>
+              <p>Total Polling Stations</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -30,9 +30,13 @@
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-                <h3><stately:integerDisplay value="#{dashboardController.pendingPvs}" /><sup style="font-size: 20px"></sup></h3>
+                <h3>
+                    <h:outputText value="#{dashboardController.pendingPollingStations}">
+                        <f:convertNumber pattern="#,##0" />
+                    </h:outputText>
+                    <sup style="font-size: 20px"></sup></h3>
 
-              <p>Pending PVs</p>
+              <p>Pending Collations</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -45,9 +49,13 @@
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-                <h3><stately:integerDisplay value="#{dashboardController.approvedPvs}" /></h3>
+                <h3>
+                    <h:outputText value="#{dashboardController.finalisedPollingStations}">
+                        <f:convertNumber pattern="#,##0" />
+                    </h:outputText>
+                </h3>
 
-              <p>Approved PVs</p>
+              <p>Completed Stations</p>
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
@@ -60,9 +68,13 @@
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-                <h3><stately:integerDisplay value="#{dashboardController.rejectedPvs}" /></h3>
+                <h3>
+                 <h:outputText value="#{(dashboardController.finalisedPollingStations / dashboardController.totalPollingStation) * 100}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                </h3>
 
-              <p>Rejected PVs</p>
+              <p>Percentage Completed</p>
             </div>
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
