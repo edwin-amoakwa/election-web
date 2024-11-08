@@ -63,6 +63,12 @@ public class PoliticalParty extends UniqueEntityModel3 {
         this.partyName = partyName;
     }
 
+    public boolean isPoliticalParty()
+    {
+      if(getPartyType() == null)return false;
+      return getPartyType().isPoliticalParty();   
+    }
+    
     @Override
     public String toString() {
         return initials;

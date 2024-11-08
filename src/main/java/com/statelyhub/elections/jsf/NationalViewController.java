@@ -81,7 +81,7 @@ public class NationalViewController implements Serializable {
     
     public void updateNationalStats()
     {
-        dd
+//        dd
     }
     
     

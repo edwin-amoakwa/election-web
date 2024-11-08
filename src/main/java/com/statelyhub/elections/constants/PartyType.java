@@ -28,6 +28,11 @@ public enum PartyType implements MessageResolvable
         this.label = label;
     }
 
+    public boolean isPoliticalParty()
+    {
+      return this == POLITICAL_PARTY;   
+    }
+    
     @Override
     public String getCode()
     {
