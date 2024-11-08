@@ -189,6 +189,8 @@ public class ConstituencyCollationController implements Serializable {
         electionPollingStation.setResultSubmissionId(resultSubmission.getId());
 
         resultSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
+        
+        electionResultService.updateResultSet(resultSubmission, electionPollingStation);
 
         crudService.saveEntity(resultSubmission);
         crudService.saveEntity(electionPollingStation);

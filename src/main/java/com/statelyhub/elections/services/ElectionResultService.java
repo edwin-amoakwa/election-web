@@ -14,6 +14,7 @@ import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.Result;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
@@ -101,13 +102,12 @@ public class ElectionResultService {
     public void updatePollingStationSourceChange(ConstituencyElection ce) {
 
         List<PollingStationResult> pollingStationResultsList = QryBuilder.get(crudService.getEm(), PollingStationResult.class)
-//                .addObjectParam(PollingStationResult._constituencyElection, ce)
+                //                .addObjectParam(PollingStationResult._constituencyElection, ce)
                 .addObjectParam(PollingStationResult._election, ce.getElection())
                 .addObjectParam(PollingStationResult._electionPollingStation_constituency, ce.getConstituency())
                 .buildQry().getResultList();
-        
-//        System.out.println("pollingStationResultsList.......... " + pollingStationResultsList);
 
+//        System.out.println("pollingStationResultsList.......... " + pollingStationResultsList);
         for (PollingStationResult result : pollingStationResultsList) {
 
             if (ce.getResultSource() == ResultSource.SUBMITTED) {
@@ -121,9 +121,8 @@ public class ElectionResultService {
             }
 
         }
-        
-//        System.out.println("\n\n\n\n\n-pollingStationResultsList.......... " + pollingStationResultsList);
 
+//        System.out.println("\n\n\n\n\n-pollingStationResultsList.......... " + pollingStationResultsList);
         //Run Positions for polling station
         Map<ElectionPollingStation, List<PollingStationResult>> map = pollingStationResultsList
                 .stream()
@@ -145,9 +144,8 @@ public class ElectionResultService {
         runConstituency(ce, ElectionType.PRESIDENTIAL);
         runConstituency(ce, ElectionType.PARLIAMENTARY);
     }
-    
-    
-      public void runConstituency(ConstituencyElection ce, ElectionType electionType) {
+
+    public void runConstituency(ConstituencyElection ce, ElectionType electionType) {
         List<Object[]> summedResult = QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                 .addReturnField("e." + PollingStationResult._electionContestant)
                 .addReturnField("SUM(e." + PollingStationResult._acceptedResult + ")")
@@ -155,29 +153,25 @@ public class ElectionResultService {
                 .addObjectParam(PollingStationResult._constituencyElection, ce)
                 .addObjectParam(PollingStationResult._electionType, electionType)
                 .buildQry().getResultList();
-        
-//        StringUtil.printObjectListArray(summedResult);
 
+//        StringUtil.printObjectListArray(summedResult);
         Map<ElectionContestant, Integer> map = new HashMap<>(summedResult.size());
 
         for (Object[] objects : summedResult) {
-            
-           
-            
+
             ElectionContestant contestant = (ElectionContestant) objects[0];
             int total = ObjectValue.get_intValue(objects[1]);
             map.put(contestant, total);
-            
-            
-             System.out.println(contestant.getId() + "  ----   " +contestant.getParty() + " ........" + total);
+
+            System.out.println(contestant.getId() + "  ----   " + contestant.getParty() + " ........" + total);
         }
 
         List<ElectionContestant> contestantsList = electionService.cecs(ce, electionType);
 //          System.out.println("map >>>>>>>>> " + map);
         for (ElectionContestant contestant : contestantsList) {
-           
+
             Integer votes = map.get(contestant);
-            
+
 //             System.out.println(contestant.getId() + "   ...... " + votes );
             if (votes != null) {
                 contestant.setAcceptedResult(votes);
@@ -185,15 +179,13 @@ public class ElectionResultService {
         }
         runPosition(contestantsList);
         runPct(contestantsList, ce.getVotersCount());
-        
-          for (ElectionContestant electionContestant : contestantsList) {
-              
-//              System.out.println(electionContestant.getParty() + " ........ " + electionContestant.getAcceptedResult());
-              crudService.save(electionContestant);
-          }
-     
 
-        
+        for (ElectionContestant electionContestant : contestantsList) {
+
+//              System.out.println(electionContestant.getParty() + " ........ " + electionContestant.getAcceptedResult());
+            crudService.save(electionContestant);
+        }
+
     }
 
     public void runPosition(List<? extends Result> pollingStationResultsList) {
@@ -223,20 +215,35 @@ public class ElectionResultService {
     }
     
     
-    
-    public void updateResultSet(ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation)
-    {
-               SubmittedResultSet presidentail = QryBuilder.get(crudService.getEm(), SubmittedResultDto.class)
+        public void updateResultSet(ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
+            updateResultSet(ElectionType.PRESIDENTIAL, resultSubmission, electionPollingStation);
+            updateResultSet(ElectionType.PARLIAMENTARY, resultSubmission, electionPollingStation);
+    }
+
+    public void updateResultSet(ElectionType electionType,ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
+        SubmittedResultSet submittedResultSet = QryBuilder.get(crudService.getEm(), SubmittedResultSet.class)
+                .addObjectParam(SubmittedResultSet._electionType, ElectionType.PRESIDENTIAL)
+                .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
+                .getSingleResult(SubmittedResultSet.class);
+
+        if (submittedResultSet != null) 
+        {
+            PollingStationResultSet resultSet = QryBuilder.get(crudService.getEm(), PollingStationResultSet.class)
                     .addObjectParam(SubmittedResultSet._electionType, ElectionType.PRESIDENTIAL)
                     .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
-                    .getSingleResult(SubmittedResultSet.class);
-               
-               
-               if(presidentail != null)
-               {
-//                   electionPollingStation.set
-               }
+                    .getSingleResult(PollingStationResultSet.class);
+            
+            if(resultSet == null)
+            {
+                resultSet = new PollingStationResultSet();
+                resultSet.setElectionType(ElectionType.PRESIDENTIAL);
+                resultSet.setResultSubmissionId(resultSubmission.getId());
+            }
+            /// add the rest
+            resultSet.setRejectedBallots(submittedResultSet.getRejectedBallots());
+            
+            crudService.save(resultSet);
+        }
     }
-    
-    
+
 }
