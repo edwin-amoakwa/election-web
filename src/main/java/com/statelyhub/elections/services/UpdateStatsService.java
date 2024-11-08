@@ -94,10 +94,12 @@ public class UpdateStatsService {
     @Asynchronous
     public void initConstituencyContestants(ConstituencyElection constituency, PoliticalParty party, ElectionType electionType) {
 
+        System.out.println("--doing "+electionType+" for "+party.getInitials()+" : party.getPartyType() = "+party.getPartyType());
         if (party.getPartyType() == PartyType.INDEPENDENT_CANDIDATE && electionType == ElectionType.PARLIAMENTARY) {
             //independent parties will not be added to eah consituency
             return;
         }
+        System.out.println("--here here passed");
 
         ElectionContestant contestant = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._party, party)
@@ -105,14 +107,35 @@ public class UpdateStatsService {
                 .addObjectParam(ElectionContestant._constituencyElection, constituency)
                 .getSingleResult(ElectionContestant.class);
 
-        if (contestant == null) {
+        if (contestant == null) 
+        {
             contestant = new ElectionContestant();
             contestant.setParty(party);
             contestant.setConstituencyElection(constituency);
             contestant.setElectionType(electionType);
 //            contestant.setResultStatus(ResultStatus.PENDING);
-            crudService.save(contestant);
+//            crudService.save(contestant);
+        } 
+        
+        try 
+        {
+            System.out.println("contestant.getParty() = "+contestant.getParty());
+            if(contestant.getParty() == null)
+            {
+                contestant.setCandidateType(PartyType.INDEPENDENT_CANDIDATE);
+            }
+            else if(contestant.getParty().isPoliticalParty())
+            {
+                contestant.setCandidateType(PartyType.POLITICAL_PARTY);
+            }
+            else
+            {
+                contestant.setCandidateType(PartyType.INDEPENDENT_CANDIDATE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        crudService.save(contestant);
 //        System.out.println("......... " + contestant);
 
         addContestant(constituency, contestant);

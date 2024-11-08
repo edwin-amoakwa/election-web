@@ -8,6 +8,8 @@ import com.stately.common.collection.CollectionUtils;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
+import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.PartyType;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.Region;
@@ -88,6 +90,9 @@ public class ParliamentaryCandidateController implements Serializable {
     public void clearElectionContestant()
     {
         this.electionContestant = new ElectionContestant();
+        this.electionContestant.setConstituencyElection(selectedConstituencyElection);
+        this.electionContestant.setElectionType(ElectionType.PARLIAMENTARY);
+        this.electionContestant.setCandidateType(PartyType.INDEPENDENT_CANDIDATE);   
     }
     
     public void saveElectionContestant()
@@ -119,6 +124,7 @@ public class ParliamentaryCandidateController implements Serializable {
         
         CollectionUtils.checkAdd(electionContestantsList, electionContestant);
         JsfMsg.info("Record Updated Successfully");
+        this.clearElectionContestant();
     }
     
     public void updateElectionContestant(ElectionContestant electionContestant)
@@ -138,6 +144,22 @@ public class ParliamentaryCandidateController implements Serializable {
         
         CollectionUtils.checkAdd(electionContestantsList, electionContestant);
         JsfMsg.info("Record Updated Successfully");
+    }
+    
+    public void removeElectionContestant(ElectionContestant electionContestant)
+    {  
+        try 
+        {
+            if(crudService.delete(electionContestant))
+            {
+                JsfMsg.successDelete();
+                this.electionContestantsList.remove(electionContestant);
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        JsfMsg.error("Error Removing Candidate. Contact Administrator!");
     }
     
     public Region getSelectedRegion() {

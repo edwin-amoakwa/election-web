@@ -80,10 +80,16 @@
                         </div>
                         <div class="panel-body">
 
-                            <p:panel header="Add/Edit Independent Candidate">
+                            <p:panel header="Add/Edit Candidate"
+                                     rendered="#{not empty parliamentaryCandidateController.selectedConstituencyElection}" >
                                 <h:form>
 
                                     <h:panelGrid columns="2" styleClass="spaced-table">
+                                        
+                                        <h:outputText value="Party"/>
+                                        <h:outputText value="#{parliamentaryCandidateController.electionContestant.party.initials}" 
+                                                      rendered="#{parliamentaryCandidateController.electionContestant.politicalParty}"/>
+                                        <h:outputText value="Independent" rendered="#{!parliamentaryCandidateController.electionContestant.politicalParty}"/>
                                         
                                         <h:outputText value="Candidate Name" />
                                         <h:inputText value="#{parliamentaryCandidateController.electionContestant.candidateName}" />
@@ -118,14 +124,26 @@
                                         <h:outputText value="IND" rendered="#{!electionContestants.politicalParty}"/>
                                     </p:column>
 
-                                    <p:column headerText="#{msg.name}">
-                                        <h:outputText value="#{electionContestants.candidateName}" 
-                                                      rendered="#{empty electionContestants.party}"/>
-                                        <p:inputText value="#{electionContestants.candidateName}"
-                                                rendered="#{electionContestants.politicalParty}" >
+                                    <p:column headerText="Candidate #{msg.name}">
+                                        <h:outputText value="#{electionContestants.candidateName}" />
+<!--                                        <p:inputText value="{electionContestants.candidateName}"
+                                                rendered="{electionContestants.politicalParty}" >
                                             <p:ajax event="change" process="@this" 
-                                                    listener="#{parliamentaryCandidateController.updateElectionContestant(electionContestants)}"/>
-                                        </p:inputText>
+                                                    listener="{parliamentaryCandidateController.updateElectionContestant(electionContestants)}"/>
+                                        </p:inputText>-->
+                                    </p:column>
+
+                                     <p:column headerText="#{msg.edit}">
+                                        <h:commandLink value="#{msg.edit}" styleClass="select" 
+                                                       action="#{parliamentaryCandidateController.editElectionContestant(electionContestants)}"/>
+                                     </p:column>
+                                    
+                                    <p:column headerText="Remove">
+                                        <h:commandLink value="remove"
+                                                       action="#{parliamentaryCandidateController.removeElectionContestant(electionContestants)}"
+                                                       rendered="#{!electionContestants.politicalParty}"
+                                                       onclick="return confirm('Remove?');"
+                                                       style="color:#d14;"/>
                                     </p:column>
 
                                 </p:dataTable>

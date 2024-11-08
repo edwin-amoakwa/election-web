@@ -84,8 +84,12 @@ public class ElectionDetailController implements Serializable {
         List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
                 .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
 
-        for (ConstituencyElection constituency : constituencys) {
+        for (ConstituencyElection constituency : constituencys) 
+        {
+            System.out.println("\n==turn of constituency = "+constituency.getConstituency().getConstituencyName());
+            
             for (PartyElection partyElection : partyElectionsList) {
+                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
                 updateStatsService.initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PRESIDENTIAL);
                 updateStatsService.initConstituencyContestants(constituency, partyElection.getParty(), ElectionType.PARLIAMENTARY);
             }
