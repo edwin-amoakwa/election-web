@@ -5,7 +5,6 @@
  */
 package com.statelyhub.elections.entities;
 
-import com.stately.modules.jpa2.UniqueEntityModel3;
 import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.model.ElectionTypeResult;
@@ -25,8 +24,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "result_submissions")
-public class ResultSubmission extends UniqueEntityModel3 {
-
+public class ResultSubmission extends  ResultSet {
+    
+    
     public static final String _submissionLevel = "submissionLevel";
     @Column(name = "submission_level")
     @Enumerated(EnumType.STRING)
@@ -90,5 +90,7 @@ public class ResultSubmission extends UniqueEntityModel3 {
     public void setElectionResultsList(List<ElectionTypeResult> electionResultsList) {
         this.electionResultsList = electionResultsList;
     }
+    
 
+    
 }

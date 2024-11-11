@@ -11,15 +11,23 @@ import java.util.List;
  *
  * @author edwin
  */
-public class ElectionResultSetDto 
-{
+public class ElectionResultSetDto extends BaseDto{
+
+    
+        private String volunteerId;
+    private String pollingStationId;
+    private String epsId;
+    
+    private List<AttachmentDto> attachmentsList;
+
+    
     private ElectionType electionType;
     private String resultSetId;
     private int votesCast;
     private int rejectedBallots;
     private int spoiltBallots;
     private int validVotes;
-    
+
     private List<SubmittedResultDto> candidatesList;
 
     public ElectionType getElectionType() {
@@ -77,5 +85,40 @@ public class ElectionResultSetDto
     public void setResultSetId(String resultSetId) {
         this.resultSetId = resultSetId;
     }
+
+    public String getVolunteerId() {
+        return volunteerId;
+    }
+
+    public void setVolunteerId(String volunteerId) {
+        this.volunteerId = volunteerId;
+    }
+
+    public String getPollingStationId() {
+        return pollingStationId;
+    }
+
+    public void setPollingStationId(String pollingStationId) {
+        this.pollingStationId = pollingStationId;
+    }
+
+    public String getEpsId() {
+        return epsId;
+    }
+
+    public void setEpsId(String epsId) {
+        this.epsId = epsId;
+    }
+
+
+
+    public List<AttachmentDto> getAttachmentsList() {
+        return attachmentsList;
+    }
+
+    public void setAttachmentsList(List<AttachmentDto> attachmentsList) {
+        this.attachmentsList = attachmentsList;
+    }
+
     
 }

@@ -28,7 +28,7 @@ public enum PartyType implements MessageResolvable
         this.label = label;
     }
 
-    public boolean isPoliticalParty()
+    public boolean isPoliticalPartyType()
     {
       return this == POLITICAL_PARTY;   
     }

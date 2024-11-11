@@ -39,7 +39,7 @@
                     <p:dataTable value="#{parliamentaryCandidateController.constituencyElectionList}" var="constituencyElection" 
                                  rows="25" paginator="true" paginatorPosition="bottom">
 
-                        <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains">
+                        <p:column headerText="#{msg.code}" filterBy="#{constituencyElection.region.regionName}" filterMatchMode="contains" rendered="false">
                             <h:outputText value="#{constituencyElection.region.regionName}" />
                         </p:column>
 
@@ -118,6 +118,14 @@
                                     <p:rowExpansion>
                                         #{electionContestants.id}
                                     </p:rowExpansion>
+                                    
+                                    <p:column headerText="#{msg.no}">
+                                              <h:outputText value="#{electionContestants.viewOrder}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg.type}">
+                                        <h:outputText value="#{electionContestants.candidateType.label}" />
+                                    </p:column>
 
                                     <p:column headerText="#{msg.party}">
                                         <h:outputText value="#{electionContestants.party.initials}" rendered="#{electionContestants.politicalParty}"/>

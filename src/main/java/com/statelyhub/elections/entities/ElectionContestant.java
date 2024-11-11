@@ -35,7 +35,7 @@ public class ElectionContestant extends Result {
     public boolean isPoliticalParty()
     {
       if(getCandidateType()== null)return false;
-      return getCandidateType().isPoliticalParty();   
+      return getCandidateType().isPoliticalPartyType();   
     }
 
     public PoliticalParty getParty() {

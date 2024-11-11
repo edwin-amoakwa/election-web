@@ -66,7 +66,7 @@ public class PoliticalParty extends UniqueEntityModel3 {
     public boolean isPoliticalParty()
     {
       if(getPartyType() == null)return false;
-      return getPartyType().isPoliticalParty();   
+      return getPartyType().isPoliticalPartyType();   
     }
     
     @Override

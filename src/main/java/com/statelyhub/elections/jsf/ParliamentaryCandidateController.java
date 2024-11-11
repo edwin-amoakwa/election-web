@@ -74,8 +74,8 @@ public class ParliamentaryCandidateController implements Serializable {
 
     public void initialise()
     {
-        for (ElectionContestant electionContestant : electionContestantsList) {
-             updateStatsService.addContestant(selectedConstituencyElection, electionContestant);
+        for (ElectionContestant contestant : electionContestantsList) {
+             updateStatsService.addContestant(selectedConstituencyElection, contestant);
         }
         JsfMsg.msg(true);
 //        electionResultService.runConstituency(selectedConstituencyElection);

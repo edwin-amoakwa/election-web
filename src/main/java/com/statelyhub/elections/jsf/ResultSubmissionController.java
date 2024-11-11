@@ -37,18 +37,17 @@ import java.util.stream.Collectors;
  * @author edwin
  */
 @SessionScoped
-@Named(value = "constituencyCollationController")
-public class ConstituencyCollationController implements Serializable {
+@Named(value = "resultSubmissionController")
+public class ResultSubmissionController implements Serializable {
 
     @Inject
     private CrudService crudService;
-
-    @Inject
-    private ElectionService electionService;
     
         @Inject
-    private UserSession userSession;
+    private ElectionService electionService;
 
+    @Inject
+    private UserSession userSession;
 
     @Inject
     private ElectionResultService electionResultService;
@@ -73,13 +72,15 @@ public class ConstituencyCollationController implements Serializable {
 
     private List<ElectionPollingStation> completedPollingStationsList;
     private List<ElectionPollingStation> pendingPollingStationsList;
+    
+    private List<SubmittedResult> submittedResultsList;
 
     private ConstituencyElection selectedConstituencyElection;
+    private ResultSubmission selectedSubmission;
     
     private boolean inputVotes;
     
-    
-        @PostConstruct
+    @PostConstruct
     public void init()
     {
         if(userSession.getAccountUR().getUserDomain() == UserDomain.CONSTITUENCY)
@@ -87,7 +88,27 @@ public class ConstituencyCollationController implements Serializable {
             selectedConstituencyElection = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                     .addObjectParam(ConstituencyElection._constituency, userSession.getAccountUR().getConstituency())
                     .getSingleResult(ConstituencyElection.class);
+            
+            System.out.println("..... " + selectedConstituencyElection);
         }
+        
+        referesh();
+    }
+    
+    public void referesh()
+    {
+        pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParam(ElectionPollingStation._constituencyElection, selectedConstituencyElection)
+                .orderByDesc(ElectionPollingStation._pollingStation_stationCode)
+                .buildQry().getResultList();
+        
+        loadUnProcessedSubmissions();
+        
+    }
+    
+    public void acceptResult()
+    {
+        System.out.println("/// // reslt submitted");
     }
     
     public void searchPollingStation() {
@@ -106,7 +127,14 @@ public class ConstituencyCollationController implements Serializable {
     
     public void pickSubmission(ResultSubmission resultSubmission)
     {
-        selectPollingStation(resultSubmission.getElectionPollingStation());
+        this.selectedSubmission = resultSubmission;
+        
+        submittedResultsList = QryBuilder.get(crudService.getEm(), SubmittedResult.class)
+                .addObjectParam(SubmittedResult._resultSubmission, resultSubmission)
+                .orderByAsc(SubmittedResult._viewOrder)
+                .buildQry().getResultList();
+        
+//        selectPollingStation(resultSubmission.getElectionPollingStation());
     }
     
     public void loadUnProcessedSubmissions()
@@ -340,5 +368,15 @@ public class ConstituencyCollationController implements Serializable {
     public List<ResultSubmission> getUnprocessedSubmissionsList() {
         return unprocessedSubmissionsList;
     }
+
+    public ResultSubmission getSelectedSubmission() {
+        return selectedSubmission;
+    }
+
+    public List<SubmittedResult> getSubmittedResultsList() {
+        return submittedResultsList;
+    }
+    
+    
 
 }

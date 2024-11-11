@@ -4,6 +4,7 @@
  */
 package com.statelyhub.elections.dto;
 
+import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.elections.constants.VolunteerApprovalStatus;
 import com.statelyhub.elections.constants.VolunteerClassification;
 
@@ -21,6 +22,7 @@ public class VolunteerDto extends BaseDto
     private String regionId;
     private String regionName;
     private String pollingStationId;
+    private String pollingStationCode;
     private String pollingStationName;
     private VolunteerClassification classification;
     private String classificationName;
@@ -28,6 +30,7 @@ public class VolunteerDto extends BaseDto
     private String approvalStatusName;
     private String processedById;
     private String processedByName;
+    private UserDomain userDomain;
 
     public String getVolunteerName() {
         return volunteerName;
@@ -148,6 +151,22 @@ public class VolunteerDto extends BaseDto
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public UserDomain getUserDomain() {
+        return userDomain;
+    }
+
+    public void setUserDomain(UserDomain userDomain) {
+        this.userDomain = userDomain;
+    }
+
+    public String getPollingStationCode() {
+        return pollingStationCode;
+    }
+
+    public void setPollingStationCode(String pollingStationCode) {
+        this.pollingStationCode = pollingStationCode;
     }
     
     

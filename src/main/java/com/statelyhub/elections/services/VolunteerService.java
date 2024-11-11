@@ -8,6 +8,7 @@ import com.stately.common.data.ProcResponse;
 import com.stately.common.security.SecurityHash;
 import com.stately.common.sms.SmsService;
 import com.stately.common.utils.StringUtil;
+import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.elections.constants.VolunteerApprovalStatus;
 import com.statelyhub.elections.dto.LoginResponse;
 import com.statelyhub.elections.dto.VolunteerDto;
@@ -23,46 +24,41 @@ import jakarta.inject.Inject;
 @Stateless
 public class VolunteerService {
 
-    @Inject private CrudService crudService;
-    @Inject private UserSession userSession;
+    @Inject
+    private CrudService crudService;
+    @Inject
+    private UserSession userSession;
 
     public LoginResponse loginResponse(Volunteer volunteer) {
         return new LoginResponse(volunteer.getId(), toDto(volunteer));
     }
-    
-    public ProcResponse approveVolunteer(Volunteer volunteer)
-    {
+
+    public ProcResponse approveVolunteer(Volunteer volunteer) {
         ProcResponse response = new ProcResponse();
-        
-        try 
-        {
-            if(volunteer == null)
-            {
+
+        try {
+            if (volunteer == null) {
                 return response.error("No Volunteer Specified");
             }
-            
-            if(volunteer.getConstituency() == null)
-            {
+
+            if (volunteer.getConstituency() == null) {
                 return response.error("Specify Constituency");
             }
-            
-            if(StringUtil.isNullOrEmpty(volunteer.getMobileNo()))
-            {
+
+            if (StringUtil.isNullOrEmpty(volunteer.getMobileNo())) {
                 return response.error("Specify Phone Number of Volunteer");
             }
-            
+
             //set password for volunteer
             String token = crudService.generateId().substring(0, 6);
-            
+
             System.out.println("TOKEN:::::::" + token);
-            
+
 //            String msg =
 //                "Congratulations! Your Account Has Been Approved. You can Login with this PIN "
 //                    + token + ". Kindly reset your password after login";
-            
-            
-             String msg =
-                "Congratulations! Your Account Has Been Approved. You can Login with this PIN "
+            String msg
+                    = "Congratulations! Your Account Has Been Approved. You can Login with this PIN "
                     + token + ". Click to login https://electionshub.netlify.app/login";
 
             // send email
@@ -75,49 +71,43 @@ public class VolunteerService {
             volunteer.setApprovalStatus(VolunteerApprovalStatus.APPROVED);
             volunteer.setProcessedBy(userSession.getAccountUR());
             volunteer = crudService.save(volunteer);
-            if(volunteer == null)
-            {
+            if (volunteer == null) {
                 return response.error("Error Approving Volunteer");
             }
-            
+
             SmsService.SMS.sendSms(volunteer.getMobileNo(), msg);
             response.setSuccess(true);
             response.setData(volunteer);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return response;
     }
-    
-    public ProcResponse resetVolunteerPassword(Volunteer volunteer)
-    {
+
+    public ProcResponse resetVolunteerPassword(Volunteer volunteer) {
         ProcResponse response = new ProcResponse();
-        
-        try 
-        {
-            if(volunteer == null)
-            {
+
+        try {
+            if (volunteer == null) {
                 return response.error("No Volunteer Specified");
             }
-            
-            if(volunteer.getConstituency() == null)
-            {
+
+            if (volunteer.getConstituency() == null) {
                 return response.error("Specify Constituency");
             }
-            
-            if(StringUtil.isNullOrEmpty(volunteer.getMobileNo()))
-            {
+
+            if (StringUtil.isNullOrEmpty(volunteer.getMobileNo())) {
                 return response.error("Specify Phone Number of Volunteer");
             }
-            
+
             //set password for volunteer
             String token = crudService.generateId().substring(0, 6);
-            
+
             System.out.println("TOKEN:::::::" + token);
-            String msg =
-                "Congratulations! Your PIN Reset Request has been acknowledged. "
+            String msg
+                    = "Congratulations! Your PIN Reset Request has been acknowledged. "
                     + "You can Login with this PIN "
                     + token + ". Kindly reset your password after login";
 
@@ -129,18 +119,17 @@ public class VolunteerService {
             volunteer.setUserPassword(hashedPassword);
 
             volunteer = crudService.save(volunteer);
-            if(volunteer == null)
-            {
+            if (volunteer == null) {
                 return response.error("Error Ressetting PIN of Volunteer");
             }
-            
+
             SmsService.SMS.sendSms(volunteer.getMobileNo(), msg);
             response.setSuccess(true);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return response;
     }
 
@@ -161,11 +150,16 @@ public class VolunteerService {
             dto.setClassificationName(record.getClassification().getLabel());
         } catch (Exception e) {
         }
-        try {
+
+        if (record.getPollingStation() != null) {
+            dto.setUserDomain(UserDomain.POLLING_STATION);
             dto.setPollingStationId(record.getPollingStation().getId());
             dto.setPollingStationName(record.getPollingStation().getStationName());
-        } catch (Exception e) {
+            dto.setPollingStationCode(record.getPollingStation().getStationCode());
+        } else {
+            dto.setUserDomain(UserDomain.CONSTITUENCY);
         }
+
         try {
             dto.setConstituencyId(record.getConstituency().getId());
             dto.setConstituencyName(record.getConstituency().getConstituencyName());
@@ -178,7 +172,11 @@ public class VolunteerService {
             dto.setProcessedByName(record.getProcessedBy().getAccountName());
         } catch (Exception e) {
         }
-//        dto.set(record.get);
+        
+        
+        System.out.println("getPollingStation...... " + record.getPollingStation());
+        System.out.println("...... " + dto.getUserDomain());
+        
         return dto;
     }
 }

@@ -16,8 +16,8 @@ import com.stately.common.api.MessageResolvable;
 public enum ElectionType implements MessageResolvable
 {
 
-    PRESIDENTIAL("PRESIDENTIAL","PRESIDENTIAL"),
-    PARLIAMENTARY("PARLIAMENTARY","PARLIAMENTARY");
+    PRESIDENTIAL("Presidential","Presidential"),
+    PARLIAMENTARY("Parliamentary","Parliamentary");
 
     private final String code;
     private final String label;

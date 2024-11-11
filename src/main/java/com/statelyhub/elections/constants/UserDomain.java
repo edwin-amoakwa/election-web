@@ -18,7 +18,8 @@ public enum UserDomain implements MessageResolvable {
     //    ELECTORIAL_AREA("Viewer","Viewer"),
     //    ADMINISTRATIVE_AREA("Viewer","Viewer"),
     CONSTITUENCY("Consistuency", "Consistuency"),
-    REGION("Region", "Region");
+    REGION("Region", "Region"),
+    POLLING_STATION("Polling Station", "Polling Station");
 
     private final String code;
     private final String label;

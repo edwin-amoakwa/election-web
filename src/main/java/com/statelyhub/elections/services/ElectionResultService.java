@@ -16,8 +16,6 @@ import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.Result;
 import com.statelyhub.elections.entities.ResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
-import com.statelyhub.elections.entities.SubmittedResult;
-import com.statelyhub.elections.entities.SubmittedResultSet;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -42,39 +40,54 @@ public class ElectionResultService {
 
     public List<ElectionTypeResult> pollingStationBucket(ElectionPollingStation eps) {
 
-        ElectionTypeResult presidential = new ElectionTypeResult();
-        presidential.setElectionType(ElectionType.PRESIDENTIAL);
-        presidential.setVotingsList(electionService.eps(eps, ElectionType.PRESIDENTIAL));
 
-        ElectionTypeResult parliamentary = new ElectionTypeResult();
-        parliamentary.setElectionType(ElectionType.PARLIAMENTARY);
-        parliamentary.setVotingsList(electionService.eps(eps, ElectionType.PARLIAMENTARY));
 
         List<ElectionTypeResult> list = new LinkedList<>();
 
-        list.add(presidential);
-        list.add(parliamentary);
+        list.add(pollingStationBucket(eps, ElectionType.PRESIDENTIAL));
+        list.add(pollingStationBucket(eps, ElectionType.PARLIAMENTARY));
 
         return list;
+
+    }
+    
+    
+    public ElectionTypeResult pollingStationBucket(ElectionPollingStation eps, ElectionType electionType) {
+
+        ElectionTypeResult electionTypeResult = new ElectionTypeResult();
+        electionTypeResult.setElectionType(electionType);
+        electionTypeResult.setVotingsList(electionService.eps(eps, electionType));
+
+    
+
+        return electionTypeResult;
 
     }
 
     public List<ElectionTypeResult> volunteerEpsBucket(ElectionPollingStation eps) {
 
-        ElectionTypeResult presidential = new ElectionTypeResult();
-        presidential.setElectionType(ElectionType.PRESIDENTIAL);
-        presidential.setSubmittedResultsList(electionService.submitted(eps, ElectionType.PRESIDENTIAL));
 
-        ElectionTypeResult parliamentary = new ElectionTypeResult();
-        parliamentary.setElectionType(ElectionType.PARLIAMENTARY);
-        parliamentary.setSubmittedResultsList(electionService.submitted(eps, ElectionType.PARLIAMENTARY));
-
+//
         List<ElectionTypeResult> list = new LinkedList<>();
 
-        list.add(presidential);
-        list.add(parliamentary);
+        list.add(volunteerEpsBucket(eps, ElectionType.PRESIDENTIAL));
+        list.add(volunteerEpsBucket(eps, ElectionType.PARLIAMENTARY));
 
         return list;
+
+    }
+    
+    
+    
+    public ElectionTypeResult volunteerEpsBucket(ElectionPollingStation eps, ElectionType electionType) {
+
+        ElectionTypeResult typeResult = new ElectionTypeResult();
+        typeResult.setElectionType(electionType);
+        typeResult.setSubmittedResultsList(electionService.submitted(eps, electionType));
+
+     
+
+        return typeResult;
 
     }
 
@@ -288,18 +301,16 @@ public class ElectionResultService {
     public PollingStationResultSet get(ElectionType electionType, ElectionPollingStation eps)
     {
         return QryBuilder.get(crudService.getEm(), PollingStationResultSet.class)
-                    .addObjectParam(SubmittedResultSet._electionType, ElectionType.PRESIDENTIAL)
+                    .addObjectParam(PollingStationResultSet._electionType, ElectionType.PRESIDENTIAL)
                     .addObjectParam(PollingStationResultSet._electionPollingStation, eps)
                     .getSingleResult(PollingStationResultSet.class);
     }
 
     public void updateResultSet(ElectionType electionType, ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
-        SubmittedResultSet submittedResultSet = QryBuilder.get(crudService.getEm(), SubmittedResultSet.class)
-                .addObjectParam(SubmittedResultSet._electionType, ElectionType.PRESIDENTIAL)
-                .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
-                .getSingleResult(SubmittedResultSet.class);
 
-        if (submittedResultSet != null) {
+        
+
+        if (resultSubmission != null) {
             PollingStationResultSet resultSet = get(electionType, electionPollingStation);
 
             if (resultSet == null) {
@@ -309,10 +320,10 @@ public class ElectionResultService {
 //                resultSet
             }
             /// add the rest
-            resultSet.setRejectedBallots(submittedResultSet.getRejectedBallots());
-            resultSet.setTotalVotesCast(submittedResultSet.getTotalVotesCast());
-            resultSet.setValidVotes(submittedResultSet.getValidVotes());
-            resultSet.setSpoiltBallots(submittedResultSet.getSpoiltBallots());
+            resultSet.setRejectedBallots(resultSubmission.getRejectedBallots());
+            resultSet.setTotalVotesCast(resultSubmission.getTotalVotesCast());
+            resultSet.setValidVotes(resultSubmission.getValidVotes());
+            resultSet.setSpoiltBallots(resultSubmission.getSpoiltBallots());
 
             crudService.save(resultSet);
         }
