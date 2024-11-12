@@ -59,7 +59,7 @@ public class ResultSubmissionController implements Serializable {
 
 //    private List<PollingStationResult> stationResultList;
     private List<PollingStationResult> electionResultsList;
-    private List<PollingStationResult> parliamentaryList;
+//    private List<PollingStationResult> parliamentaryList;
     
       PollingStationResultSet selectedPollingStationResultSet;
 
@@ -68,7 +68,8 @@ public class ResultSubmissionController implements Serializable {
     private List<ElectionTypeResult> constituencyResultList;
 
     private List<ResultSubmission> submissionsList;
-    private List<ResultSubmission> unprocessedSubmissionsList;
+    private List<ResultSubmission> unprocessedSubmissionsList = new LinkedList<>();
+    private List<ResultSubmission> processedSubmissionsList = new LinkedList<>();
 
     private List<ElectionPollingStation> pollingStationsList;
 
@@ -137,10 +138,19 @@ public class ResultSubmissionController implements Serializable {
 
         selectedSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
         
-        electionResultService.updateResultSet(selectedSubmission, electionPollingStation);
+        PollingStationResultSet resultSet = electionService.init(electionPollingStation, selectedSubmission.getElectionType());
+        resultSet.setValidVotes(selectedSubmission.getValidVotes());
+        resultSet.setRejectedBallots(selectedSubmission.getRejectedBallots());
+        resultSet.setSpoiltBallots(selectedSubmission.getSpoiltBallots());
+        crudService.save(resultSet);
+        
+//        electionResultService.updateResultSet(selectedSubmission, electionPollingStation);
 
         crudService.saveEntity(selectedSubmission);
         crudService.saveEntity(electionPollingStation);
+        
+        unprocessedSubmissionsList.remove(selectedSubmission);
+        processedSubmissionsList.add(selectedSubmission);
 
         JsfMsg.msg(true);
         System.out.println("/// // reslt accepted");
@@ -192,9 +202,25 @@ public class ResultSubmissionController implements Serializable {
     
     public void loadUnProcessedSubmissions()
     {
-        unprocessedSubmissionsList  = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
+        submissionsList  = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
                 .addObjectParam(ResultSubmission._constituencyElection, selectedConstituencyElection)
                 .buildQry().getResultList();
+        
+        unprocessedSubmissionsList = new LinkedList<>();
+        processedSubmissionsList = new LinkedList<>();
+        
+        for (ResultSubmission submission : submissionsList) {
+            if(submission.getSubmissionStatus() == SubmissionStatus.LOCKED)
+            {
+                processedSubmissionsList.add(submission);
+            }
+            else if(submission.getSubmissionStatus() == SubmissionStatus.OPEN)
+            {
+                unprocessedSubmissionsList.add(submission);
+            }
+        }
+        
+        
     }
 
     public void loadPollingStation() {
@@ -432,6 +458,10 @@ public class ResultSubmissionController implements Serializable {
 
     public List<PollingStationResult> getElectionResultsList() {
         return electionResultsList;
+    }
+
+    public List<ResultSubmission> getProcessedSubmissionsList() {
+        return processedSubmissionsList;
     }
     
     

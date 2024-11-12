@@ -6,6 +6,7 @@ package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ConstituencyResultSet;
 import com.statelyhub.elections.entities.Election;
@@ -33,10 +34,18 @@ public class ElectionService {
 
         return elections.get(0);
     }
+    
+    public ConstituencyElection election(Constituency constituency, Election election)
+    {
+        return QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                .addObjectParam(ConstituencyElection._constituency, constituency)
+                .addObjectParam(ConstituencyElection._election, election)
+                .getSingleResult(ConstituencyElection.class);
+    }
 
     public List<ElectionContestant> cecs(ConstituencyElection constituencyElection, ElectionType electionType) {
         return QryBuilder.get(crudService.getEm(), ElectionContestant.class)
-                //                .addObjectParam(ElectionContestant._electionType, electionType)
+                                .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();

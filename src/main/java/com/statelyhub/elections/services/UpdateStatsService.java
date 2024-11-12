@@ -95,7 +95,7 @@ public class UpdateStatsService {
 //            
 //        }
 //    }
-    @Asynchronous
+//    @Asynchronous
     public void initConstituencyContestants(ConstituencyElection constituencyElection, PartyElection partyElection, ElectionType electionType) {
 
 //        System.out.println("--doing "+electionType+" for "+party.getInitials()+" : party.getPartyType() = "+party.getPartyType()+" : constituency = "+constituency.getConstituency().getConstituencyName());

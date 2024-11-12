@@ -5,10 +5,13 @@
 package com.statelyhub.elections.services;
 
 import com.stately.common.formating.ObjectValue;
+import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultSource;
+import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.ConstituencyElection;
+import com.statelyhub.elections.entities.ConstituencyResultSet;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
@@ -117,21 +120,22 @@ public class ElectionResultService {
                 .addObjectParam(PollingStationResult._election, ce.getElection())
                 .addObjectParam(PollingStationResult._electionPollingStation_constituency, ce.getConstituency())
                 .buildQry().getResultList();
-
-//        System.out.println("pollingStationResultsList.......... " + pollingStationResultsList);
-        for (PollingStationResult result : pollingStationResultsList) {
-
-            if (ce.getResultSource() == ResultSource.SUBMITTED) {
-                result.setAcceptedResult(result.getSubmittedResult());
-//                System.out.println(".....  setting result .... ");
-
-            } else if (ce.getResultSource() == ResultSource.OFFICIAL) {
-                result.setAcceptedResult(result.getOfficialResult());
-            } else if (ce.getResultSource() == ResultSource.INPUTTED) {
-                result.setAcceptedResult(result.getInputResult());
-            }
-
-        }
+        
+        updateSource(pollingStationResultsList);
+        
+//        for (PollingStationResult result : pollingStationResultsList) {
+//
+//            if (ce.getResultSource() == ResultSource.SUBMITTED) {
+//                result.setAcceptedResult(result.getSubmittedResult());
+////                System.out.println(".....  setting result .... ");
+//
+//            } else if (ce.getResultSource() == ResultSource.OFFICIAL) {
+//                result.setAcceptedResult(result.getOfficialResult());
+//            } else if (ce.getResultSource() == ResultSource.INPUTTED) {
+//                result.setAcceptedResult(result.getInputResult());
+//            }
+//
+//        }
 
 //        System.out.println("\n\n\n\n\n-pollingStationResultsList.......... " + pollingStationResultsList);
         //Run Positions for polling station
@@ -150,6 +154,28 @@ public class ElectionResultService {
 
         crudService.save(ce);
     }
+    
+    public void updateSource(List<PollingStationResult> pollingStationResultsList)
+    {
+        for (PollingStationResult result : pollingStationResultsList) {
+             if (result.getConstituencyElection().getResultSource() == ResultSource.SUBMITTED) {
+                result.setAcceptedResult(result.getSubmittedResult());
+//                System.out.println(".....  setting result .... ");
+
+            } else if (result.getConstituencyElection().getResultSource() == ResultSource.OFFICIAL) {
+                result.setAcceptedResult(result.getOfficialResult());
+            } else if (result.getConstituencyElection().getResultSource() == ResultSource.INPUTTED) {
+                result.setAcceptedResult(result.getInputResult());
+            }
+        }
+        
+        
+        runPosition(pollingStationResultsList);
+        
+          for (PollingStationResult result : pollingStationResultsList) {
+            crudService.save(result);
+        }
+    }
 
     public void runConstituency(ConstituencyElection ce) {
 
@@ -167,7 +193,7 @@ public class ElectionResultService {
                 .addObjectParam(PollingStationResult._electionType, electionType)
                 .buildQry().getResultList();
 
-//        StringUtil.printObjectListArray(summedResult);
+        StringUtil.printObjectListArray(summedResult);
         Map<ElectionContestant, Integer> map = new HashMap<>(summedResult.size());
 
         for (Object[] objects : summedResult) {
@@ -195,10 +221,6 @@ public class ElectionResultService {
 
         for (ElectionContestant electionContestant : contestantsList) {
 
-            
-            System.out.println(electionContestant.getPosition() + " .????.... " + electionContestant.getWon());
-            
-//              System.out.println(electionContestant.getParty() + " ........ " + electionContestant.getAcceptedResult());
             crudService.save(electionContestant);
         }
         
@@ -211,11 +233,15 @@ public class ElectionResultService {
                 .addGroupBy(PollingStationResultSet._electionType)
                 .addObjectParam(PollingStationResultSet._constituencyElection, ce)
                 .addObjectParam(PollingStationResultSet._electionType, electionType)
+                 .addObjectParam(PollingStationResultSet._resultStatus, ResultStatus.FINALISED)
                  .getSingleResult(Object[].class);
+         
+         
+         ConstituencyResultSet resultSet = electionService.init(ce, electionType);
          
          if(summarySet != null)
          {
-              ResultSet resultSet = new ResultSet();
+             
 //         resultSet.setElectionType(electionType);
          resultSet.setTotalVotesCast(ObjectValue.get_intValue(summarySet[0]));
          resultSet.setRejectedBallots(ObjectValue.get_intValue(summarySet[1]));
@@ -224,6 +250,7 @@ public class ElectionResultService {
          
 //         ce.update(resultSet);
           crudService.save(ce);
+          crudService.save(resultSet);
          }
          
         
@@ -294,10 +321,10 @@ public class ElectionResultService {
         }
     }
 
-    public void updateResultSet(ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
-        updateResultSet(ElectionType.PRESIDENTIAL, resultSubmission, electionPollingStation);
-        updateResultSet(ElectionType.PARLIAMENTARY, resultSubmission, electionPollingStation);
-    }
+//    public void updateResultSet(ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
+//        updateResultSet(ElectionType.PRESIDENTIAL, resultSubmission, electionPollingStation);
+//        updateResultSet(ElectionType.PARLIAMENTARY, resultSubmission, electionPollingStation);
+//    }
     
     public PollingStationResultSet get(ElectionType electionType, ElectionPollingStation eps)
     {
@@ -307,27 +334,27 @@ public class ElectionResultService {
                     .getSingleResult(PollingStationResultSet.class);
     }
 
-    public void updateResultSet(ElectionType electionType, ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
-
-        
-
-        if (resultSubmission != null) {
-            PollingStationResultSet resultSet = get(electionType, electionPollingStation);
-
-            if (resultSet == null) {
-                resultSet = new PollingStationResultSet();
-                resultSet.setElectionType(electionType);
-                resultSet.setElectionPollingStation(electionPollingStation);
-//                resultSet
-            }
-            /// add the rest
-            resultSet.setRejectedBallots(resultSubmission.getRejectedBallots());
-            resultSet.setTotalVotesCast(resultSubmission.getTotalVotesCast());
-            resultSet.setValidVotes(resultSubmission.getValidVotes());
-            resultSet.setSpoiltBallots(resultSubmission.getSpoiltBallots());
-
-            crudService.save(resultSet);
-        }
-    }
+//    public void updateResultSet(ElectionType electionType, ResultSubmission resultSubmission, ElectionPollingStation electionPollingStation) {
+//
+//        
+//
+//        if (resultSubmission != null) {
+//            PollingStationResultSet resultSet = get(electionType, electionPollingStation);
+//
+//            if (resultSet == null) {
+//                resultSet = new PollingStationResultSet();
+//                resultSet.setElectionType(electionType);
+//                resultSet.setElectionPollingStation(electionPollingStation);
+////                resultSet
+//            }
+//            /// add the rest
+//            resultSet.setRejectedBallots(resultSubmission.getRejectedBallots());
+//            resultSet.setTotalVotesCast(resultSubmission.getTotalVotesCast());
+//            resultSet.setValidVotes(resultSubmission.getValidVotes());
+//            resultSet.setSpoiltBallots(resultSubmission.getSpoiltBallots());
+//
+//            crudService.save(resultSet);
+//        }
+//    }
 
 }

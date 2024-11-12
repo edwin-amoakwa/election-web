@@ -10,7 +10,7 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:define name="pageTitle">
-        Collation Center - #{resultSubmissionController.selectedConstituencyElection.constituency.constituencyName}
+        Result Submission - #{resultSubmissionController.selectedConstituencyElection.constituency.constituencyName}
     </ui:define>
 
     <ui:define name="content">
@@ -40,7 +40,7 @@
 
                     </h:form>
 
-                    <h:form>
+                    <h:form id="mainListForm">
 
                         <p:commandButton value="Refresh" action="#{resultSubmissionController.referesh()}"
                                          update="@form"/>
@@ -54,7 +54,7 @@
 
                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                                         <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
-                                                       update=":stationResult, :submittedResultPanel"
+                                                       update=":stationResult"
                                                        action="#{resultSubmissionController.pickSubmission(submission)}"/>
                                     </p:column>
 
@@ -83,7 +83,44 @@
 
                             </p:tab>
 
-                            <p:tab title="Finalised - #{resultSubmissionController.completedPollingStationsList.size()}">
+                            <p:tab title="Finalised - #{resultSubmissionController.processedSubmissionsList.size()}">
+                                <p:dataTable value="#{resultSubmissionController.processedSubmissionsList}" var="submission" 
+                                             rows="10" paginator="true" paginatorPosition="bottom">
+
+                                    
+                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+                                        <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
+                                                       update=":stationResult"
+                                                       action="#{resultSubmissionController.pickSubmission(submission)}"/>
+                                    </p:column>
+
+
+                                    <p:column headerText="#{msg.type}" filterBy="#{submission.electionType.label}" filterMatchMode="contains">
+                                        <h:outputText value="#{submission.electionType.label}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.name}" filterBy="#{submission.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains">
+                                        <h:outputText value="#{submission.electionPollingStation.pollingStation.stationName}" />
+                                    </p:column>
+
+                                    <p:column headerText="Submitter" filterBy="#{submission.volunteer.volunteerName}" filterMatchMode="contains">
+                                        <h:outputText value="#{submission.volunteer.volunteerName}" />
+                                    </p:column>
+
+
+                                    <p:column  >
+                                        <p:commandLink value="#{msg.view}" update=":sumbissionDetails, :stationResult"
+                                                       action="#{resultSubmissionController.pickSubmission(submission)}" 
+                                                       oncomplete="PF('resultPanel').show()"/>
+                                    </p:column>
+
+
+                                </p:dataTable>
+
+                            </p:tab>
+                            
+                            
+                            <p:tab title="Finalised - #{resultSubmissionController.processedSubmissionsList.size()}" rendered="false">
                                 <p:dataTable value="#{resultSubmissionController.completedPollingStationsList}" var="pollingStation" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
@@ -126,30 +163,30 @@
                             </div>
                         </div>
 
-                        
-                        
-                        
-            
 
-                    <h:form>
-                        <label style="font-size:14px;">Toggle to Input Votes</label>
-                        <p:toggleSwitch value="#{resultSubmissionController.inputVotes}" style="margin-left:3px;">
-                            <!--<p:ajax listener="{resultSubmissionController.addMessage}" update="msg"/>-->
-                            <!--<p:ajax process="@this" update="stationResult"/>-->
-                            <p:ajax update="stationResult"/>
-                        </p:toggleSwitch>
-                        <p:commandButton value="Save Changes" 
-                                         style="margin-left:3px;"
-                                         action="#{resultSubmissionController.saveResults()}"
-                                         rendered="false"/>
-                        <span style="margin-left:3px;" jsf:rendered="#{resultSubmissionController.inputVotes}">
-                            <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
-                            <i>Press the Enter Key to Update Record After Input</i>
-                        </span>
-                    </h:form>
-                    <br/>
 
-             
+
+
+
+                        <h:form>
+                            <label style="font-size:14px;">Toggle to Input Votes</label>
+                            <p:toggleSwitch value="#{resultSubmissionController.inputVotes}" style="margin-left:3px;">
+                                <!--<p:ajax listener="{resultSubmissionController.addMessage}" update="msg"/>-->
+                                <!--<p:ajax process="@this" update="stationResult"/>-->
+                                <p:ajax update="stationResult"/>
+                            </p:toggleSwitch>
+                            <p:commandButton value="Save Changes" 
+                                             style="margin-left:3px;"
+                                             action="#{resultSubmissionController.saveResults()}"
+                                             rendered="false"/>
+                            <span style="margin-left:3px;" jsf:rendered="#{resultSubmissionController.inputVotes}">
+                                <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
+                                <i>Press the Enter Key to Update Record After Input</i>
+                            </span>
+                        </h:form>
+                        <br/>
+
+
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <div class="panel-title">
@@ -232,48 +269,12 @@
 
                             </div>
                         </div>
-
-
-
-
-
-
-
-
-
+                        
                     </h:panelGroup>
 
                     <br />
                     <br />
-
-                    <div class="row">
-                        <div class="col-lg-12">
-
-
-
-
-
-
-
-
-                            <div class="card">
-
-
-                                <h:panelGroup id="submittedResultPanel">
-
-
-                                </h:panelGroup>
-
-                            </div>
-
-
-
-
-                        </div>
-                    </div>
-
-
-
+                    
 
                 </div>
 
@@ -289,42 +290,34 @@
 
         <hr />
         <hr />
-
-
-
-
-
+        
 
         <h:panelGroup id="sumbissionDetails">
             <p:dialog widgetVar="resultPanel" >
 
                 <div class="container">
-                    
+
                     <div class="row justify-content-center">
                         <div class="col-md-12">
-                            <h3>${resultSubmissionController.selectedSubmission.electionType.label}</h3>
+                            <h2>${resultSubmissionController.selectedSubmission.electionType.label}</h2>
                         </div>
                         <div class="col-md-12">
-                            <h5>${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}</h5>
+                            <h3>
+                               ${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
+                            
+                                 -  <h:outputText value=" Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
+                            </h3>
                         </div>
                         <div class="col-md-12">
-                            <h:outputText value="Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
+                            
                         </div>
                     </div>
                     <div class="clearfix row">
                         <div class="col-md-6">
-                            <h:panelGrid columns="2" styleClass="spaced-table">
-                                <h:outputText value="Total Votes Cast" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" />
-                                
-                                <h:outputText value="Valid Votes" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}" />
-                                
-                                <h:outputText value="Rejected Votes" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}" />
-                            </h:panelGrid>
+                  
+                            
 
-                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
+                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" var="submittedResult" rendered="false">
                                 <p:column headerText="">
                                     #{submittedResult.partyDetails}
                                 </p:column>
@@ -335,9 +328,36 @@
 
                             </p:dataTable>
 
+                            <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
+
+                                <c:forEach items="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
+
+                                    <h:outputText value="#{submittedResult.partyDetails}" styleClass="field-label" />
+                                    <h:outputText value="#{submittedResult.submittedResult}" styleClass="field-value text-right" >
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+
+                                </c:forEach>
+
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
+                                
+                                <h:outputText value="Total Votes Cast" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
+
+                                <h:outputText value="Valid Votes" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
+
+                                <h:outputText value="Rejected Votes" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
+                            
+                            </h:panelGrid>
+
                             <br/>
                             <br/>
                             <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
+                                             update=":stationResult, :mainListForm"
                                              oncomplete="PF('resultPanel').hide()"/>
                             <br/>
                             <br/>
@@ -358,7 +378,7 @@
 
                     </div>
                 </div>
-                
+
             </p:dialog>
         </h:panelGroup>
 

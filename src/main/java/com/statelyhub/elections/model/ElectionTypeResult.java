@@ -7,7 +7,6 @@ package com.statelyhub.elections.model;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.PollingStationResult;
-import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.SubmittedResult;
 import java.util.List;
 

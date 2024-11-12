@@ -5,6 +5,7 @@
  */
 package com.statelyhub.elections.jsf;
 
+import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfUtil;
 import com.statelyhub.elections.services.CrudService;
 import com.stately.modules.web.jsf.Msg;
@@ -114,7 +115,8 @@ public class ElectionController implements Serializable
 
     public List<PartyElection> getPartyElectionsList() 
     {
-        partyElectionsList = crudService.findAll(PartyElection.class);
+        partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .orderByAsc(PartyElection._viewOrder).buildQry().getResultList();
         return partyElectionsList;
     }
 

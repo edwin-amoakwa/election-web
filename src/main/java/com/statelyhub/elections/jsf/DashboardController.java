@@ -5,19 +5,21 @@
  */
 package com.statelyhub.elections.jsf;
 
-import com.statelyhub.elections.jsf.UserSession;
-import com.statelyhub.old.entities.BillStatus;
 import com.statelyhub.elections.services.CrudService;
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultStatus;
-import com.statelyhub.elections.entities.Election;
+import com.statelyhub.elections.entities.Constituency;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
+import com.statelyhub.elections.model.ElectionTypeDashboard;
+import com.statelyhub.elections.services.DashboardService;
+import com.statelyhub.elections.services.ElectionService;
 import java.io.Serializable;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import java.util.List;
 
 
 /**
@@ -32,34 +34,74 @@ public class DashboardController implements Serializable
     
     @Inject CrudService crudService;
     @Inject UserSession userSession;
+    @Inject ElectionService electionService;
+    
+        @Inject DashboardService dashboardService;
     
     
     private int totalPollingStation;
     private int pendingPollingStations;
     private int finalisedPollingStations;
-    private int rejectedPvs;
+    private int totalVoters;
+    
+    private ElectionTypeDashboard presidential;
+    private ElectionTypeDashboard parliamentary;
+    
+    private ConstituencyElection constituencyElection;
     
     @PostConstruct
     public void init()
     {
-        totalPollingStation = getTotalMembership(null);
+        Constituency constituency = userSession.getAccountUR().getConstituency();
+        
+        constituencyElection = electionService.election(constituency, electionService.getCurrentElection());
+        
+        presidential = dashboardService.dashboard(ElectionType.PRESIDENTIAL, constituencyElection);
+        parliamentary = dashboardService.dashboard(ElectionType.PARLIAMENTARY, constituencyElection);
+        
+//        constituencyElection
+        
+        
+        totalPollingStation = pollingStation(constituencyElection);
         pendingPollingStations = getTotalMembership(ResultStatus.PENDING);
         finalisedPollingStations = getTotalMembership(ResultStatus.FINALISED);
         
-        
-//        Object[] result = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-//                .addReturnField("COUNT(e.id)")
-//                .addReturnField("e."+ElectionPollingStation._resultStatus)
-//                .addGroupBy(ElectionPollingStation._resultStatus)
-//                .getSingleResult(Object[].class);
-//        
-//        if(result != null)
-//        {
-//            
-//        }
+        totalVoters = voteres(constituencyElection);
 
         
         
+    }
+    
+     public int pollingStation(ConstituencyElection constituencyElection)
+    {
+        QryBuilder builder = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class);
+        builder.addObjectParamWhenNotNull(ElectionPollingStation._constituencyElection, constituencyElection);
+//        
+//        if (pvStatus != null)
+//        {
+//            builder.addObjectParam(Bill._billStatus, pvStatus);
+//        }
+
+        return builder.count();
+    }
+    
+     public int voteres(ConstituencyElection constituencyElection)
+    {
+        if(constituencyElection != null)
+        {
+            return constituencyElection.getVotersCount();
+        }
+        
+        return QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                .addReturnField("SUM(e."+ConstituencyElection._votersCount+")")
+                .getResultAsInt();
+//        
+//        if (pvStatus != null)
+//        {
+//            builder.addObjectParam(Bill._billStatus, pvStatus);
+//        }
+
+//        return 0;
     }
     
     public int getTotalMembership(ResultStatus resultStatus)
@@ -90,9 +132,17 @@ public class DashboardController implements Serializable
         return finalisedPollingStations;
     }
 
-    public int getRejectedPvs()
-    {
-        return rejectedPvs;
+    public int getTotalVoters() {
+        return totalVoters;
+    }
+
+  
+    public ElectionTypeDashboard getPresidential() {
+        return presidential;
+    }
+
+    public ElectionTypeDashboard getParliamentary() {
+        return parliamentary;
     }
     
     
