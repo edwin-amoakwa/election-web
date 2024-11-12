@@ -11,9 +11,7 @@ import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.dto.ElectionResultSetDto;
 import com.statelyhub.elections.dto.SubmittedResultDto;
-import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
-import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
@@ -74,17 +72,7 @@ public class SubmisionService {
 
             ElectionTypeResult template = electionResultService.pollingStationBucket(eps,electionType);
 
-//            List<PollingStationResult> pollingStationResult = new LinkedList<>();
-//            for (ElectionTypeResult electionTypeResult : template) 
-//            {
-//                SubmittedResultSet resultSet = new SubmittedResultSet();
-//                resultSet.setResultSubmissionId(resultSubmission.getId());
-//                resultSet.setElectionType(template.getElectionType());
-//                
-//                crudService.save(resultSet);
-                
-//                pollingStationResult.addAll(template.getVotingsList());
-//            }
+
 
             for (PollingStationResult stationResult : template.getVotingsList()) {
 

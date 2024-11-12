@@ -15,7 +15,6 @@ import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PartyElection;
 import com.statelyhub.elections.entities.PollingStationResult;
-import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.Region;
 import jakarta.ejb.Asynchronous;
@@ -148,7 +147,7 @@ public class UpdateStatsService {
                 .addObjectParam(PollingStationResult._electionPollingStation, eps)
                 .getSingleResult(PollingStationResult.class);
         
-        PollingStationResultSet resultSet = electionService.getResultSet(contestant.getConstituencyElection(), contestant.getElectionType());
+        PollingStationResultSet resultSet = electionService.init(eps, contestant.getElectionType());
         
         
         

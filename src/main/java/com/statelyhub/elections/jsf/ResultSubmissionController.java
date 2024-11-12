@@ -14,6 +14,7 @@ import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.model.ElectionTypeResult;
@@ -59,10 +60,12 @@ public class ResultSubmissionController implements Serializable {
     private ElectionPollingStation electionPollingStation;
 
 //    private List<PollingStationResult> stationResultList;
-    private List<PollingStationResult> presidentialList;
+    private List<PollingStationResult> electionResultsList;
     private List<PollingStationResult> parliamentaryList;
+    
+      PollingStationResultSet selectedPollingStationResultSet;
 
-    private List<ElectionTypeResult> resultsList;
+//    private List<ElectionTypeResult> resultsList;
 
     private List<ElectionTypeResult> constituencyResultList;
 
@@ -109,7 +112,42 @@ public class ResultSubmissionController implements Serializable {
     
     public void acceptResult()
     {
-        System.out.println("/// // reslt submitted");
+      
+        
+        selectedPollingStationResultSet.setTotalVotesCast(selectedSubmission.getTotalVotesCast());
+        selectedPollingStationResultSet.setRejectedBallots(selectedSubmission.getRejectedBallots());
+        
+        
+
+        Map<String, Integer> resultMap = new LinkedHashMap<>();
+        for (SubmittedResult result : submittedResultsList) {
+            resultMap.put(result.getPollingStationResult().getId(), result.getSubmittedResult());
+        }
+        System.out.println("map ... " + resultMap);
+
+//        List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(resultsList);
+
+        for (PollingStationResult pollingStationResult : electionResultsList) {
+            Integer votes = resultMap.get(pollingStationResult.getId());
+            if (votes != null) {
+                pollingStationResult.setSubmittedResult(votes);
+
+                crudService.saveEntity(pollingStationResult);
+            }
+
+        }
+        electionPollingStation.setResultSubmissionId(selectedSubmission.getId());
+
+        selectedSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
+        
+        electionResultService.updateResultSet(selectedSubmission, electionPollingStation);
+
+        crudService.saveEntity(selectedSubmission);
+        crudService.saveEntity(electionPollingStation);
+
+        JsfMsg.msg(true);
+          System.out.println("/// // reslt accepted");
+        
     }
     
     public void searchPollingStation() {
@@ -119,10 +157,7 @@ public class ResultSubmissionController implements Serializable {
     public void selectPollingStation(ElectionPollingStation station) {
         this.electionPollingStation = station;
 
-        resultsList = electionResultService.pollingStationBucket(station);
         
-        
-
         loadSubmissions();
     }
     
@@ -130,9 +165,20 @@ public class ResultSubmissionController implements Serializable {
     {
         this.selectedSubmission = resultSubmission;
         
+        selectedPollingStationResultSet = electionService.init(selectedSubmission.getElectionPollingStation(), selectedSubmission.getElectionType());
+        electionPollingStation = selectedSubmission.getElectionPollingStation();
+        
         submittedResultsList = QryBuilder.get(crudService.getEm(), SubmittedResult.class)
                 .addObjectParam(SubmittedResult._resultSubmission, resultSubmission)
                 .orderByAsc(SubmittedResult._viewOrder)
+                .buildQry().getResultList();
+        
+        
+        
+        electionResultsList =  QryBuilder.get(crudService.getEm(), PollingStationResult.class)
+                .addObjectParam(PollingStationResult._electionType, resultSubmission.getElectionType())
+                .addObjectParam(PollingStationResult._electionPollingStation, resultSubmission.getElectionPollingStation())
+                .orderByAsc(PollingStationResult._viewOrder)
                 .buildQry().getResultList();
         
 //        selectPollingStation(resultSubmission.getElectionPollingStation());
@@ -230,39 +276,39 @@ public class ResultSubmissionController implements Serializable {
         JsfMsg.msg(true);
     }
 
-    public void acceptSubmission(ResultSubmission resultSubmission) {
-
-        List<SubmittedResult> results = PollingStationResultContainer.submitedResults(resultSubmission.getElectionResultsList());
-
-        Map<String, Integer> resultMap = new LinkedHashMap<>();
-        for (SubmittedResult result : results) {
-            resultMap.put(result.getPollingStationResult().getId(), result.getInputResult());
-        }
-
-        List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(resultsList);
-
-        for (PollingStationResult pollingStationResult : stationResultsList) {
-            Integer votes = resultMap.get(pollingStationResult.getId());
-            if (votes != null) {
-                pollingStationResult.setSubmittedResult(votes);
-
-                crudService.saveEntity(pollingStationResult);
-            }
-
-        }
-        electionPollingStation.setResultSubmissionId(resultSubmission.getId());
-
-        resultSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
-        
-        electionResultService.updateResultSet(resultSubmission, electionPollingStation);
-
-        crudService.saveEntity(resultSubmission);
-        crudService.saveEntity(electionPollingStation);
-
-//        System.out.println("ress ..... " + resultSubmission);
-
-        JsfMsg.msg(true);
-    }
+//    public void acceptSubmission(ResultSubmission resultSubmission) {
+//
+//        List<SubmittedResult> results = PollingStationResultContainer.submitedResults(resultSubmission.getElectionResultsList());
+//
+//        Map<String, Integer> resultMap = new LinkedHashMap<>();
+//        for (SubmittedResult result : results) {
+//            resultMap.put(result.getPollingStationResult().getId(), result.getInputResult());
+//        }
+//
+//        List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(resultsList);
+//
+//        for (PollingStationResult pollingStationResult : stationResultsList) {
+//            Integer votes = resultMap.get(pollingStationResult.getId());
+//            if (votes != null) {
+//                pollingStationResult.setSubmittedResult(votes);
+//
+//                crudService.saveEntity(pollingStationResult);
+//            }
+//
+//        }
+//        electionPollingStation.setResultSubmissionId(resultSubmission.getId());
+//
+//        resultSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
+//        
+//        electionResultService.updateResultSet(resultSubmission, electionPollingStation);
+//
+//        crudService.saveEntity(resultSubmission);
+//        crudService.saveEntity(electionPollingStation);
+//
+////        System.out.println("ress ..... " + resultSubmission);
+//
+//        JsfMsg.msg(true);
+//    }
     
     public void recordUpdated(PollingStationResult result)
     {
@@ -275,12 +321,12 @@ public class ResultSubmissionController implements Serializable {
     
     public void saveResults()
     {
-        if(resultsList == null) return;
-        
-        for(ElectionTypeResult record: resultsList)
-        {
-            System.out.println("\n--record.getElectionType() = "+record.getElectionType());
-            for (PollingStationResult result : record.getVotingsList()) 
+        if(electionResultsList == null) return;
+//        
+//        for(ElectionTypeResult record: resultsList)
+//        {
+//            System.out.println("\n--record.getElectionType() = "+record.getElectionType());
+            for (PollingStationResult result : electionResultsList) 
             {
                 System.out.println( 
                         result.getPartyDetails()+" -"
@@ -288,27 +334,27 @@ public class ResultSubmissionController implements Serializable {
                                 +"--result.getOfficialResult() = "+result.getOfficialResult());
                 crudService.save(result);
             }
-        }
+//        }
         
         JsfMsg.successSave();
         this.inputVotes = false;
     }
 
-    public List<PollingStationResult> getPresidentialList() {
-        return presidentialList;
-    }
-
-    public List<PollingStationResult> getParliamentaryList() {
-        return parliamentaryList;
-    }
-
-    public List<ElectionTypeResult> getResultsList() {
-        return resultsList;
-    }
-
-    public void setResultsList(List<ElectionTypeResult> resultsList) {
-        this.resultsList = resultsList;
-    }
+//    public List<PollingStationResult> getPresidentialList() {
+//        return presidentialList;
+//    }
+//
+//    public List<PollingStationResult> getParliamentaryList() {
+//        return parliamentaryList;
+//    }
+//
+//    public List<ElectionTypeResult> getResultsList() {
+//        return resultsList;
+//    }
+//
+//    public void setResultsList(List<ElectionTypeResult> resultsList) {
+//        this.resultsList = resultsList;
+//    }
 
     public ElectionPollingStation getElectionPollingStation() {
         return electionPollingStation;
@@ -376,6 +422,10 @@ public class ResultSubmissionController implements Serializable {
 
     public List<SubmittedResult> getSubmittedResultsList() {
         return submittedResultsList;
+    }
+
+    public List<PollingStationResult> getElectionResultsList() {
+        return electionResultsList;
     }
     
     
