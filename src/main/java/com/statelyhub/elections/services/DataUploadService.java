@@ -52,7 +52,7 @@ public class DataUploadService {
             eps.setElection(constituencyElection.getElection());
             eps.setConstituency(constituencyElection.getConstituency());
             eps.setPollingStation(pollingStation);
-//                    eps.setConstituencyElection(constituencyElection);
+           eps.setConstituencyElection(constituencyElection);
             eps.setResultStatus(ResultStatus.PENDING);
 
             crudService.save(eps);

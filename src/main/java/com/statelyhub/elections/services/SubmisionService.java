@@ -11,6 +11,7 @@ import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.dto.ElectionResultSetDto;
 import com.statelyhub.elections.dto.SubmittedResultDto;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResult;
@@ -66,6 +67,8 @@ public class SubmisionService {
             resultSubmission.setSubmissionStatus(SubmissionStatus.PENDING);
             resultSubmission.setSubmissionLevel(SubmissionLevel.POLLING_STATION);
             resultSubmission.setElectionType(electionType);
+            resultSubmission.setConstituencyElection(eps.getConstituencyElection());
+            resultSubmission.setElection(eps.getElection());
 
             crudService.save(resultSubmission);
 

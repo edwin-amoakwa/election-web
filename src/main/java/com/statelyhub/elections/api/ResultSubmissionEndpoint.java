@@ -107,7 +107,7 @@ public class ResultSubmissionEndpoint {
         }
 
         for (SubmittedResult compare : resultsList) {
-            System.out.println(".... " + compare.getInputResult());
+            System.out.println(".... " + compare.getSubmittedResult());
             int counter = 0;
             for (SubmittedResult submitted : resultsList) {
                 if (submitted.getSubmittedResult()> compare.getSubmittedResult()) {
