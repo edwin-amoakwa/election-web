@@ -39,6 +39,7 @@ public class Result extends UniqueEntityModel3 {
     @ManyToOne
     private ConstituencyElection constituencyElection;
 
+
     public static final String _candidateName = "candidateName";
     @Column(name = "candidate_name")
     private String candidateName;
@@ -219,6 +220,7 @@ public class Result extends UniqueEntityModel3 {
     public void setWon(int won) {
         this.won = won;
     }
+
 
     @Override
     public String toString() {

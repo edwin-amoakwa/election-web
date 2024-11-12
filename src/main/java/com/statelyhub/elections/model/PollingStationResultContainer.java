@@ -6,6 +6,7 @@ package com.statelyhub.elections.model;
 
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.SubmittedResult;
 import java.util.LinkedList;
 import java.util.List;

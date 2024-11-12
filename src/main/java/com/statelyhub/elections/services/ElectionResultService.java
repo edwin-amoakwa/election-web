@@ -151,19 +151,20 @@ public class ElectionResultService {
         crudService.save(ce);
     }
 
-//    public void runConstituency(ConstituencyElection ce) {
-//        runConstituency(ce);
-////        runConstituency(ce, ElectionType.PARLIAMENTARY);
-//    }
+    public void runConstituency(ConstituencyElection ce) {
 
-    public void runConstituency(ConstituencyElection ce) 
+        runConstituency(ce, ElectionType.PRESIDENTIAL);
+        runConstituency(ce, ElectionType.PARLIAMENTARY);
+    }
+
+    public void runConstituency(ConstituencyElection ce, ElectionType electionType) 
     {
         List<Object[]> summedResult = QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                 .addReturnField("e." + PollingStationResult._electionContestant)
                 .addReturnField("SUM(e." + PollingStationResult._acceptedResult + ")")
                 .addGroupBy(PollingStationResult._electionContestant_id)
                 .addObjectParam(PollingStationResult._constituencyElection, ce)
-//                .addObjectParam(PollingStationResult._electionType, electionType)
+                .addObjectParam(PollingStationResult._electionType, electionType)
                 .buildQry().getResultList();
 
 //        StringUtil.printObjectListArray(summedResult);
@@ -178,7 +179,7 @@ public class ElectionResultService {
             System.out.println(contestant.getId() + "  ----   " + contestant.getParty() + " ........" + total);
         }
 
-        List<ElectionContestant> contestantsList = electionService.cecs(ce,ce.getElectionType());
+        List<ElectionContestant> contestantsList = electionService.cecs(ce,electionType);
 //          System.out.println("map >>>>>>>>> " + map);
         for (ElectionContestant contestant : contestantsList) {
 
@@ -190,7 +191,7 @@ public class ElectionResultService {
             }
         }
         runPosition(contestantsList);
-        runPct(contestantsList, ce.getValidVotes());
+        runPct(contestantsList, 0);
 
         for (ElectionContestant electionContestant : contestantsList) {
 
@@ -209,7 +210,7 @@ public class ElectionResultService {
                 .addReturnField("SUM(e." + PollingStationResultSet._validVotes + ")")
                 .addGroupBy(PollingStationResultSet._electionType)
                 .addObjectParam(PollingStationResultSet._constituencyElection, ce)
-//                .addObjectParam(PollingStationResultSet._electionType, electionType)
+                .addObjectParam(PollingStationResultSet._electionType, electionType)
                  .getSingleResult(Object[].class);
          
          if(summarySet != null)

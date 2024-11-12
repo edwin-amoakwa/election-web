@@ -11,6 +11,8 @@ import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.PollingStationResult;
+import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.SubmittedResult;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -79,6 +81,34 @@ public class ElectionService {
                     .buildQry().getResultList();
                     
 
+    }
+    
+    public PollingStationResultSet getResultSet(ConstituencyElection constituencyElection, ElectionType electionType)
+    {
+           PollingStationResultSet resultSet = QryBuilder.get(crudService.getEm(), PollingStationResultSet.class)
+                .addObjectParam(PollingStationResultSet._constituencyElection, constituencyElection)
+                .addObjectParam(PollingStationResultSet._electionType, electionType)
+                .getSingleResult(PollingStationResultSet.class);
+        
+   
+        
+        return resultSet;
+    }
+    
+    
+      public PollingStationResultSet init(ConstituencyElection constituencyElection, ElectionType electionType)
+    {
+           PollingStationResultSet resultSet = getResultSet(constituencyElection, electionType);
+        
+        if(resultSet == null)
+        {
+            resultSet = new PollingStationResultSet();
+            resultSet.setConstituencyElection(constituencyElection);
+            resultSet.setElectionType(electionType);
+            crudService.save(resultSet);
+        }
+        
+        return resultSet;
     }
 
 }

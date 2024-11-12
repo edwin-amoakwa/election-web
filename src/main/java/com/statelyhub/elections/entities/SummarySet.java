@@ -15,7 +15,7 @@ import jakarta.persistence.MappedSuperclass;
  * @author Edwin
  */
 @MappedSuperclass
-public class SumamarySet extends UniqueEntityModel3 {
+public class SummarySet extends UniqueEntityModel3 {
 
     public static final String _votersCount = "votersCount";
     @Column(name = "voters_count")

@@ -5,6 +5,7 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PartyElection;
@@ -88,8 +89,9 @@ public class ElectionDetailController implements Serializable {
 
             for (PartyElection partyElection : partyElectionsList) {
 //                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
-//                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
-                updateStatsService.initConstituencyContestants(constituency, partyElection);
+                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
+                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
+//                updateStatsService.initConstituencyContestants(constituency, partyElection);
             }
 
         }

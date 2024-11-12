@@ -31,36 +31,33 @@ public class DataUploadService {
 
     @Inject
     private CrudService crudService;
-    
-    
-    
+
+    @Inject
+    private ElectionService electionService;
+
     @Asynchronous
 //    public void process(Election election,Region region, Constituency constituency, String stationCode, String stationName)
-    public void process(ConstituencyElection constituencyElection, String stationCode, String stationName)
-    {
-        
+    public void process(ConstituencyElection constituencyElection, String stationCode, String stationName) {
+
         PollingStation pollingStation = pollingStation(constituencyElection.getConstituency(), stationCode, stationName);
-        
-          
-        
-         ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                        .addObjectParam(ElectionPollingStation._constituency, constituencyElection.getConstituency())
-                        .addObjectParam(ElectionPollingStation._election, constituencyElection.getElection())
-                        .addObjectParam(ElectionPollingStation._pollingStation, pollingStation)
-                        .getSingleResult(ElectionPollingStation.class);
 
-                if (eps == null) {
-                    eps = new ElectionPollingStation();
-                    eps.setElection(constituencyElection.getElection());
-                    eps.setConstituency(constituencyElection.getConstituency());
-                    eps.setPollingStation(pollingStation);
+        ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParam(ElectionPollingStation._constituency, constituencyElection.getConstituency())
+                .addObjectParam(ElectionPollingStation._election, constituencyElection.getElection())
+                .addObjectParam(ElectionPollingStation._pollingStation, pollingStation)
+                .getSingleResult(ElectionPollingStation.class);
+
+        if (eps == null) {
+            eps = new ElectionPollingStation();
+            eps.setElection(constituencyElection.getElection());
+            eps.setConstituency(constituencyElection.getConstituency());
+            eps.setPollingStation(pollingStation);
 //                    eps.setConstituencyElection(constituencyElection);
-                    eps.setResultStatus(ResultStatus.PENDING);
+            eps.setResultStatus(ResultStatus.PENDING);
 
-                    crudService.save(eps);
-                }
-                
-           
+            crudService.save(eps);
+        }
+
     }
 
     public ConstituencyElection initConsElection(Constituency constituency, Region region, Election election, ElectionType electionType) {
@@ -68,7 +65,7 @@ public class DataUploadService {
                 .addObjectParam(ConstituencyElection._constituency, constituency)
                 .addObjectParam(ConstituencyElection._election, election)
                 .addObjectParam(ConstituencyElection._region, region)
-                .addObjectParam(ConstituencyElection._electionType, electionType)
+                //                .addObjectParam(ConstituencyElection._electionType, electionType)
                 .getSingleResult(ConstituencyElection.class);
 
         if (ce == null) {
@@ -78,16 +75,16 @@ public class DataUploadService {
             ce.setRegion(region);
             ce.setResultStatus(ResultStatus.PENDING);
             ce.setResultSource(ResultSource.SUBMITTED);
-            ce.setElectionType(electionType);
             crudService.save(ce);
         }
-        
+
+        electionService.getResultSet(ce, ElectionType.PRESIDENTIAL);
+        electionService.getResultSet(ce, ElectionType.PARLIAMENTARY);
+
         return ce;
     }
-    
-    
-    
-    
+
+
 
     public Region region(String regionName) {
         Region region = QryBuilder.get(crudService.getEm(), Region.class)
@@ -132,8 +129,7 @@ public class DataUploadService {
             constituency.setRegion(region);
             constituency.setDistrict(assembly);
             crudService.save(constituency);
-            
-            
+
         }
 
         return constituency;
@@ -155,44 +151,38 @@ public class DataUploadService {
 
         return station;
     }
-    
-    public void deleteConsituency(Constituency constituency)
-    {
+
+    public void deleteConsituency(Constituency constituency) {
         try {
-            
-              QryBuilder.get(crudService.getEm(), PollingStationResult.class)
-                .addObjectParam(PollingStationResult._electionPollingStation_constituency, constituency).delete();
-            
+
+            QryBuilder.get(crudService.getEm(), PollingStationResult.class)
+                    .addObjectParam(PollingStationResult._electionPollingStation_constituency, constituency).delete();
+
             QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                .addObjectParam(ElectionPollingStation._constituency, constituency).delete();
-            
-            
-              QryBuilder.get(crudService.getEm(), ElectionContestant.class)
-                .addObjectParam(ElectionContestant._constituencyElection_constituency, constituency).delete();
-        
-         QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
-                .addObjectParam(ConstituencyElection._constituency, constituency).delete();
-        
-        
-        crudService.delete(constituency);
+                    .addObjectParam(ElectionPollingStation._constituency, constituency).delete();
+
+            QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+                    .addObjectParam(ElectionContestant._constituencyElection_constituency, constituency).delete();
+
+            QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                    .addObjectParam(ConstituencyElection._constituency, constituency).delete();
+
+            crudService.delete(constituency);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    
-     public void deleteRegion(Region region)
-    {
+
+    public void deleteRegion(Region region) {
         try {
-             List<Constituency> constituencysList = QryBuilder.get(crudService.getEm(), Constituency.class)
-                .addObjectParam(Constituency._region, region).buildQry().getResultList();
-        
-        for (Constituency constituency : constituencysList) {
-            deleteConsituency(constituency);
-        }
-        
-        
-        crudService.delete(region);
+            List<Constituency> constituencysList = QryBuilder.get(crudService.getEm(), Constituency.class)
+                    .addObjectParam(Constituency._region, region).buildQry().getResultList();
+
+            for (Constituency constituency : constituencysList) {
+                deleteConsituency(constituency);
+            }
+
+            crudService.delete(region);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,26 +20,9 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "election_polling_station")
-public class ElectionPollingStation extends SumamarySet {
+public class ElectionPollingStation extends SummarySet {
 
-//    public static final String _votersCount = "votersCount";
-//    @Column(name = "voters_count")
-//    private int votersCount;
-//    public static final String _validVotes = "validVotes";
-//    @Column(name = "valid_votes")
-//    private int validVotes;
-//
-//    public static final String _rejectedBallots = "rejectedBallots";
-//    @Column(name = "rejected_ballots")
-//    private int rejectedBallots;
-//
-//    public static final String _spoiltBallots = "spoiltBallots";
-//    @Column(name = "spoilt_ballots")
-//    private int spoiltBallots;
-//
-//    public static final String _voterTurnout = "voterTurnout";
-//    @Column(name = "voter_turnout")
-//    private int voterTurnout;
+
 
     public static final String _election = "election";
     @JoinColumn(name = "election")
@@ -59,10 +42,11 @@ public class ElectionPollingStation extends SumamarySet {
     @ManyToOne
     private Constituency constituency;
 
-//    public static final String _constituencyElection = "constituencyElection";
-//    @JoinColumn(name = "constituency_election")
-//    @ManyToOne
-//    private ConstituencyElection constituencyElection;
+    public static final String _constituencyElection = "constituencyElection";
+    @JoinColumn(name = "constituency_election")
+    @ManyToOne
+    private ConstituencyElection constituencyElection;
+    
     public static final String _resultSubmission = "resultSubmissionId";
     @Column(name = "result_submission")
     private String resultSubmissionId;
@@ -72,13 +56,6 @@ public class ElectionPollingStation extends SumamarySet {
     @Enumerated(EnumType.STRING)
     private ResultStatus resultStatus;
 
-//    public int getVotersCount() {
-//        return votersCount;
-//    }
-//
-//    public void setVotersCount(int votersCount) {
-//        this.votersCount = votersCount;
-//    }
     public Election getElection() {
         return election;
     }
@@ -103,13 +80,13 @@ public class ElectionPollingStation extends SumamarySet {
         this.constituency = constituency;
     }
 
-//    public ConstituencyElection getConstituencyElection() {
-//        return constituencyElection;
-//    }
-//
-//    public void setConstituencyElection(ConstituencyElection constituencyElection) {
-//        this.constituencyElection = constituencyElection;
-//    }
+    public ConstituencyElection getConstituencyElection() {
+        return constituencyElection;
+    }
+
+    public void setConstituencyElection(ConstituencyElection constituencyElection) {
+        this.constituencyElection = constituencyElection;
+    }
     public String getResultSubmissionId() {
         return resultSubmissionId;
     }
@@ -118,37 +95,6 @@ public class ElectionPollingStation extends SumamarySet {
         this.resultSubmissionId = resultSubmissionId;
     }
 
-//    public int getValidVotes() {
-//        return validVotes;
-//    }
-//
-//    public void setValidVotes(int validVotes) {
-//        this.validVotes = validVotes;
-//    }
-//
-//    public int getRejectedBallots() {
-//        return rejectedBallots;
-//    }
-//
-//    public void setRejectedBallots(int rejectedBallots) {
-//        this.rejectedBallots = rejectedBallots;
-//    }
-//
-//    public int getSpoiltBallots() {
-//        return spoiltBallots;
-//    }
-//
-//    public void setSpoiltBallots(int spoiltBallots) {
-//        this.spoiltBallots = spoiltBallots;
-//    }
-//
-//    public int getVoterTurnout() {
-//        return voterTurnout;
-//    }
-//
-//    public void setVoterTurnout(int voterTurnout) {
-//        this.voterTurnout = voterTurnout;
-//    }
 
     public ResultStatus getResultStatus() {
         return resultStatus;

@@ -21,12 +21,12 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "constituency_election")
-public class ConstituencyElection extends ResultSet {
+public class ConstituencyElection extends SummarySet {
 
-//    public static final String _election = "election";
-//    @JoinColumn(name = "election")
-//    @ManyToOne
-//    private Election election;
+    public static final String _election = "election";
+    @JoinColumn(name = "election")
+    @ManyToOne
+    private Election election;
 
     public static final String _constituency = "constituency";
     public static final String _constituency_constituencyName = _constituency + "." + Constituency._constituencyName;
@@ -59,13 +59,13 @@ public class ConstituencyElection extends ResultSet {
     @Column(name = "polling_stations")
     private int pollingStationCount;
 
-//    public Election getElection() {
-//        return election;
-//    }
-//
-//    public void setElection(Election election) {
-//        this.election = election;
-//    }
+    public Election getElection() {
+        return election;
+    }
+
+    public void setElection(Election election) {
+        this.election = election;
+    }
 
     public Constituency getConstituency() {
         return constituency;
