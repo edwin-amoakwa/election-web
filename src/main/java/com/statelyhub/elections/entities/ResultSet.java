@@ -13,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -38,6 +39,7 @@ public class ResultSet extends UniqueEntityModel3 {
     private int totalVotesCast;
 
     public static final String _electionType = "electionType";
+    @NotNull
     @Column(name = "election_type")
     @Enumerated(EnumType.STRING)
     private ElectionType electionType;

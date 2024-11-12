@@ -112,13 +112,13 @@ public class ConstituencyCollationController implements Serializable {
     public void loadUnProcessedSubmissions()
     {
         unprocessedSubmissionsList  = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
-                .addObjectParam(ResultSubmission._electionPollingStation_constituencyElection, selectedConstituencyElection)
+                .addObjectParam(ResultSubmission._constituencyElection, selectedConstituencyElection)
                 .buildQry().getResultList();
     }
 
     public void loadPollingStation() {
-        pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                .addObjectParam(ElectionPollingStation._constituencyElection, selectedConstituencyElection)
+       pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                .addObjectParam(ElectionPollingStation._election, selectedConstituencyElection.getElection())
                 .orderByDesc(ElectionPollingStation._pollingStation_stationCode)
                 .buildQry().getResultList();
 

@@ -8,6 +8,7 @@ import com.stately.common.formating.ObjectValue;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.excel.ExcelDataLoader;
 import com.stately.modules.excel.ExcelExporter;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.DistrictAssembly;
@@ -113,9 +114,11 @@ public class DataUploadController implements Serializable {
                 DistrictAssembly assembly = dataUploadService.district(region, districtName);
                 Constituency constituency = dataUploadService.constituency(region, assembly, consistuencyName);
 
-                ConstituencyElection constituencyElection = dataUploadService.initConsElection(constituency, region, userSession.getElectionUR());
+                ConstituencyElection presidential = dataUploadService.initConsElection(constituency, region, userSession.getElectionUR(), ElectionType.PRESIDENTIAL);
+                ConstituencyElection parliamentary = dataUploadService.initConsElection(constituency, region, userSession.getElectionUR(), ElectionType.PARLIAMENTARY);
 
-                dataUploadService.process(constituencyElection, stationCode, stationName);
+                dataUploadService.process(presidential, stationCode, stationName);
+                dataUploadService.process(parliamentary, stationCode, stationName);
 
 //                PollingStation pollingStation = dataUploadService.pollingStation(constituency, stationCode, stationName);
 //

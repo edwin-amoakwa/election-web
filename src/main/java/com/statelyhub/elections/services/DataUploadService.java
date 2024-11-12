@@ -5,6 +5,7 @@
 package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultSource;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.Constituency;
@@ -43,8 +44,8 @@ public class DataUploadService {
           
         
          ElectionPollingStation eps = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                        .addObjectParam(ElectionPollingStation._constituencyElection, constituencyElection)
-//                        .addObjectParam(ElectionPollingStation._election, election)
+                        .addObjectParam(ElectionPollingStation._constituency, constituencyElection.getConstituency())
+                        .addObjectParam(ElectionPollingStation._election, constituencyElection.getElection())
                         .addObjectParam(ElectionPollingStation._pollingStation, pollingStation)
                         .getSingleResult(ElectionPollingStation.class);
 
@@ -53,7 +54,7 @@ public class DataUploadService {
                     eps.setElection(constituencyElection.getElection());
                     eps.setConstituency(constituencyElection.getConstituency());
                     eps.setPollingStation(pollingStation);
-                    eps.setConstituencyElection(constituencyElection);
+//                    eps.setConstituencyElection(constituencyElection);
                     eps.setResultStatus(ResultStatus.PENDING);
 
                     crudService.save(eps);
@@ -62,11 +63,12 @@ public class DataUploadService {
            
     }
 
-    public ConstituencyElection initConsElection(Constituency constituency, Region region, Election election) {
+    public ConstituencyElection initConsElection(Constituency constituency, Region region, Election election, ElectionType electionType) {
         ConstituencyElection ce = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._constituency, constituency)
                 .addObjectParam(ConstituencyElection._election, election)
                 .addObjectParam(ConstituencyElection._region, region)
+                .addObjectParam(ConstituencyElection._electionType, electionType)
                 .getSingleResult(ConstituencyElection.class);
 
         if (ce == null) {
@@ -76,6 +78,7 @@ public class DataUploadService {
             ce.setRegion(region);
             ce.setResultStatus(ResultStatus.PENDING);
             ce.setResultSource(ResultSource.SUBMITTED);
+            ce.setElectionType(electionType);
             crudService.save(ce);
         }
         

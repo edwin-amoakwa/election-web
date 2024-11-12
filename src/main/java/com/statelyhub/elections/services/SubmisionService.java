@@ -11,6 +11,7 @@ import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.dto.ElectionResultSetDto;
 import com.statelyhub.elections.dto.SubmittedResultDto;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.ResultSubmission;
@@ -55,6 +56,10 @@ public class SubmisionService {
 
         if (resultSubmission == null) 
         {
+            
+//            ConstituencyElection ce = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+//                    .addObjectParam(ConstituencyElection._constituency, eps)
+            
             resultSubmission = new ResultSubmission();
             resultSubmission.setElectionPollingStation(eps);
             resultSubmission.setVolunteer(volunteer);

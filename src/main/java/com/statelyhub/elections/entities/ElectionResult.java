@@ -23,8 +23,8 @@ import java.util.List;
  * @author Edwin
  */
 @Entity
-@Table(name = "result_submissions")
-public class ResultSubmission extends  ResultSet {
+@Table(name = "election_results")
+public class ElectionResult extends  ResultSet {
     
     
     public static final String _submissionLevel = "submissionLevel";
@@ -43,12 +43,11 @@ public class ResultSubmission extends  ResultSet {
     private Volunteer volunteer;
 
     public static final String _electionPollingStation = "electionPollingStation";
-    
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;
     
-    public static final String _constituencyElection = "constituencyElection";
+     public static final String _constituencyElection = "constituencyElection";
     @JoinColumn(name = "constituency_election")
     @ManyToOne
     private ConstituencyElection constituencyElection;

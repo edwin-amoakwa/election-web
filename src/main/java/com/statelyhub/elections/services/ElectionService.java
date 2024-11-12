@@ -34,7 +34,7 @@ public class ElectionService {
 
     public List<ElectionContestant> cecs(ConstituencyElection constituencyElection, ElectionType electionType) {
         return QryBuilder.get(crudService.getEm(), ElectionContestant.class)
-                .addObjectParam(ElectionContestant._electionType, electionType)
+//                .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();
@@ -66,6 +66,19 @@ public class ElectionService {
                 .orderByAsc(ElectionContestant._viewOrder)
                 //                  .printQryInfo()
                 .buildQry().getResultList();
+    }
+    
+    
+    public List<ElectionPollingStation> getPollingStations(ConstituencyElection constituencyElection)
+    {
+        
+            return QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
+                    .addObjectParam(ElectionPollingStation._constituency, constituencyElection.getConstituency())
+                    .addObjectParam(ElectionPollingStation._election, constituencyElection.getElection())
+                    .orderByAsc(ElectionPollingStation._pollingStation_stationName)
+                    .buildQry().getResultList();
+                    
+
     }
 
 }

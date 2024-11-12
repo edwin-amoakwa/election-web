@@ -5,7 +5,6 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.modules.jpa2.QryBuilder;
-import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PartyElection;
@@ -31,13 +30,13 @@ public class ElectionDetailController implements Serializable {
     private @Inject
     CrudService crudService;
 
-    private @Inject
-    UserSession userSession;
-     @Inject private
-    UpdateStatsService updateStatsService;
-     
-     @Inject private
-    DataUploadService dataUploadService;
+    @Inject
+    private UserSession userSession;
+    @Inject
+    private UpdateStatsService updateStatsService;
+
+    @Inject
+    private DataUploadService dataUploadService;
 
     private Region selectedRegion;
     private ConstituencyElection selectedConstituency;
@@ -84,23 +83,21 @@ public class ElectionDetailController implements Serializable {
         List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
                 .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
 
-        for (ConstituencyElection constituency : constituencys) 
-        {
+        for (ConstituencyElection constituency : constituencys) {
 //            System.out.println("\n==turn of constituency = "+constituency.getConstituency().getConstituencyName());
-            
+
             for (PartyElection partyElection : partyElectionsList) {
 //                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
-                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
-                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
+//                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
+                updateStatsService.initConstituencyContestants(constituency, partyElection);
             }
 
         }
 
 //        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
     }
-    
-    public void deleteRegion(Region region)
-    {
+
+    public void deleteRegion(Region region) {
         dataUploadService.deleteRegion(region);
     }
 

@@ -11,16 +11,14 @@ import java.util.List;
  *
  * @author edwin
  */
-public class ElectionResultSetDto extends BaseDto{
+public class ElectionResultSetDto extends BaseDto {
 
-    
-        private String volunteerId;
+    private String volunteerId;
     private String pollingStationId;
     private String epsId;
-    
+
     private List<AttachmentDto> attachmentsList;
 
-    
     private ElectionType electionType;
     private String resultSetId;
     private int votesCast;
@@ -110,8 +108,6 @@ public class ElectionResultSetDto extends BaseDto{
         this.epsId = epsId;
     }
 
-
-
     public List<AttachmentDto> getAttachmentsList() {
         return attachmentsList;
     }
@@ -120,5 +116,4 @@ public class ElectionResultSetDto extends BaseDto{
         this.attachmentsList = attachmentsList;
     }
 
-    
 }

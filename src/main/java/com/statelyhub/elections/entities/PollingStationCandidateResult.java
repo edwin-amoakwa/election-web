@@ -15,8 +15,8 @@ import jakarta.persistence.Table;
  * @author Edwin
  */
 @Entity
-@Table(name = "polling_station_result")
-public class PollingStationResult extends Result {
+@Table(name = "polling_station_candidate_result")
+public class PollingStationCandidateResult extends Result {
     
     
     public static final String _electionResult = "electionResult";
@@ -44,6 +44,12 @@ public class PollingStationResult extends Result {
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;
+    
+    
+    public static final String _pollingStationResult = "pollingStationResult";
+    @JoinColumn(name = "polling_station_result")
+    @ManyToOne
+    private PollingStationResult pollingStationResult;
 
 
     public Volunteer getVolunteer() {
@@ -84,6 +90,14 @@ public class PollingStationResult extends Result {
 
     public void setElectionResult(ElectionResult electionResult) {
         this.electionResult = electionResult;
+    }
+
+    public PollingStationResult getPollingStationResult() {
+        return pollingStationResult;
+    }
+
+    public void setPollingStationResult(PollingStationResult pollingStationResult) {
+        this.pollingStationResult = pollingStationResult;
     }
 
     

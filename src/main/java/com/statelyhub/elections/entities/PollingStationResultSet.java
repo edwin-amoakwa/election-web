@@ -19,10 +19,15 @@ import jakarta.persistence.Table;
 public class PollingStationResultSet extends ResultSet {
     
     public static final String _electionPollingStation = "electionPollingStation";
-    public static final String _electionPollingStation_constituencyElection = _electionPollingStation + "." + ElectionPollingStation._constituencyElection;
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;
+    
+    
+     public static final String _constituencyElection = "constituencyElection";
+    @JoinColumn(name = "constituency_election")
+    @ManyToOne
+    private ConstituencyElection constituencyElection;
 
     public ElectionPollingStation getElectionPollingStation() {
         return electionPollingStation;
@@ -30,6 +35,14 @@ public class PollingStationResultSet extends ResultSet {
 
     public void setElectionPollingStation(ElectionPollingStation electionPollingStation) {
         this.electionPollingStation = electionPollingStation;
+    }
+
+    public ConstituencyElection getConstituencyElection() {
+        return constituencyElection;
+    }
+
+    public void setConstituencyElection(ConstituencyElection constituencyElection) {
+        this.constituencyElection = constituencyElection;
     }
 
    

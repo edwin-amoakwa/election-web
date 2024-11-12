@@ -21,12 +21,12 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "constituency_election")
-public class ConstituencyElection extends SumamarySet {
+public class ConstituencyElection extends ResultSet {
 
-    public static final String _election = "election";
-    @JoinColumn(name = "election")
-    @ManyToOne
-    private Election election;
+//    public static final String _election = "election";
+//    @JoinColumn(name = "election")
+//    @ManyToOne
+//    private Election election;
 
     public static final String _constituency = "constituency";
     public static final String _constituency_constituencyName = _constituency + "." + Constituency._constituencyName;
@@ -38,6 +38,12 @@ public class ConstituencyElection extends SumamarySet {
     @JoinColumn(name = "region")
     @ManyToOne
     private Region region;
+    
+    
+//    public static final String _resultSource = "resultSource";
+//    @Column(name = "result_source")
+//    @Enumerated(EnumType.STRING)
+//    private Elec resultSource;
 
     public static final String _resultSource = "resultSource";
     @Column(name = "result_source")
@@ -48,18 +54,18 @@ public class ConstituencyElection extends SumamarySet {
     @Column(name = "result_status")
     @Enumerated(EnumType.STRING)
     private ResultStatus resultStatus;
-    
-        public static final String _pollingStationCount = "pollingStations";
+
+    public static final String _pollingStationCount = "pollingStations";
     @Column(name = "polling_stations")
     private int pollingStationCount;
 
-    public Election getElection() {
-        return election;
-    }
-
-    public void setElection(Election election) {
-        this.election = election;
-    }
+//    public Election getElection() {
+//        return election;
+//    }
+//
+//    public void setElection(Election election) {
+//        this.election = election;
+//    }
 
     public Constituency getConstituency() {
         return constituency;
@@ -100,9 +106,6 @@ public class ConstituencyElection extends SumamarySet {
     public void setPollingStationCount(int pollingStationCount) {
         this.pollingStationCount = pollingStationCount;
     }
-
-
-    
 
     @Override
     public String toString() {
