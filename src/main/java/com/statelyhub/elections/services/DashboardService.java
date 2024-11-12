@@ -38,8 +38,10 @@ public class DashboardService {
     public ElectionTypeDashboard dashboard(ElectionType electionType, ConstituencyElection constituencyElection) {
         ElectionTypeDashboard dashboard = new ElectionTypeDashboard();
 
-        dashboard.setTotalRegisteredVoters(constituencyElection.getVotersCount());
-        dashboard.setTotalPollingStation(constituencyElection.getPollingStationCount());
+        if (constituencyElection != null) {
+            dashboard.setTotalRegisteredVoters(constituencyElection.getVotersCount());
+            dashboard.setTotalPollingStation(constituencyElection.getPollingStationCount());
+        }
 
         List<Object[]> pollSummary = QryBuilder.get(crudService.getEm(), PollingStationResultSet.class)
                 .addReturnField("e." + PollingStationResultSet._resultStatus)
@@ -60,27 +62,22 @@ public class DashboardService {
                 dashboard.setPollingStationCompleted(value);
             }
         }
-        
-        
-        
-        
+
         Object[] pollingStats = QryBuilder.get(crudService.getEm(), PollingStationResultSet.class)
-//                .addReturnField("e." + PollingStationResultSet._resultStatus)
+                //                .addReturnField("e." + PollingStationResultSet._resultStatus)
                 .addReturnField("SUM(e." + PollingStationResultSet._validVotes + ")")
                 .addReturnField("SUM(e." + PollingStationResultSet._rejectedBallots + ")")
                 .addReturnField("SUM(e." + PollingStationResultSet._spoiltBallots + ")")
                 .addObjectParam(PollingStationResultSet._electionPollingStation_constituencyElection, constituencyElection)
                 .addObjectParam(PollingStationResultSet._electionType, electionType)
                 .addGroupBy(PollingStationResultSet._resultStatus).getSingleResult(Object[].class);
-        
-        if(pollingStats != null)
-        {
+
+        if (pollingStats != null) {
             StringUtil.printArray(pollingStats);
-           dashboard.setValidVotes(ObjectValue.get_intValue(pollingStats[0]));
-           dashboard.setRejectedBallot(ObjectValue.get_intValue(pollingStats[1]));
-           dashboard.setSpoiltVotes(ObjectValue.get_intValue(pollingStats[2]));
+            dashboard.setValidVotes(ObjectValue.get_intValue(pollingStats[0]));
+            dashboard.setRejectedBallot(ObjectValue.get_intValue(pollingStats[1]));
+            dashboard.setSpoiltVotes(ObjectValue.get_intValue(pollingStats[2]));
         }
-        
 
         dashboard.setPollingStationPct(NumberUtil.pct(dashboard.getPollingStationCompleted(), dashboard.getTotalPollingStation()));
 
@@ -106,11 +103,8 @@ public class DashboardService {
             }
 
         }
-        
-        
-        
+
         dashboard.setContestantsList(electionService.consititueny(constituencyElection, ElectionType.PRESIDENTIAL));
-        
 
         return dashboard;
     }
