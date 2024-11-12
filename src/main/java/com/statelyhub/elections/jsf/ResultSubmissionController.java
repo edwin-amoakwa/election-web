@@ -13,12 +13,10 @@ import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
-import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.model.ElectionTypeResult;
-import com.statelyhub.elections.model.PollingStationResultContainer;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.web.PollingStationSearch;
 import com.statelyhub.elections.services.ElectionResultService;
@@ -118,7 +116,6 @@ public class ResultSubmissionController implements Serializable {
         selectedPollingStationResultSet.setRejectedBallots(selectedSubmission.getRejectedBallots());
         
         
-
         Map<String, Integer> resultMap = new LinkedHashMap<>();
         for (SubmittedResult result : submittedResultsList) {
             resultMap.put(result.getPollingStationResult().getId(), result.getSubmittedResult());
@@ -146,8 +143,14 @@ public class ResultSubmissionController implements Serializable {
         crudService.saveEntity(electionPollingStation);
 
         JsfMsg.msg(true);
-          System.out.println("/// // reslt accepted");
+        System.out.println("/// // reslt accepted");
         
+    }
+    
+    public void rejectResult()
+    {
+        selectedSubmission.setSubmissionStatus(SubmissionStatus.LOCKED);
+        crudService.saveEntity(selectedSubmission);
     }
     
     public void searchPollingStation() {
@@ -164,6 +167,9 @@ public class ResultSubmissionController implements Serializable {
     public void pickSubmission(ResultSubmission resultSubmission)
     {
         this.selectedSubmission = resultSubmission;
+        System.out.println("resultSubmission.getSubmissionPictureImageFormat() = "+resultSubmission.getSubmissionPictureImageFormat());
+        System.out.println("resultSubmission.getSubmissionPicture() = "+resultSubmission.getSubmissionPicture()); 
+        System.out.println("resultSubmission.getSubmissionPictureSRC() = "+resultSubmission.getSubmissionPictureSRC());
         
         selectedPollingStationResultSet = electionService.init(selectedSubmission.getElectionPollingStation(), selectedSubmission.getElectionType());
         electionPollingStation = selectedSubmission.getElectionPollingStation();

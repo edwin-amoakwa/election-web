@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -53,6 +54,13 @@ public class ResultSubmission extends  ResultSet {
     @ManyToOne
     private ConstituencyElection constituencyElection;
 
+    public static final String _submissionPicture = "submissionPicture";
+    @Column(name = "submission_picture")
+    private byte[] submissionPicture;
+    
+    @Column(name = "submission_image_format")
+    private String submissionPictureImageFormat;
+    
     @Transient
     private List<ElectionTypeResult> electionResultsList;
 
@@ -103,7 +111,34 @@ public class ResultSubmission extends  ResultSet {
     public void setConstituencyElection(ConstituencyElection constituencyElection) {
         this.constituencyElection = constituencyElection;
     }
-    
 
+    public byte[] getSubmissionPicture() {
+        return submissionPicture;
+    }
+
+    public void setSubmissionPicture(byte[] submissionPicture) {
+        this.submissionPicture = submissionPicture;
+    }
+
+    public String getSubmissionPictureImageFormat() {
+        return submissionPictureImageFormat;
+    }
+
+    public void setSubmissionPictureImageFormat(String submissionPictureImageFormat) {
+        this.submissionPictureImageFormat = submissionPictureImageFormat;
+    }
+    
+    public String getSubmissionPictureSRC()
+    {
+        try {
+            String base64 =
+                getSubmissionPictureImageFormat()
+                + ","
+                + Base64.getEncoder().encodeToString(getSubmissionPicture());
+            return base64;
+        } catch (Exception e) {
+        }
+        return null;
+    }
     
 }
