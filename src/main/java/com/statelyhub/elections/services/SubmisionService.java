@@ -9,16 +9,19 @@ import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.SubmissionLevel;
 import com.statelyhub.elections.constants.SubmissionStatus;
+import com.statelyhub.elections.dto.AttachmentDto;
 import com.statelyhub.elections.dto.ElectionResultSetDto;
 import com.statelyhub.elections.dto.SubmittedResultDto;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
+import com.statelyhub.elections.entities.SubmittedResultPicture;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -137,10 +140,29 @@ public class SubmisionService {
                 submittedList.add(submittedDto);
             }
             electionResultSetDto.setCandidatesList(submittedList);
-
-
-  
             electionResultSetDto.setVolunteerId(resultSubmission.getVolunteer().getId());
+            
+            
+            List<AttachmentDto> attachmentsList = new LinkedList<>();
+            List<SubmittedResultPicture> images = QryBuilder.get(crudService.getEm(), SubmittedResultPicture.class)
+                    .addObjectParam(SubmittedResultPicture._resultSubmission, resultSubmission)
+                    .buildQry().getResultList();
+            for (SubmittedResultPicture image : images) 
+            {   
+                AttachmentDto dto = new AttachmentDto();
+//                dto.setDateTime(image.getCreatedDate());
+                dto.setId(image.getId());
+                try {
+                    String base64
+                            = image.getImageFormat()
+                            + ","
+                            + Base64.getEncoder().encodeToString(image.getImage());
+                    dto.setFileDataBase64(base64);
+                } catch (Exception e) {
+                }
+                attachmentsList.add(dto);
+            }
+            electionResultSetDto.setAttachmentsList(attachmentsList);
             
         try {
             electionResultSetDto.setEpsId(resultSubmission.getElectionPollingStation().getId());

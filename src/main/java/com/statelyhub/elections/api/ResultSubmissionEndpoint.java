@@ -5,11 +5,13 @@ import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.SubmissionStatus;
+import com.statelyhub.elections.dto.AttachmentDto;
 import com.statelyhub.elections.dto.ElectionResultSetDto;
 import com.statelyhub.elections.dto.SubmittedResultDto;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
+import com.statelyhub.elections.entities.SubmittedResultPicture;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
@@ -99,7 +101,6 @@ public class ResultSubmissionEndpoint {
         resultSubmission.setValidVotes(resultSetDto.getValidVotes());
         resultSubmission.setTotalVotesCast(resultSetDto.getVotesCast());
 
-        processImage(resultSetDto,resultSubmission);
 //        crudService.save(resultSet);
 
         for (SubmittedResultDto submittedResultDto : resultSetDto.getCandidatesList()) 
@@ -137,9 +138,14 @@ public class ResultSubmissionEndpoint {
         //run position logic;
         resultSubmission.setSubmissionStatus(SubmissionStatus.OPEN);
 
-        crudService.save(resultSubmission);
-        
+        resultSubmission = crudService.save(resultSubmission);
+        if(resultSubmission == null)
+        {
+            return ApiResponse.error("Error Submitting Results");
+        }
 
+        processImage(resultSetDto,resultSubmission);
+        
         return ApiResponse.ok(resultSetDto);
     }
 
@@ -147,28 +153,67 @@ public class ResultSubmissionEndpoint {
     {
         if(dto == null)return;
         
-        if(dto.getFileResource() == null)return;
-        if(dto.getFileResource().getFileUpload() == null)return;
+        if(dto.getAttachmentsList() == null)return;
+        if(dto.getAttachmentsList().isEmpty())return;
         
-        System.out.println("dto.getFileResource().getFileUpload().getFileString() = "+dto.getFileResource().getFileUpload().getFileString());
-        System.out.println("dto.getFileResource().getFileUpload().getFileName() = "+dto.getFileResource().getFileUpload().getFileName());
-        System.out.println("dto.getFileResource().getFileUpload().getFileFormat() = "+dto.getFileResource().getFileUpload().getFileFormat());
-    
-        FileUploadDto uploadDto = dto.getFileResource().getFileUpload();
-        String ext = FileUtilities.getFileExtension(uploadDto.getFileName());
-        
-        String before = "";
-        String after = uploadDto.getFileString();
-        
-        if(uploadDto.getFileString().contains(","))
+        for (AttachmentDto recordDto : dto.getAttachmentsList()) 
         {
-               before = uploadDto.getFileString().substring(0,uploadDto.getFileString().indexOf(","));
-               after = uploadDto.getFileString().substring(uploadDto.getFileString().indexOf(",") + 1);
+            System.out.println("dto.getFileResource().getFileUpload().getFileString() = "+recordDto.getFileDataBase64());
+            
+            String ext = FileUtilities.getFileExtension(recordDto.getFileName());
+
+            String before = "";
+            String after = recordDto.getFileDataBase64();
+
+            if(recordDto.getFileDataBase64().contains(","))
+            {
+                   before = recordDto.getFileDataBase64().substring(0,recordDto.getFileDataBase64().indexOf(","));
+                   after = recordDto.getFileDataBase64().substring(recordDto.getFileDataBase64().indexOf(",") + 1);
+            }
+
+            byte[] bytes = Base64.getDecoder().decode(after);
+
+            SubmittedResultPicture submittedImg = new SubmittedResultPicture();
+            submittedImg.setResultSubmission(resultSubmission);
+            submittedImg.setImage(bytes);
+            submittedImg.setImageFormat(before);
+            crudService.save(submittedImg);
         }
- 
-        byte[] bytes = Base64.getDecoder().decode(after);
         
-        resultSubmission.setSubmissionPicture(bytes);
-        resultSubmission.setSubmissionPictureImageFormat(before);
+    
     }
+    
+//    public void processImage(ElectionResultSetDto dto,ResultSubmission resultSubmission)
+//    {
+//        if(dto == null)return;
+//        
+//        if(dto.getAttachmentsList() == null)return;
+//        if(dto.getAttachmentsList().isEmpty())return;
+//        
+//        for (AttachmentDto recordDto : dto.getAttachmentsList()) 
+//        {
+//            
+//        }
+//        
+//        System.out.println("dto.getFileResource().getFileUpload().getFileString() = "+dto.getFileResource().getFileUpload().getFileString());
+//        System.out.println("dto.getFileResource().getFileUpload().getFileName() = "+dto.getFileResource().getFileUpload().getFileName());
+//        System.out.println("dto.getFileResource().getFileUpload().getFileFormat() = "+dto.getFileResource().getFileUpload().getFileFormat());
+//    
+//        FileUploadDto uploadDto = dto.getFileResource().getFileUpload();
+//        String ext = FileUtilities.getFileExtension(uploadDto.getFileName());
+//        
+//        String before = "";
+//        String after = uploadDto.getFileString();
+//        
+//        if(uploadDto.getFileString().contains(","))
+//        {
+//               before = uploadDto.getFileString().substring(0,uploadDto.getFileString().indexOf(","));
+//               after = uploadDto.getFileString().substring(uploadDto.getFileString().indexOf(",") + 1);
+//        }
+// 
+//        byte[] bytes = Base64.getDecoder().decode(after);
+//        
+//        resultSubmission.setSubmissionPicture(bytes);
+//        resultSubmission.setSubmissionPictureImageFormat(before);
+//    }
 }

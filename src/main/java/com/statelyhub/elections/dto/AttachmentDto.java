@@ -17,6 +17,7 @@ public class AttachmentDto {
     private String id;
     private String fileDataBase64;
     private String dateTime = "";
+    private String fileName;
 
     public String getId() {
         return id;
@@ -48,6 +49,14 @@ public class AttachmentDto {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
 }

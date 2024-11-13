@@ -14,6 +14,21 @@
     </ui:define>
 
     <ui:define name="content">
+        
+        <style>
+            .product-item .product-item-content {
+                border: 1px solid var(--surface-d);
+                border-radius: 3px;
+                margin: .3rem;
+                text-align: center;
+                padding: 2rem 0;
+            }
+
+            .product-item .product-image {
+                width: 95%;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+            }
+        </style>
 
         <h:panelGroup id="collationBoad">
 
@@ -370,9 +385,49 @@
                         <div class="clearfix col-md-6">
 
                             <h:panelGroup id="picturePanel">
-                                <div jsf:rendered="#{not empty resultSubmissionController.selectedSubmission.submissionPictureSRC}">
-                                    <img src="#{resultSubmissionController.selectedSubmission.submissionPictureSRC}" width="250" height="420" alt="alt"/>
+<!--                                <div jsf:rendered="{not empty resultSubmissionController.selectedSubmission.submissionPictureSRC}">
+                                    <img src="{resultSubmissionController.selectedSubmission.submissionPictureSRC}" width="250" height="420" alt="alt"/>
+                                </div>-->
+                                
+                                <div class="card">
+                                   <!-- <p:carousel value="{resultSubmissionController.submittedResultImagesList}" var="record" 
+                                                orientation="horizontal"
+                                                verticalViewPortHeight="352px" 
+                                                style="max-width: 250px;margin-top: 2em;">-->
+                                    <p:carousel value="#{resultSubmissionController.submittedResultImagesList}" var="record" 
+                                                numVisible="1" numScroll="1">
+<!--                                        <f:facet name="header">
+                                            <h5>Vertical</h5>
+                                        </f:facet>-->
+                                        <div class="product-item">
+                                            <div class="product-item-content">
+                                                <div class="mb-3">
+                                                    <!--<p:graphicImage name="demo/images/product/{record.image}" styleClass="product-image"/>-->
+                                                    <!--<img src="{record.imageSRC}" width="250" height="420" alt="alt"/>-->
+                                                    <img class="product-image" src="#{record.imageSRC}" alt="alt"/>
+                                                </div>
+<!--                                                <div>
+                                                    <h4 class="mb-1">{product.name}</h4>
+                                                    <h6 class="mt-0 mb-3">
+                                                        <h:outputText value="{product.price}">
+                                                            <f:convertNumber type="currency" pattern="¤#0" currencySymbol="$" />
+                                                        </h:outputText>
+                                                    </h6>
+                                                    <span class="product-badge status-{product.inventoryStatus.name().toLowerCase()}">{product.inventoryStatus.text}</span>
+                                                    <div class="mt-5">
+                                                        <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button mr-2" />
+                                                        <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                                        <p:commandButton type="button" icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
+                                                    </div>
+                                                </div>-->
+                                                <div class="mt-5">
+                                                    <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:carousel>
                                 </div>
+                                
                             </h:panelGroup>
                         </div>
 

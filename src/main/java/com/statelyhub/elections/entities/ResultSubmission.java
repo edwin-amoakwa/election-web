@@ -54,12 +54,12 @@ public class ResultSubmission extends  ResultSet {
     @ManyToOne
     private ConstituencyElection constituencyElection;
 
-    public static final String _submissionPicture = "submissionPicture";
-    @Column(name = "submission_picture")
-    private byte[] submissionPicture;
-    
-    @Column(name = "submission_image_format")
-    private String submissionPictureImageFormat;
+//    public static final String _submissionPicture = "submissionPicture";
+//    @Column(name = "submission_picture")
+//    private byte[] submissionPicture;
+//    
+//    @Column(name = "submission_image_format")
+//    private String submissionPictureImageFormat;
     
     @Transient
     private List<ElectionTypeResult> electionResultsList;
@@ -112,33 +112,33 @@ public class ResultSubmission extends  ResultSet {
         this.constituencyElection = constituencyElection;
     }
 
-    public byte[] getSubmissionPicture() {
-        return submissionPicture;
-    }
-
-    public void setSubmissionPicture(byte[] submissionPicture) {
-        this.submissionPicture = submissionPicture;
-    }
-
-    public String getSubmissionPictureImageFormat() {
-        return submissionPictureImageFormat;
-    }
-
-    public void setSubmissionPictureImageFormat(String submissionPictureImageFormat) {
-        this.submissionPictureImageFormat = submissionPictureImageFormat;
-    }
-    
-    public String getSubmissionPictureSRC()
-    {
-        try {
-            String base64 =
-                getSubmissionPictureImageFormat()
-                + ","
-                + Base64.getEncoder().encodeToString(getSubmissionPicture());
-            return base64;
-        } catch (Exception e) {
-        }
-        return null;
-    }
+//    public byte[] getSubmissionPicture() {
+//        return submissionPicture;
+//    }
+//
+//    public void setSubmissionPicture(byte[] submissionPicture) {
+//        this.submissionPicture = submissionPicture;
+//    }
+//
+//    public String getSubmissionPictureImageFormat() {
+//        return submissionPictureImageFormat;
+//    }
+//
+//    public void setSubmissionPictureImageFormat(String submissionPictureImageFormat) {
+//        this.submissionPictureImageFormat = submissionPictureImageFormat;
+//    }
+//    
+//    public String getSubmissionPictureSRC()
+//    {
+//        try {
+//            String base64 =
+//                getSubmissionPictureImageFormat()
+//                + ","
+//                + Base64.getEncoder().encodeToString(getSubmissionPicture());
+//            return base64;
+//        } catch (Exception e) {
+//        }
+//        return null;
+//    }
     
 }

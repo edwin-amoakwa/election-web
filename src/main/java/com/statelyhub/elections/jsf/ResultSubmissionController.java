@@ -16,6 +16,7 @@ import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.SubmittedResult;
+import com.statelyhub.elections.entities.SubmittedResultPicture;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.web.PollingStationSearch;
@@ -31,6 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.primefaces.model.ResponsiveOption;
 
 /**
  *
@@ -77,6 +79,9 @@ public class ResultSubmissionController implements Serializable {
     private List<ElectionPollingStation> pendingPollingStationsList;
     
     private List<SubmittedResult> submittedResultsList;
+    
+    private List<SubmittedResultPicture> submittedResultImagesList = new LinkedList<>();
+    private List<ResponsiveOption> responsiveOptions;
 
     private ConstituencyElection selectedConstituencyElection;
     private ResultSubmission selectedSubmission;
@@ -96,6 +101,11 @@ public class ResultSubmissionController implements Serializable {
         }
         
         referesh();
+        
+        responsiveOptions = new LinkedList<>();
+        responsiveOptions.add(new ResponsiveOption("1024px", 3, 3));
+        responsiveOptions.add(new ResponsiveOption("768px", 2, 2));
+        responsiveOptions.add(new ResponsiveOption("560px", 1, 1));
     }
     
     public void referesh()
@@ -177,9 +187,9 @@ public class ResultSubmissionController implements Serializable {
     public void pickSubmission(ResultSubmission resultSubmission)
     {
         this.selectedSubmission = resultSubmission;
-        System.out.println("resultSubmission.getSubmissionPictureImageFormat() = "+resultSubmission.getSubmissionPictureImageFormat());
-        System.out.println("resultSubmission.getSubmissionPicture() = "+resultSubmission.getSubmissionPicture()); 
-        System.out.println("resultSubmission.getSubmissionPictureSRC() = "+resultSubmission.getSubmissionPictureSRC());
+//        System.out.println("resultSubmission.getSubmissionPictureImageFormat() = "+resultSubmission.getSubmissionPictureImageFormat());
+//        System.out.println("resultSubmission.getSubmissionPicture() = "+resultSubmission.getSubmissionPicture()); 
+//        System.out.println("resultSubmission.getSubmissionPictureSRC() = "+resultSubmission.getSubmissionPictureSRC());
         
         selectedPollingStationResultSet = electionService.init(selectedSubmission.getElectionPollingStation(), selectedSubmission.getElectionType());
         electionPollingStation = selectedSubmission.getElectionPollingStation();
@@ -189,12 +199,15 @@ public class ResultSubmissionController implements Serializable {
                 .orderByAsc(SubmittedResult._viewOrder)
                 .buildQry().getResultList();
         
-        
-        
         electionResultsList =  QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                 .addObjectParam(PollingStationResult._electionType, resultSubmission.getElectionType())
                 .addObjectParam(PollingStationResult._electionPollingStation, resultSubmission.getElectionPollingStation())
                 .orderByAsc(PollingStationResult._viewOrder)
+                .buildQry().getResultList();
+        
+        submittedResultImagesList =  QryBuilder.get(crudService.getEm(), SubmittedResultPicture.class)
+                .addObjectParam(SubmittedResultPicture._resultSubmission, resultSubmission)
+                .orderByAsc(SubmittedResultPicture._createdDate)
                 .buildQry().getResultList();
         
 //        selectPollingStation(resultSubmission.getElectionPollingStation());
@@ -371,6 +384,8 @@ public class ResultSubmissionController implements Serializable {
         JsfMsg.successSave();
         this.inputVotes = false;
     }
+    
+//    public void nex
 
 //    public List<PollingStationResult> getPresidentialList() {
 //        return presidentialList;
@@ -463,7 +478,21 @@ public class ResultSubmissionController implements Serializable {
     public List<ResultSubmission> getProcessedSubmissionsList() {
         return processedSubmissionsList;
     }
+
+    public List<SubmittedResultPicture> getSubmittedResultImagesList() {
+        return submittedResultImagesList;
+    }
+
+    public void setSubmittedResultImagesList(List<SubmittedResultPicture> submittedResultImagesList) {
+        this.submittedResultImagesList = submittedResultImagesList;
+    }
     
-    
+    public List<ResponsiveOption> getResponsiveOptions() {
+        return responsiveOptions;
+    }
+
+    public void setResponsiveOptions(List<ResponsiveOption> responsiveOptions) {
+        this.responsiveOptions = responsiveOptions;
+    }
 
 }

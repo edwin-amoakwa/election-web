@@ -19,7 +19,7 @@ public class ElectionResultSetDto extends BaseDto {
     private String epsId;
 
     private List<AttachmentDto> attachmentsList;
-    private FileResourceDto fileResource;
+//    private FileResourceDto fileResource;
 
     private ElectionType electionType;
     private String resultSetId;
@@ -118,12 +118,12 @@ public class ElectionResultSetDto extends BaseDto {
         this.attachmentsList = attachmentsList;
     }
 
-    public FileResourceDto getFileResource() {
-        return fileResource;
-    }
-
-    public void setFileResource(FileResourceDto fileResource) {
-        this.fileResource = fileResource;
-    }
+//    public FileResourceDto getFileResource() {
+//        return fileResource;
+//    }
+//
+//    public void setFileResource(FileResourceDto fileResource) {
+//        this.fileResource = fileResource;
+//    }
 
 }
