@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import java.util.Base64;
 import java.util.List;
 
 /**
@@ -36,7 +35,13 @@ public class ResultSubmission extends  ResultSet {
     public static final String _submissionStatus = "submissionStatus";
     @Column(name = "submission_status")
     @Enumerated(EnumType.STRING)
-    private SubmissionStatus submissionStatus;
+    private SubmissionStatus submissionStatus = SubmissionStatus.OPEN;
+    
+     @Column(name = "collated")
+    private boolean collated;
+     
+     @Column(name = "result_set_id")
+    private String resultSetId;
 
     public static final String _volunteer = "volunteer";
     @JoinColumn(name = "volunteer")
@@ -112,33 +117,21 @@ public class ResultSubmission extends  ResultSet {
         this.constituencyElection = constituencyElection;
     }
 
-//    public byte[] getSubmissionPicture() {
-//        return submissionPicture;
-//    }
-//
-//    public void setSubmissionPicture(byte[] submissionPicture) {
-//        this.submissionPicture = submissionPicture;
-//    }
-//
-//    public String getSubmissionPictureImageFormat() {
-//        return submissionPictureImageFormat;
-//    }
-//
-//    public void setSubmissionPictureImageFormat(String submissionPictureImageFormat) {
-//        this.submissionPictureImageFormat = submissionPictureImageFormat;
-//    }
-//    
-//    public String getSubmissionPictureSRC()
-//    {
-//        try {
-//            String base64 =
-//                getSubmissionPictureImageFormat()
-//                + ","
-//                + Base64.getEncoder().encodeToString(getSubmissionPicture());
-//            return base64;
-//        } catch (Exception e) {
-//        }
-//        return null;
-//    }
+    public boolean isCollated() {
+        return collated;
+    }
+
+    public void setCollated(boolean collated) {
+        this.collated = collated;
+    }
+
+    public String getResultSetId() {
+        return resultSetId;
+    }
+
+    public void setResultSetId(String resultSetId) {
+        this.resultSetId = resultSetId;
+    }
+    
     
 }

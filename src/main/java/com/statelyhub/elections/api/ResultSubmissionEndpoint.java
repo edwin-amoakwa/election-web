@@ -90,7 +90,7 @@ public class ResultSubmissionEndpoint {
             return ApiResponse.ok("Cannot Process Submission. Referesh and try again");
         }
 
-        if (resultSubmission.getSubmissionStatus() == SubmissionStatus.LOCKED) {
+        if (resultSubmission.getSubmissionStatus() == SubmissionStatus.ACCEPTED) {
 //            return ApiResponse.ok("Your Submission is locked. You are not allowed to submit at this time");
         }
 

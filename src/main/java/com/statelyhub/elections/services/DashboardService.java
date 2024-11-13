@@ -81,7 +81,7 @@ public class DashboardService {
 
         dashboard.setPollingStationPct(NumberUtil.pct(dashboard.getPollingStationCompleted(), dashboard.getTotalPollingStation()));
 
-        System.out.println("... submission");
+//        System.out.println("... submission");
         List<Object[]> resultList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
                 .addReturnField("e." + ResultSubmission._submissionStatus)
                 .addReturnField("COUNT(e." + ResultSubmission._id + ")")
@@ -91,20 +91,29 @@ public class DashboardService {
 
         int total = 0;
 
+//        System.out.println(".... submisstions");
         StringUtil.printObjectListArray(resultList);
         for (Object[] result : resultList) {
             SubmissionStatus status = (SubmissionStatus) result[0];
             int value = ObjectValue.get_intValue(result[1]);
+            
+            System.out.println(electionType + " -- subs ..... " + status + " ... " + value);
 
             total += value;
 
-            if (status == SubmissionStatus.LOCKED) {
+            if (status == SubmissionStatus.ACCEPTED) {
                 dashboard.setTotalProcessed(total);
+            }
+            else if (status == SubmissionStatus.PENDING) {
+                dashboard.setUnprocessedSubmission(total);
+            }
+            else if (status == SubmissionStatus.OPEN) {
+                dashboard.setPendingSubmission(total);
             }
 
         }
 
-        dashboard.setContestantsList(electionService.consititueny(constituencyElection, ElectionType.PRESIDENTIAL));
+        dashboard.setContestantsList(electionService.consititueny(constituencyElection, electionType));
 
         return dashboard;
     }

@@ -17,10 +17,12 @@ import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
 import com.statelyhub.elections.services.UpdateStatsService;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -36,6 +38,10 @@ public class ParliamentaryCandidateController implements Serializable {
 
     @Inject
     private ElectionService electionService;
+    
+    
+    @Inject
+    private UserSession userSession;
 
     @Inject
     private ElectionResultService electionResultService;
@@ -53,6 +59,15 @@ public class ParliamentaryCandidateController implements Serializable {
     private Region selectedRegion;
     
     private ElectionContestant electionContestant;
+    
+    @PostConstruct
+    public void init()
+    {
+        selectedConstituencyElection = userSession.getConstituencyElectionUR();
+        constituencyElectionList = new LinkedList<>();
+        constituencyElectionList.add(selectedConstituencyElection);
+        loadConstituencyResult(selectedConstituencyElection);
+    }
 
     public void loadConstituency() {
         constituencyElectionList = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
@@ -68,6 +83,7 @@ public class ParliamentaryCandidateController implements Serializable {
         electionContestantsList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .addObjectParam(ElectionContestant._electionType, ElectionType.PARLIAMENTARY)
+                .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();
     }
 
@@ -93,6 +109,7 @@ public class ParliamentaryCandidateController implements Serializable {
         this.electionContestant.setConstituencyElection(selectedConstituencyElection);
         this.electionContestant.setElectionType(ElectionType.PARLIAMENTARY);
         this.electionContestant.setCandidateType(PartyType.INDEPENDENT_CANDIDATE);   
+        electionContestant.setElectionType(ElectionType.PARLIAMENTARY);
     }
     
     public void saveElectionContestant()
