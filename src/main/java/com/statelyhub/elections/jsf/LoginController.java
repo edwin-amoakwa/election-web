@@ -13,8 +13,12 @@ import com.statelyhub.old.service.AdminService;
 import com.stately.common.security.SecurityHash;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.Msg;
+import com.statelyhub.elections.constants.UserDomain;
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.Election;
+import com.statelyhub.elections.services.AppConfigService;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.elections.services.ElectionService;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -35,6 +39,12 @@ public class LoginController implements Serializable
     @Inject private UserSession userSession;
     @Inject private UserPermission userPermission;
         @Inject private CrudService crudService;
+        
+         @Inject
+    private AppConfigService appConfigService;
+         
+                 @Inject
+    private ElectionService electionService;
     
     private String userPassword;
     private String username;
@@ -63,8 +73,21 @@ public class LoginController implements Serializable
                     userSession.setElectionUR(elections.get(0));
                 }
                 
-                
+
                 userSession.login(adminLogin);
+                
+                
+                                  if (userSession.getAccountUR().getUserDomain() == UserDomain.CONSTITUENCY) {
+                                      ConstituencyElection  selectedConstituencyElection = electionService.election(userSession.getAccountUR().getConstituency(), appConfigService.getCurrentElection());
+                                       userSession.setConstituencyElectionUR(selectedConstituencyElection);
+
+        }
+                
+           
+                
+                
+                
+                
                 System.out.println("login sucefull --- ");
                 Faces.redirect(Pages.adminLogin);
                 

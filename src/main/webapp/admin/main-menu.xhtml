@@ -39,7 +39,7 @@
                     <li >      
                           <a href="#{application.contextPath}/admin/sysadmin/result-submissions.xhtml"><i class="fa fa-anchor"></i>#{msg.result_submissions}</a>
                         
-                         <a href="#{application.contextPath}/admin/sysadmin/polling-station-collation.xhtml"><i class="fa fa-anchor"></i>Collation Center</a>
+                         <a href="#{application.contextPath}/admin/sysadmin/polling-station-collation.xhtml"><i class="fa fa-anchor"></i>Collation Board</a>
                         
                         <a href="#{application.contextPath}/admin/sysadmin/parliamentary-candidates.xhtml"><i class="fa fa-anchor"></i>#{msg.constituency} Candidates</a>
 
@@ -56,7 +56,7 @@
         
         
 
-        <f:subview id="nationl" >
+        <f:subview id="nationl" rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
 
             <li class="active treeview ">
                 <a href="#">

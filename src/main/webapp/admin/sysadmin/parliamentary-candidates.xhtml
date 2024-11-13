@@ -18,7 +18,7 @@
         <div class="row">
 
             <div class="col-lg-5">
-                <h:form>
+                <h:form rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
 
                     <h:panelGrid columns="6" styleClass="spaced-table">
                         <h:outputText value="#{msg.region}" />
@@ -91,8 +91,13 @@
                                                       rendered="#{parliamentaryCandidateController.electionContestant.politicalParty}"/>
                                         <h:outputText value="Independent" rendered="#{!parliamentaryCandidateController.electionContestant.politicalParty}"/>
                                         
+                                        
+                                        <h:outputText value="#{msg.view_order}" />
+                                        <p:inputText value="#{parliamentaryCandidateController.electionContestant.viewOrder}" />
+                                        
+                                        
                                         <h:outputText value="Candidate Name" />
-                                        <h:inputText value="#{parliamentaryCandidateController.electionContestant.candidateName}" />
+                                        <p:inputText value="#{parliamentaryCandidateController.electionContestant.candidateName}" />
 
                                         <f:facet name="footer">
                                             <center style="margin: 10px">
@@ -124,7 +129,7 @@
                                     </p:column>
                                     
                                     <p:column headerText="#{msg.type}">
-                                        <h:outputText value="#{electionContestants.candidateType.label}" />
+                                        <h:outputText value="#{electionContestants.candidateType.label}" />  
                                     </p:column>
 
                                     <p:column headerText="#{msg.party}">

@@ -18,7 +18,8 @@ public enum SubmissionStatus implements MessageResolvable
 
     PENDING("PENDING","PENDING"),
     OPEN("PENDING","PENDING"),
-    LOCKED("FINALISED","FINALISED");
+    REJECTED("REJECTED","REJECTED"),
+    ACCEPTED("ACCEPTED","ACCEPTED");
 
     private final String code;
     private final String label;

@@ -120,6 +120,44 @@
                             </p:tab>
                             
                             
+                              <p:tab title="Rejected - #{resultSubmissionController.rejectedSubmissionsList.size()}">
+                                <p:dataTable value="#{resultSubmissionController.rejectedSubmissionsList}" var="submission" 
+                                             rows="10" paginator="true" paginatorPosition="bottom">
+
+                                    
+                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+                                        <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
+                                                       update=":stationResult"
+                                                       action="#{resultSubmissionController.pickSubmission(submission)}"/>
+                                    </p:column>
+
+
+                                    <p:column headerText="#{msg.type}" filterBy="#{submission.electionType.label}" filterMatchMode="contains">
+                                        <h:outputText value="#{submission.electionType.label}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.name}" filterBy="#{submission.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains">
+                                        <h:outputText value="#{submission.electionPollingStation.pollingStation.stationName}" />
+                                    </p:column>
+
+                                    <p:column headerText="Submitter" filterBy="#{submission.volunteer.volunteerName}" filterMatchMode="contains">
+                                        <h:outputText value="#{submission.volunteer.volunteerName}" />
+                                    </p:column>
+
+
+                                    <p:column  >
+                                        <p:commandLink value="#{msg.view}" update=":sumbissionDetails, :stationResult"
+                                                       action="#{resultSubmissionController.pickSubmission(submission)}" 
+                                                       oncomplete="PF('resultPanel').show()"/>
+                                    </p:column>
+
+
+                                </p:dataTable>
+
+                            </p:tab>
+                            
+                            
+                            
                             <p:tab title="Finalised - #{resultSubmissionController.processedSubmissionsList.size()}" rendered="false">
                                 <p:dataTable value="#{resultSubmissionController.completedPollingStationsList}" var="pollingStation" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
@@ -168,7 +206,7 @@
 
 
 
-                        <h:form>
+                        <h:form rendered="false">
                             <label style="font-size:14px;">Toggle to Input Votes</label>
                             <p:toggleSwitch value="#{resultSubmissionController.inputVotes}" style="margin-left:3px;">
                                 <!--<p:ajax listener="{resultSubmissionController.addMessage}" update="msg"/>-->
@@ -216,13 +254,13 @@
                                             <h:outputText value="#{result.candidateName}" />
                                         </p:column>
 
-                                        <p:column headerText="#{msg.accepted}">
+                                        <p:column headerText="#{msg.accepted}" rendered="false">
                                             <h:outputText value="#{result.acceptedResult}" >
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
                                         </p:column>
 
-                                        <p:column headerText="#{msg.input_result}">
+                                        <p:column headerText="#{msg.input_result}" rendered="false">
                                             <h:outputText value="#{result.inputResult}" 
                                                           rendered="#{!resultSubmissionController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
@@ -233,7 +271,7 @@
                                             </p:inputNumber>
                                         </p:column>
 
-                                        <p:column headerText="#{msg.official}">
+                                        <p:column headerText="#{msg.official}" rendered="false">
                                             <h:outputText value="#{result.officialResult}" 
                                                           rendered="#{!resultSubmissionController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
@@ -343,15 +381,18 @@
 
                             <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
                                 
+                                         <h:outputText value="Valid Votes" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
+
+                                     <h:outputText value="Rejected Votes" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
+                            
+                                
                                 <h:outputText value="Total Votes Cast" styleClass="field-label" />
                                 <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
 
-                                <h:outputText value="Valid Votes" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
-
-                                <h:outputText value="Rejected Votes" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
-                            
+                       
+                           
                             </h:panelGrid>
 
                             <br/>

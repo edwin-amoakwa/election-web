@@ -15,7 +15,7 @@ public class ElectionTypeDashboard {
     
     private int totalPollingStation;
     private int pendingSubmission;
-    private int totalUnprocessed;
+    private int unprocessedSubmission;
     private int totalProcessed;
     private int rejectedBallot;
     private int totalRegisteredVoters;
@@ -51,12 +51,12 @@ public class ElectionTypeDashboard {
         this.pendingSubmission = pendingSubmission;
     }
 
-    public int getTotalUnprocessed() {
-        return totalUnprocessed;
+    public int getUnprocessedSubmission() {
+        return unprocessedSubmission;
     }
 
-    public void setTotalUnprocessed(int totalUnprocessed) {
-        this.totalUnprocessed = totalUnprocessed;
+    public void setUnprocessedSubmission(int unprocessedSubmission) {
+        this.unprocessedSubmission = unprocessedSubmission;
     }
 
     public int getTotalProcessed() {

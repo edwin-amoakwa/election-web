@@ -5,6 +5,7 @@
  */
 package com.statelyhub.elections.jsf;
 
+import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.Election;
 import com.statelyhub.elections.entities.UserAccount;
 import com.statelyhub.old.entities.Institution;
@@ -25,6 +26,7 @@ public class UserSession implements Serializable
     
     private UserAccount accountUR;
     private Election electionUR;
+    private ConstituencyElection constituencyElectionUR;
     
         
     public UserSession()
@@ -75,6 +77,14 @@ public class UserSession implements Serializable
 
     public void setElectionUR(Election electionUR) {
         this.electionUR = electionUR;
+    }
+
+    public ConstituencyElection getConstituencyElectionUR() {
+        return constituencyElectionUR;
+    }
+
+    public void setConstituencyElectionUR(ConstituencyElection constituencyElectionUR) {
+        this.constituencyElectionUR = constituencyElectionUR;
     }
     
     
