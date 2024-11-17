@@ -16,8 +16,8 @@ import com.stately.common.api.MessageResolvable;
 public enum PartyType implements MessageResolvable
 {
 
-    POLITICAL_PARTY("POLITICAL_PARTY","POLITICAL_PARTY"),
-    INDEPENDENT_CANDIDATE("INDEPENDENT_CANDIDATE","INDEPENDENT_CANDIDATE");
+    POLITICAL_PARTY("POLITICAL_PARTY","Political Party"),
+    INDEPENDENT_CANDIDATE("INDEPENDENT_CANDIDATE","Independent Candiate");
 
     private final String code;
     private final String label;

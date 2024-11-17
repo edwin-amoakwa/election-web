@@ -17,32 +17,50 @@
 
         <h:panelGroup id="collationBoad">
 
+ 
+
+            <br />
 
             <div class="row">
 
                 <div class="col-lg-5">
+
+                    <center>
+                        <h:form>
+                            <p:commandButton value="Refresh" action="#{constituencyCollationController.init()}"
+                                             update="@form"/>
+                        </h:form>
+                        
+                                   <h:form>
+
+                    <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
+
+                        <h:outputText value="#{msg.constituency}" />
+                        <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{msg.select_one}" />
+                            <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Load" ajax="false"
+                                         action="#{constituencyCollationController.loadPollingStation()}"/>
+                    </h:panelGrid>
+
+
+
+                </h:form>
+                        
+                        
+                        
+                    </center>
+
                     <h:form>
 
-                        <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
-
-                            <h:outputText value="#{msg.constituency}" />
-                            <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
-                                             filter="true" filterMatchMode="contains">
-                                <f:selectItem itemLabel="#{msg.select_one}" />
-                                <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
-                            </p:selectOneMenu>
-
-                            <p:commandButton value="Load" ajax="false"
-                                             action="#{constituencyCollationController.loadPollingStation()}"/>
-                        </h:panelGrid>
 
 
 
-                    </h:form>
 
-                    <h:form>
-                        <p:commandButton value="Refresh" action="#{constituencyCollationController.init()}"
-                                         update="@form"/>
+
 
                         <p:tabView>
 
@@ -415,30 +433,35 @@
                                 <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
 
                                     <h:outputText value="#{msg.valid_votes}" />
-                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.validVotes}" disabled="#{!constituencyCollationController.inputVotes}"/>
+                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.validVotes}" 
+                                                 disabled="#{!constituencyCollationController.inputVotes}"/>
 
                                     <h:outputText value="#{msg.rejected_ballots}" />
-                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.rejectedBallots}"  disabled="#{!constituencyCollationController.inputVotes}"/>
+                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.rejectedBallots}"  
+                                                 size="6"
+                                                 disabled="#{!constituencyCollationController.inputVotes}"/>
 
 
                                     <h:outputText value="#{msg.spoilt_ballots}" />
-                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.spoiltBallots}"  disabled="#{!constituencyCollationController.inputVotes}" />
+                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.spoiltBallots}" 
+                                                 size="6"
+                                                 disabled="#{!constituencyCollationController.inputVotes}" />
 
 
                                 </h:panelGrid>
-                                
+
                                 <h:panelGrid columns="2" styleClass="spaced-table">
-                                    
+
                                     <p:commandButton value="Approve" action="#{constituencyCollationController.approveSubmission()}" 
                                                      styleClass="ui-button-success" 
                                                      ajax=":collationBoad"/>
-                                    
-                                    
+
+
                                     <p:commandButton value="Reject" action="#{constituencyCollationController.rejectResult()}" 
                                                      styleClass="ui-button-danger" 
                                                      ajax=":collationBoad"/>
-                                    
-                                    
+
+
                                 </h:panelGrid>
 
                             </h:form>
@@ -475,6 +498,83 @@
                 </div>
             </div>
 
+            
+            
+            
+              <br />
+                            <br />
+            
+                       <div class="row bg-blue-gradient">
+     
+
+                          
+
+                <h:form>
+
+
+                    <div class="row">
+
+                        <div class="col-lg-1">
+
+                        </div>
+
+                        <div class="col-lg-5">
+                            <h:panelGrid  columns="4" styleClass="spaced-table" style="width: 80%">
+                                <h:outputLabel />
+                                <h:outputLabel value="Pending" />
+                                <h:outputLabel value="Completed" />
+                                <h:outputLabel value="% Completed" />
+
+
+                                <h:outputLabel value="Presidential" />
+                                <h:outputText value="#{dashboardController.presidential.pollingStationPending}" styleClass="field-value" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                                <h:outputText value="#{dashboardController.presidential.pollingStationCompleted}" styleClass="field-value" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                                <h:outputText value="#{dashboardController.presidential.pollingStationPct}" styleClass="field-value" >
+                                    <f:convertNumber pattern="#,##0.00 %" />
+                                </h:outputText>
+
+
+
+                            </h:panelGrid>
+                        </div>
+
+                        <div class="col-lg-5">
+                            <h:panelGrid  columns="4" styleClass="spaced-table" style="width: 80%">
+                                <h:outputLabel />
+                                <h:outputLabel value="Pending" />
+                                <h:outputLabel value="Completed" />
+                                <h:outputLabel value="% Completed" />
+
+
+
+
+                                <h:outputLabel value="Parliamentary" />
+                                <h:outputText value="#{dashboardController.parliamentary.pollingStationPending}" styleClass="field-value" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                                <h:outputText value="#{dashboardController.parliamentary.pollingStationCompleted}" styleClass="field-value" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                                <h:outputText value="#{dashboardController.parliamentary.pollingStationPct}" styleClass="field-value" >
+                                    <f:convertNumber pattern="#,##0.00 %" />
+                                </h:outputText>
+                            </h:panelGrid>
+                        </div>
+
+
+
+                    </div>
+
+                </h:form>
+
+
+
+
+            </div>
         </h:panelGroup>
 
 

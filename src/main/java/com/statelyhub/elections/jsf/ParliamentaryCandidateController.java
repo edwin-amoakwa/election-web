@@ -50,6 +50,8 @@ public class ParliamentaryCandidateController implements Serializable {
     private UpdateStatsService updateStatsService;
 
     private List<ElectionContestant> electionContestantsList;
+    
+     private List<ElectionContestant> presidentialContestantsList;
 
     private List<ConstituencyElection> constituencyElectionList;
     
@@ -85,6 +87,15 @@ public class ParliamentaryCandidateController implements Serializable {
                 .addObjectParam(ElectionContestant._electionType, ElectionType.PARLIAMENTARY)
                 .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();
+        
+        
+        
+        presidentialContestantsList= QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+                .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
+                .addObjectParam(ElectionContestant._electionType, ElectionType.PRESIDENTIAL)
+                .orderByAsc(ElectionContestant._viewOrder)
+                .buildQry().getResultList();
+        
     }
 
 
@@ -206,6 +217,10 @@ public class ParliamentaryCandidateController implements Serializable {
 
     public void setElectionContestant(ElectionContestant electionContestant) {
         this.electionContestant = electionContestant;
+    }
+
+    public List<ElectionContestant> getPresidentialContestantsList() {
+        return presidentialContestantsList;
     }
 
     

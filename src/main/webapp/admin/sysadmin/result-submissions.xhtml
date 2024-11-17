@@ -57,9 +57,12 @@
 
                     <h:form id="mainListForm">
 
-                        <p:commandButton value="Refresh" action="#{resultSubmissionController.referesh()}"
-                                         update="@form"/>
 
+                        
+                           
+                                 <p:commandButton value="Refresh" action="#{resultSubmissionController.referesh()}"
+                                         update="@form"/>
+                        
                         <p:tabView>
 
 
@@ -346,14 +349,12 @@
         
 
         <h:panelGroup id="sumbissionDetails">
-            <p:dialog widgetVar="resultPanel" >
+            <p:dialog widgetVar="resultPanel" header="${resultSubmissionController.selectedSubmission.electionType.label}">
 
                 <div class="container">
 
                     <div class="row justify-content-center">
-                        <div class="col-md-12">
-                            <h2>${resultSubmissionController.selectedSubmission.electionType.label}</h2>
-                        </div>
+                  
                         <div class="col-md-12">
                             <h3>
                                ${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
@@ -409,17 +410,20 @@
                        
                            
                             </h:panelGrid>
-
-                            <br/>
-                            <br/>
-                            <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
+                            
+                            <h:panelGrid columns="2" styleClass="spaced-table">
+                                
+                                 <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
                                              update=":stationResult, :mainListForm"
                                              oncomplete="PF('resultPanel').hide()"/>
-                            <br/>
-                            <br/>
-                            <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
+                                 
+                                 <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
                                              styleClass="ui-button-danger" 
                                              oncomplete="PF('resultPanel').hide()"/>
+                                
+                            </h:panelGrid>
+                          
+                            
 
                         </div>
 
