@@ -184,7 +184,7 @@ public class UpdateStatsService {
                 .addObjectParam(PollingStationResult._electionPollingStation, eps)
                 .getSingleResult(PollingStationResult.class);
 
-        PollingStationResultSet resultSet = electionService.getResultSet(eps, contestant.getElectionType());
+        PollingStationResultSet resultSet = electionService.init(eps, contestant.getElectionType());
 
         if (stationResult == null) {
             stationResult = new PollingStationResult();

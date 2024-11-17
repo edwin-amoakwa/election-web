@@ -6,6 +6,7 @@ package com.statelyhub.elections.services;
 
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.Constituency;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ConstituencyResultSet;
@@ -34,9 +35,8 @@ public class ElectionService {
 
         return elections.get(0);
     }
-    
-    public ConstituencyElection election(Constituency constituency, Election election)
-    {
+
+    public ConstituencyElection election(Constituency constituency, Election election) {
         return QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._constituency, constituency)
                 .addObjectParam(ConstituencyElection._election, election)
@@ -45,7 +45,7 @@ public class ElectionService {
 
     public List<ElectionContestant> cecs(ConstituencyElection constituencyElection, ElectionType electionType) {
         return QryBuilder.get(crudService.getEm(), ElectionContestant.class)
-                                .addObjectParam(ElectionContestant._electionType, electionType)
+                .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();
@@ -107,7 +107,6 @@ public class ElectionService {
         return resultSet;
     }
 
-    
     public ConstituencyResultSet init(ConstituencyElection constituencyElection, ElectionType electionType) {
         ConstituencyResultSet resultSet = getResultSet(constituencyElection, electionType);
 
@@ -120,9 +119,7 @@ public class ElectionService {
 
         return resultSet;
     }
-    
-    
-     
+
     public PollingStationResultSet init(ElectionPollingStation electionPollingStation, ElectionType electionType) {
         PollingStationResultSet resultSet = getResultSet(electionPollingStation, electionType);
 
@@ -130,7 +127,9 @@ public class ElectionService {
             resultSet = new PollingStationResultSet();
             resultSet.setElectionPollingStation(electionPollingStation);
             resultSet.setElectionType(electionType);
+            resultSet.setResultStatus(ResultStatus.PENDING);
             crudService.save(resultSet);
+
         }
 
         return resultSet;

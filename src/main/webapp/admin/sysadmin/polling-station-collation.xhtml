@@ -17,7 +17,7 @@
 
         <h:panelGroup id="collationBoad">
 
- 
+
 
             <br />
 
@@ -30,28 +30,28 @@
                             <p:commandButton value="Refresh" action="#{constituencyCollationController.init()}"
                                              update="@form"/>
                         </h:form>
-                        
-                                   <h:form>
 
-                    <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
+                        <h:form>
 
-                        <h:outputText value="#{msg.constituency}" />
-                        <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
-                                         filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="#{msg.select_one}" />
-                            <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
-                        </p:selectOneMenu>
+                            <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
 
-                        <p:commandButton value="Load" ajax="false"
-                                         action="#{constituencyCollationController.loadPollingStation()}"/>
-                    </h:panelGrid>
+                                <h:outputText value="#{msg.constituency}" />
+                                <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
+                                                 filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{msg.select_one}" />
+                                    <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Load" ajax="false"
+                                                 action="#{constituencyCollationController.loadPollingStation()}"/>
+                            </h:panelGrid>
 
 
 
-                </h:form>
-                        
-                        
-                        
+                        </h:form>
+
+
+
                     </center>
 
                     <h:form>
@@ -498,16 +498,16 @@
                 </div>
             </div>
 
-            
-            
-            
-              <br />
-                            <br />
-            
-                       <div class="row bg-blue-gradient">
-     
 
-                          
+
+
+            <br />
+            <br />
+
+            <div class="row bg-blue-gradient">
+
+
+
 
                 <h:form>
 
