@@ -10,7 +10,7 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:define name="pageTitle">
-        Collation Center -  #{constituencyCollationController.selectedConstituencyElection.constituency.constituencyName}
+        Collation Board -  #{constituencyCollationController.selectedConstituencyElection.constituency.constituencyName}
     </ui:define>
 
     <ui:define name="content">
@@ -45,9 +45,9 @@
                                          update="@form"/>
 
                         <p:tabView>
-                            
-                            
-                                   <p:tab title="Accepted Submissions - #{constituencyCollationController.completedSubmissionList.size()}">
+
+
+                            <p:tab title="Accepted Submissions - #{constituencyCollationController.completedSubmissionList.size()}">
                                 <p:dataTable value="#{constituencyCollationController.completedSubmissionList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
@@ -81,8 +81,8 @@
                                 </p:dataTable>
 
                             </p:tab>
-                            
-                            
+
+
 
                             <p:tab title="Pending - #{constituencyCollationController.pendingList.size()}">
 
@@ -112,7 +112,7 @@
 
 
                             <p:tab title="Finalised - #{constituencyCollationController.completedList.size()}">
-                               
+
                                 <p:dataTable value="#{constituencyCollationController.completedList}" var="record" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
@@ -412,28 +412,33 @@
 
                         <center>
                             <h:form >
-                                <h:panelGrid columns="2" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
+                                <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
 
                                     <h:outputText value="#{msg.valid_votes}" />
                                     <p:inputText value="#{constituencyCollationController.selectedResultSet.validVotes}" disabled="#{!constituencyCollationController.inputVotes}"/>
-                                    
-                                     <h:outputText value="#{msg.rejected_ballots}" />
+
+                                    <h:outputText value="#{msg.rejected_ballots}" />
                                     <p:inputText value="#{constituencyCollationController.selectedResultSet.rejectedBallots}"  disabled="#{!constituencyCollationController.inputVotes}"/>
+
+
+                                    <h:outputText value="#{msg.spoilt_ballots}" />
+                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.spoiltBallots}"  disabled="#{!constituencyCollationController.inputVotes}" />
+
+
+                                </h:panelGrid>
+                                
+                                <h:panelGrid columns="2" styleClass="spaced-table">
                                     
-                                    
-                                     <h:outputText value="#{msg.spoilt_ballots}" />
-                                     <p:inputText value="#{constituencyCollationController.selectedResultSet.spoiltBallots}"  disabled="#{!constituencyCollationController.inputVotes}" />
-
-
-                                    <h:outputText value="Status" />
-
-                                    <p:selectOneMenu value="#{constituencyCollationController.selectedResultSet.resultStatus}">
-                                        <f:selectItems value="#{commonOptions.resultStatusList}" />
-                                    </p:selectOneMenu>
-
-                                    <p:commandButton value="Update" action="#{constituencyCollationController.updatePollingStatationStatus()}" 
+                                    <p:commandButton value="Approve" action="#{constituencyCollationController.approveSubmission()}" 
+                                                     styleClass="ui-button-success" 
                                                      ajax=":collationBoad"/>
-
+                                    
+                                    
+                                    <p:commandButton value="Reject" action="#{constituencyCollationController.rejectResult()}" 
+                                                     styleClass="ui-button-danger" 
+                                                     ajax=":collationBoad"/>
+                                    
+                                    
                                 </h:panelGrid>
 
                             </h:form>
@@ -443,18 +448,23 @@
                         </center>
 
 
-                                <h:panelGroup id="picturePanel" >
+                        <h:panelGroup id="picturePanel" >
+
+                            <ui:remove>
                                 <div jsf:rendered="#{not empty constituencyCollationController.selectedSubmission.submissionPictureSRC}">
                                     <img src="#{constituencyCollationController.selectedSubmission.submissionPictureSRC}" width="250" height="420" alt="alt"/>
                                 </div>
-                            </h:panelGroup>
+                            </ui:remove>
+
+
+                        </h:panelGroup>
 
                     </h:panelGroup>
 
                     <br />
-                    
-                    
-                  
+
+
+
 
 
                 </div>

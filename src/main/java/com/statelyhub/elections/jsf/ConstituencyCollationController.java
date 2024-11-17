@@ -210,8 +210,14 @@ public class ConstituencyCollationController implements Serializable {
         loadConstituencyResult();
         JsfMsg.msg(true);
     }
+    
+    public void rejectResult()
+    {
+        
+    }
 
-    public void updatePollingStatationStatus() {
+    public void approveSubmission() {
+        selectedResultSet.setResultStatus(ResultStatus.FINALISED);
         crudService.save(selectedResultSet);
 
         if (selectedResultSet.getResultStatus() == ResultStatus.FINALISED) {

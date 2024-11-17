@@ -72,6 +72,12 @@
                                     </h:outputText>
                                 </p:column>
                         
+                        
+                        <p:column headerText="#{msg.constituency}" filterBy="#{consElection.constituency.constituencyName}" filterMatchMode="contains">
+                            <h:commandLink value="Init" 
+                                           action="#{electionDetailController.initiaiseConsiituency(consElection)}"/>
+                        </p:column>
+                        
 
                     </p:dataTable>
                 </h:form>

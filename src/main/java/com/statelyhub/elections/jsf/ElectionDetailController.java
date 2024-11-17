@@ -78,22 +78,62 @@ public class ElectionDetailController implements Serializable {
 
     public void initIaliseDefaultContesttants() {
 
-//        List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
-//                .addObjectParam(ConstituencyElection._election, userSession.getElectionUR()).buildQry().getResultList();
-//
+        List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+                .addObjectParam(ConstituencyElection._election, userSession.getElectionUR()).buildQry().getResultList();
+
+        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
+
+        for (ConstituencyElection constituency : constituencys) {
+//            System.out.println("\n==turn of constituency = "+constituency.getConstituency().getConstituencyName());
+
+            for (PartyElection partyElection : partyElectionsList) {
+//                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
+                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
+                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
+//                updateStatsService.initConstituencyContestants(constituency, partyElection);
+            }
+
+        }
+
+
 //        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
 //                .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
 //
-//        for (ConstituencyElection constituency : constituencys) {
+////        for (ConstituencyElection constituency : constituencys) {
 ////            System.out.println("\n==turn of constituency = "+constituency.getConstituency().getConstituencyName());
 //
 //            for (PartyElection partyElection : partyElectionsList) {
 ////                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
-//                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
-//                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
+//                updateStatsService.initIaliseDefaultContesttants(partyElection, userSession.getElectionUR());
+////                updateStatsService.initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
 ////                updateStatsService.initConstituencyContestants(constituency, partyElection);
 //            }
-//
+
+
+
+//        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
+    }
+    
+        public void initiaiseConsiituency(ConstituencyElection constituencyElection) {
+
+//        List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
+//                .addObjectParam(ConstituencyElection._election, userSession.getElectionUR()).buildQry().getResultList();
+
+        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
+
+//        for (ConstituencyElection constituency : constituencyElection) {
+//            System.out.println("\n==turn of constituency = "+constituency.getConstituency().getConstituencyName());
+
+            for (PartyElection partyElection : partyElectionsList) {
+//                System.out.println("--turn of party = "+partyElection.getParty().getInitials());
+                updateStatsService.initConstituencyContestants(constituencyElection, partyElection, ElectionType.PRESIDENTIAL);
+                updateStatsService.initConstituencyContestants(constituencyElection, partyElection, ElectionType.PARLIAMENTARY);
+//                updateStatsService.initConstituencyContestants(constituency, partyElection);
+            }
+
+            System.out.println("... comppleted ....");
 //        }
 
 
@@ -112,8 +152,10 @@ public class ElectionDetailController implements Serializable {
 
 
 
-        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
+//        updateStatsService.initIaliseDefaultContesttants(userSession.getElectionUR());
     }
+    
+    
 
     public void deleteRegion(Region region) {
         dataUploadService.deleteRegion(region);

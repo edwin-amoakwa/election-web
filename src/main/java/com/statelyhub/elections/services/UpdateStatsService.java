@@ -135,7 +135,7 @@ public class UpdateStatsService {
 //        System.out.println("--here here passed");
         ElectionContestant contestant = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._party, partyElection.getParty())
-                //                .addObjectParam(ElectionContestant._electionType, electionType)
+                .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .getSingleResult(ElectionContestant.class);
 
@@ -174,10 +174,10 @@ public class UpdateStatsService {
 
     public void initPollingStationContestants(ElectionContestant contestant, ElectionPollingStation eps) {
 
-        if (contestant.getCandidateType() == PartyType.INDEPENDENT_CANDIDATE && contestant.getElectionType() == ElectionType.PARLIAMENTARY) {
-            //independent parties will not be added to eah consituency
-            return;
-        }
+//        if (contestant.getCandidateType() == PartyType.INDEPENDENT_CANDIDATE && contestant.getElectionType() == ElectionType.PARLIAMENTARY) {
+//            //independent parties will not be added to eah consituency
+//            return;
+//        }
 
         PollingStationResult stationResult = QryBuilder.get(crudService.getEm(), PollingStationResult.class)
                 .addObjectParam(PollingStationResult._electionContestant, contestant)
@@ -203,7 +203,7 @@ public class UpdateStatsService {
         stationResult.setViewOrder(contestant.getViewOrder());
         crudService.save(stationResult);
 
-//        System.out.println("..... " + stationResult);
+        System.out.println("..... " + stationResult);
     }
 
     public void addContestant(ConstituencyElection constituencyElection, ElectionContestant electionContestant) {
