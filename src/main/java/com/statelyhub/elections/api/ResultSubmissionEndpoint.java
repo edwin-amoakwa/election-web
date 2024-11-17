@@ -17,7 +17,6 @@ import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
 import com.statelyhub.elections.services.SubmisionService;
-import com.statelyhub.elections.utils.FileUploadDto;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
