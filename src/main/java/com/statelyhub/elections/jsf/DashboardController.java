@@ -54,7 +54,11 @@ public class DashboardController implements Serializable
     {
         Constituency constituency = userSession.getAccountUR().getConstituency();
         
-        constituencyElection = electionService.election(constituency, electionService.getCurrentElection());
+        try {
+            constituencyElection = electionService.election(constituency, electionService.getCurrentElection());
+        } catch (Exception e) {
+            constituencyElection = null;
+        }
         
         presidential = dashboardService.dashboard(ElectionType.PRESIDENTIAL, constituencyElection);
         parliamentary = dashboardService.dashboard(ElectionType.PARLIAMENTARY, constituencyElection);
