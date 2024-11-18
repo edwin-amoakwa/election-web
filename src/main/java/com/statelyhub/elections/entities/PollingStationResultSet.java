@@ -21,33 +21,23 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "polling_station_result_set")
 public class PollingStationResultSet extends ResultSet {
-    
-    
-    
-       public static final String _resultStatus = "resultStatus";
+
+    public static final String _resultStatus = "resultStatus";
     @Column(name = "result_status")
     @Enumerated(EnumType.STRING)
-    private ResultStatus resultStatus =  ResultStatus.PENDING;
+    private ResultStatus resultStatus = ResultStatus.PENDING;
 
-    
-    
-    
     public static final String _electionPollingStation = "electionPollingStation";
     public static final String _electionPollingStation_constituencyElection = _electionPollingStation + "." + ElectionPollingStation._constituencyElection;
     @JoinColumn(name = "election_polling_station")
     @ManyToOne
     private ElectionPollingStation electionPollingStation;
-    
-    
-     public static final String _constituencyElection = "constituencyElection";
+
+    public static final String _constituencyElection = "constituencyElection";
     @JoinColumn(name = "constituency_election")
     @ManyToOne
     private ConstituencyElection constituencyElection;
 
-    
-    
-    
-    
     public ElectionPollingStation getElectionPollingStation() {
         return electionPollingStation;
     }
@@ -72,6 +62,4 @@ public class PollingStationResultSet extends ResultSet {
         this.resultStatus = resultStatus;
     }
 
-   
-    
 }

@@ -14,7 +14,7 @@
     </ui:define>
 
     <ui:define name="content">
-        
+
         <style>
             .product-item .product-item-content {
                 border: 1px solid var(--surface-d);
@@ -58,11 +58,11 @@
                     <h:form id="mainListForm">
 
 
-                        
-                           
-                                 <p:commandButton value="Refresh" action="#{resultSubmissionController.referesh()}"
+
+
+                        <p:commandButton value="Refresh" action="#{resultSubmissionController.referesh()}"
                                          update="@form"/>
-                        
+
                         <p:tabView>
 
 
@@ -105,8 +105,8 @@
                                 <p:dataTable value="#{resultSubmissionController.processedSubmissionsList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
-                                    
-                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+
+                                    <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                                         <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
                                                        update=":stationResult"
                                                        action="#{resultSubmissionController.pickSubmission(submission)}"/>
@@ -136,14 +136,14 @@
                                 </p:dataTable>
 
                             </p:tab>
-                            
-                            
-                              <p:tab title="Rejected - #{resultSubmissionController.rejectedSubmissionsList.size()}">
+
+
+                            <p:tab title="Rejected - #{resultSubmissionController.rejectedSubmissionsList.size()}">
                                 <p:dataTable value="#{resultSubmissionController.rejectedSubmissionsList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
-                                    
-                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+
+                                    <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                                         <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
                                                        update=":stationResult"
                                                        action="#{resultSubmissionController.pickSubmission(submission)}"/>
@@ -173,9 +173,9 @@
                                 </p:dataTable>
 
                             </p:tab>
-                            
-                            
-                            
+
+
+
                             <p:tab title="Finalised - #{resultSubmissionController.processedSubmissionsList.size()}" rendered="false">
                                 <p:dataTable value="#{resultSubmissionController.completedPollingStationsList}" var="pollingStation" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
@@ -325,12 +325,12 @@
 
                             </div>
                         </div>
-                        
+
                     </h:panelGroup>
 
                     <br />
                     <br />
-                    
+
 
                 </div>
 
@@ -346,7 +346,7 @@
 
         <hr />
         <hr />
-        
+
 
         <h:panelGroup id="sumbissionDetails">
             <p:dialog widgetVar="resultPanel" header="${resultSubmissionController.selectedSubmission.electionType.label}">
@@ -354,22 +354,22 @@
                 <div class="container">
 
                     <div class="row justify-content-center">
-                  
+
                         <div class="col-md-12">
                             <h3>
-                               ${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
-                            
-                                 -  <h:outputText value=" Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
+                                ${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
+
+                                -  <h:outputText value=" Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
                             </h3>
                         </div>
                         <div class="col-md-12">
-                            
+
                         </div>
                     </div>
                     <div class="clearfix row">
                         <div class="col-md-6">
-                  
-                            
+
+
 
                             <p:dataTable value="#{resultSubmissionController.submittedResultsList}" var="submittedResult" rendered="false">
                                 <p:column headerText="">
@@ -396,54 +396,54 @@
                             </h:panelGrid>
 
                             <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
-                                
-                                         <h:outputText value="Valid Votes" styleClass="field-label" />
+
+                                <h:outputText value="Valid Votes" styleClass="field-label" />
                                 <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
 
-                                     <h:outputText value="Rejected Votes" styleClass="field-label" />
+                                <h:outputText value="Rejected Votes" styleClass="field-label" />
                                 <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
-                            
-                                
+
+
                                 <h:outputText value="Total Votes Cast" styleClass="field-label" />
                                 <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
 
-                       
-                           
+
+
                             </h:panelGrid>
-                            
+
                             <h:panelGrid columns="2" styleClass="spaced-table">
-                                
-                                 <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
-                                             update=":stationResult, :mainListForm"
-                                             oncomplete="PF('resultPanel').hide()"/>
-                                 
-                                 <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
-                                             styleClass="ui-button-danger" 
-                                             oncomplete="PF('resultPanel').hide()"/>
-                                
+
+                                <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
+                                                 update=":stationResult, :mainListForm"
+                                                 oncomplete="PF('resultPanel').hide()"/>
+
+                                <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
+                                                 styleClass="ui-button-danger" update=":collationBoad"
+                                                 oncomplete="PF('resultPanel').hide()"/>
+
                             </h:panelGrid>
-                          
-                            
+
+
 
                         </div>
 
                         <div class="clearfix col-md-6">
 
                             <h:panelGroup id="picturePanel">
-<!--                                <div jsf:rendered="{not empty resultSubmissionController.selectedSubmission.submissionPictureSRC}">
-                                    <img src="{resultSubmissionController.selectedSubmission.submissionPictureSRC}" width="250" height="420" alt="alt"/>
-                                </div>-->
-                                
+                                <!--                                <div jsf:rendered="{not empty resultSubmissionController.selectedSubmission.submissionPictureSRC}">
+                                                                    <img src="{resultSubmissionController.selectedSubmission.submissionPictureSRC}" width="250" height="420" alt="alt"/>
+                                                                </div>-->
+
                                 <div class="card">
-                                   <!-- <p:carousel value="{resultSubmissionController.submittedResultImagesList}" var="record" 
-                                                orientation="horizontal"
-                                                verticalViewPortHeight="352px" 
-                                                style="max-width: 250px;margin-top: 2em;">-->
+                                    <!-- <p:carousel value="{resultSubmissionController.submittedResultImagesList}" var="record" 
+                                                 orientation="horizontal"
+                                                 verticalViewPortHeight="352px" 
+                                                 style="max-width: 250px;margin-top: 2em;">-->
                                     <p:carousel value="#{resultSubmissionController.submittedResultImagesList}" var="record" 
                                                 numVisible="1" numScroll="1">
-<!--                                        <f:facet name="header">
-                                            <h5>Vertical</h5>
-                                        </f:facet>-->
+                                        <!--                                        <f:facet name="header">
+                                                                                    <h5>Vertical</h5>
+                                                                                </f:facet>-->
                                         <div class="product-item">
                                             <div class="product-item-content">
                                                 <div class="mb-3">
@@ -451,20 +451,20 @@
                                                     <!--<img src="{record.imageSRC}" width="250" height="420" alt="alt"/>-->
                                                     <img class="product-image" src="#{record.imageSRC}" alt="alt"/>
                                                 </div>
-<!--                                                <div>
-                                                    <h4 class="mb-1">{product.name}</h4>
-                                                    <h6 class="mt-0 mb-3">
-                                                        <h:outputText value="{product.price}">
-                                                            <f:convertNumber type="currency" pattern="¤#0" currencySymbol="$" />
-                                                        </h:outputText>
-                                                    </h6>
-                                                    <span class="product-badge status-{product.inventoryStatus.name().toLowerCase()}">{product.inventoryStatus.text}</span>
-                                                    <div class="mt-5">
-                                                        <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button mr-2" />
-                                                        <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
-                                                        <p:commandButton type="button" icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
-                                                    </div>
-                                                </div>-->
+                                                <!--                                                <div>
+                                                                                                    <h4 class="mb-1">{product.name}</h4>
+                                                                                                    <h6 class="mt-0 mb-3">
+                                                                                                        <h:outputText value="{product.price}">
+                                                                                                            <f:convertNumber type="currency" pattern="¤#0" currencySymbol="$" />
+                                                                                                        </h:outputText>
+                                                                                                    </h6>
+                                                                                                    <span class="product-badge status-{product.inventoryStatus.name().toLowerCase()}">{product.inventoryStatus.text}</span>
+                                                                                                    <div class="mt-5">
+                                                                                                        <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button mr-2" />
+                                                                                                        <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                                                                                        <p:commandButton type="button" icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
+                                                                                                    </div>
+                                                                                                </div>-->
                                                 <div class="mt-5">
                                                     <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
                                                 </div>
@@ -472,7 +472,7 @@
                                         </div>
                                     </p:carousel>
                                 </div>
-                                
+
                             </h:panelGroup>
                         </div>
 

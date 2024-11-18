@@ -37,6 +37,7 @@ public class ResultSubmission extends  ResultSet {
     @Enumerated(EnumType.STRING)
     private SubmissionStatus submissionStatus = SubmissionStatus.OPEN;
     
+    public static final String _collated = "collated";
      @Column(name = "collated")
     private boolean collated;
      

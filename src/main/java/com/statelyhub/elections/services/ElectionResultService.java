@@ -112,6 +112,19 @@ public class ElectionResultService {
         return list;
 
     }
+    
+    
+    
+    public ElectionTypeResult constituencyType(ConstituencyElection constituencyElection, ElectionType electionType) {
+
+        ElectionTypeResult result = new ElectionTypeResult();
+        result.setElectionType(electionType);
+        result.setContestantsList(electionService.consititueny(constituencyElection, electionType));
+        
+
+        return result;
+
+    }
 
     public void updatePollingStationSourceChange(ConstituencyElection ce) {
 
@@ -121,7 +134,9 @@ public class ElectionResultService {
                 .addObjectParam(PollingStationResult._electionPollingStation_constituency, ce.getConstituency())
                 .buildQry().getResultList();
         
-        updateSource(pollingStationResultsList);
+//        PollingStationResultSet resultSet =
+//        
+//        updateSource(pollingStationResultsList);
         
 //        for (PollingStationResult result : pollingStationResultsList) {
 //
@@ -155,16 +170,22 @@ public class ElectionResultService {
         crudService.save(ce);
     }
     
-    public void updateSource(List<PollingStationResult> pollingStationResultsList)
+    public void updateSource(PollingStationResultSet resultSet, List<PollingStationResult> pollingStationResultsList)
     {
+        
+        if(resultSet.getResultSource() == null)
+        {
+            resultSet.setResultSource(ResultSource.INPUTTED);
+        }
+        
         for (PollingStationResult result : pollingStationResultsList) {
-             if (result.getConstituencyElection().getResultSource() == ResultSource.SUBMITTED) {
+             if (resultSet.getResultSource() == ResultSource.SUBMITTED) {
                 result.setAcceptedResult(result.getSubmittedResult());
 //                System.out.println(".....  setting result .... ");
 
-            } else if (result.getConstituencyElection().getResultSource() == ResultSource.OFFICIAL) {
+            } else if (resultSet.getResultSource() == ResultSource.OFFICIAL) {
                 result.setAcceptedResult(result.getOfficialResult());
-            } else if (result.getConstituencyElection().getResultSource() == ResultSource.INPUTTED) {
+            } else if (resultSet.getResultSource() == ResultSource.INPUTTED) {
                 result.setAcceptedResult(result.getInputResult());
             }
         }
