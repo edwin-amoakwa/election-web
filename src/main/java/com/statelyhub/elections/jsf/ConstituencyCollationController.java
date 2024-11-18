@@ -7,6 +7,7 @@ package com.statelyhub.elections.jsf;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.ResultSource;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.constants.UserDomain;
@@ -234,7 +235,7 @@ public class ConstituencyCollationController implements Serializable {
         crudService.save(selectedResultSet);
 
  
-            electionResultService.updateSource(electionResultsList);
+            electionResultService.updateSource(selectedResultSet, electionResultsList);
 
             completedList.add(selectedResultSet);
             pendingList.remove(selectedResultSet);
@@ -256,6 +257,16 @@ public class ConstituencyCollationController implements Serializable {
                 result.getPartyDetails() + " -"
                 + "--result.getInputResult() = " + result.getInputResult()
                 + "--result.getOfficialResult() = " + result.getOfficialResult());
+        
+        if(selectedResultSet.getResultSource() == ResultSource.INPUTTED)
+        {
+            result.setAcceptedResult(result.getInputResult());
+        }
+        else  if(selectedResultSet.getResultSource() == ResultSource.OFFICIAL)
+        {
+            result.setAcceptedResult(result.getOfficialResult());
+        }
+        
         crudService.save(result);
     }
 
@@ -347,6 +358,10 @@ public class ConstituencyCollationController implements Serializable {
 
     public PollingStationResultSet getSelectedResultSet() {
         return selectedResultSet;
+    }
+
+    public void setSelectedResultSet(PollingStationResultSet selectedResultSet) {
+        this.selectedResultSet = selectedResultSet;
     }
 
     public List<PollingStationResult> getElectionResultsList() {

@@ -296,12 +296,23 @@
 
                                 <h:form>
                                     
-                                    <h:panelGrid columns="2" styleClass="spaced-table">
+                                    <center>
+                                            <h:panelGroup rendered="#{constituencyCollationController.inputVotes}">
+                                        
+                                        <h:panelGrid columns="2" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
                                         <h:outputText value="Result Source" />
-                                        <p:selectOneMenu value="#{constituencyCollationController.selectedResultSet.resultStatus}">
+                                        
+                                        <p:selectOneMenu value="#{constituencyCollationController.selectedResultSet.resultSource}" required="true">
+                                            <f:selectItem itemLabel="#{msg.select_one}"  noSelectionOption="true" />
                                             <f:selectItems value="#{commonOptions.resultSourceList}" />
+                                            <p:ajax process="@this" />
                                         </p:selectOneMenu>
+                                        
                                     </h:panelGrid>
+                                    </h:panelGroup>
+                                    </center>
+                                    
+                                    
                                     
 
                                     <p:dataTable value="#{constituencyCollationController.electionResultsList}" var="result" 
@@ -334,7 +345,7 @@
                                                           rendered="#{!constituencyCollationController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
-                                            <p:inputNumber value="#{result.inputResult}"
+                                            <p:inputNumber value="#{result.inputResult}" size="10"
                                                            rendered="#{constituencyCollationController.inputVotes}" >
                                                 <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
                                             </p:inputNumber>
@@ -345,7 +356,7 @@
                                                           rendered="#{!constituencyCollationController.inputVotes}">
                                                 <f:convertNumber pattern="#,##0" />
                                             </h:outputText>
-                                            <p:inputNumber value="#{result.officialResult}"
+                                            <p:inputNumber value="#{result.officialResult}" size="10"
                                                            rendered="#{constituencyCollationController.inputVotes}" >
                                                 <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
                                             </p:inputNumber>

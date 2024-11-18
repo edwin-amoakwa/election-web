@@ -103,4 +103,12 @@ public class ResultSet extends UniqueEntityModel3 {
         this.election = election;
     }
 
+    public ResultSource getResultSource() {
+        return resultSource;
+    }
+
+    public void setResultSource(ResultSource resultSource) {
+        this.resultSource = resultSource;
+    }
+
 }
