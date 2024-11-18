@@ -17,6 +17,7 @@ import java.util.List;
 public class ElectionTypeResult {
 
     private ElectionType electionType;
+    private ElectionTypeDashboard dashboard;
     
     private List<PollingStationResult> votingsList;
     
@@ -54,6 +55,14 @@ public class ElectionTypeResult {
 
     public void setContestantsList(List<ElectionContestant> contestantsList) {
         this.contestantsList = contestantsList;
+    }
+
+    public ElectionTypeDashboard getDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(ElectionTypeDashboard dashboard) {
+        this.dashboard = dashboard;
     }
 
     @Override

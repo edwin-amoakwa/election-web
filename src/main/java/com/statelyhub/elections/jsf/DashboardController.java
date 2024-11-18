@@ -59,8 +59,6 @@ public class DashboardController implements Serializable
         presidential = dashboardService.dashboard(ElectionType.PRESIDENTIAL, constituencyElection);
         parliamentary = dashboardService.dashboard(ElectionType.PARLIAMENTARY, constituencyElection);
         
-//        constituencyElection
-        
         
         totalPollingStation = pollingStation(constituencyElection);
         pendingPollingStations = getTotalMembership(ResultStatus.PENDING);

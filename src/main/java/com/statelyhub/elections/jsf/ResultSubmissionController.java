@@ -117,6 +117,12 @@ public class ResultSubmissionController implements Serializable {
     
     public void acceptResult() {
         
+             if(processedSubmissionsList.contains(selectedSubmission))
+        {
+            JsfMsg.error("Result already Processed");
+            return;
+        }
+        
         selectedPollingStationResultSet.setTotalVotesCast(selectedSubmission.getTotalVotesCast());
         selectedPollingStationResultSet.setRejectedBallots(selectedSubmission.getRejectedBallots());
         
@@ -126,7 +132,6 @@ public class ResultSubmissionController implements Serializable {
         }
         System.out.println("map ... " + resultMap);
 
-//        List<PollingStationResult> stationResultsList = PollingStationResultContainer.stationResult(resultsList);
         for (PollingStationResult pollingStationResult : electionResultsList) {
             Integer votes = resultMap.get(pollingStationResult.getId());
             if (votes != null) {
@@ -149,11 +154,15 @@ public class ResultSubmissionController implements Serializable {
 //        electionResultService.updateResultSet(selectedSubmission, electionPollingStation);
 
         selectedSubmission.setResultSetId(resultSet.getId());
+        selectedSubmission.setCollated(false);
+        selectedSubmission.setLastModifiedBy(userSession.getAccountUR().getAccountName());
         
         crudService.saveEntity(selectedSubmission);
         crudService.saveEntity(electionPollingStation);
         
         unprocessedSubmissionsList.remove(selectedSubmission);
+        rejectedSubmissionsList.remove(selectedSubmission);
+        
         processedSubmissionsList.add(selectedSubmission);
         
         JsfMsg.msg(true);
@@ -162,10 +171,21 @@ public class ResultSubmissionController implements Serializable {
     }
     
     public void rejectResult() {
-        selectedSubmission.setSubmissionStatus(SubmissionStatus.REJECTED);
+       
+        
+        
+        if(rejectedSubmissionsList.contains(selectedSubmission))
+        {
+            JsfMsg.error("Result already Rejected");
+            return;
+        }
+        
+         selectedSubmission.setSubmissionStatus(SubmissionStatus.REJECTED);
         crudService.saveEntity(selectedSubmission);
         
         unprocessedSubmissionsList.remove(selectedSubmission);
+        processedSubmissionsList.remove(selectedSubmission);
+        
         rejectedSubmissionsList.add(selectedSubmission);
         
         JsfMsg.msg(true);
@@ -210,8 +230,9 @@ public class ResultSubmissionController implements Serializable {
                 .addObjectParam(ResultSubmission._constituencyElection, selectedConstituencyElection)
                 .buildQry().getResultList();
         
-        unprocessedSubmissionsList = new LinkedList<>();
-        processedSubmissionsList = new LinkedList<>();
+        unprocessedSubmissionsList.clear();
+        processedSubmissionsList.clear();
+        rejectedSubmissionsList.clear();
         
         for (ResultSubmission submission : submissionsList) {
             if (submission.getSubmissionStatus() == SubmissionStatus.ACCEPTED) {

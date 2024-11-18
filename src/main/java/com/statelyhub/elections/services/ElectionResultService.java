@@ -112,6 +112,19 @@ public class ElectionResultService {
         return list;
 
     }
+    
+    
+    
+    public ElectionTypeResult constituencyType(ConstituencyElection constituencyElection, ElectionType electionType) {
+
+        ElectionTypeResult result = new ElectionTypeResult();
+        result.setElectionType(electionType);
+        result.setContestantsList(electionService.consititueny(constituencyElection, electionType));
+        
+
+        return result;
+
+    }
 
     public void updatePollingStationSourceChange(ConstituencyElection ce) {
 

@@ -6,6 +6,7 @@ package com.statelyhub.elections.jsf;
 
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.constants.UserDomain;
@@ -14,9 +15,9 @@ import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
-import com.statelyhub.elections.entities.SubmittedResult;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
+import com.statelyhub.elections.services.DashboardService;
 import com.statelyhub.elections.web.PollingStationSearch;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
@@ -50,6 +51,10 @@ public class ConstituencyCollationController implements Serializable {
 
     @Inject
     private PollingStationSearch pollingStationSearch;
+    
+    
+    @Inject
+    private DashboardService dashboardService;
 
     private ElectionPollingStation electionPollingStation;
 
@@ -58,8 +63,11 @@ public class ConstituencyCollationController implements Serializable {
     private List<PollingStationResult> parliamentaryList;
 
     private List<ElectionTypeResult> resultsList;
+    
+    private ElectionTypeResult presidential;
+    private ElectionTypeResult parliamentary;
 
-    private List<ElectionTypeResult> constituencyResultList;
+//    private List<ElectionTypeResult> constituencyResultList;
 
     private List<ElectionPollingStation> pollingStationsList;
 
@@ -110,7 +118,7 @@ public class ConstituencyCollationController implements Serializable {
         completedSubmissionList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
                 .addObjectParam(ResultSubmission._constituencyElection, selectedConstituencyElection)
                 .addObjectParam(ResultSubmission._submissionStatus, SubmissionStatus.ACCEPTED)
-                .addObjectParam(ResultSubmission._submissionStatus, SubmissionStatus.ACCEPTED)
+                .addObjectParam(ResultSubmission._collated, false)
                 .printQryInfo()
                 .buildQry().getResultList();
 
@@ -120,6 +128,8 @@ public class ConstituencyCollationController implements Serializable {
     public void selectResultSet(PollingStationResultSet station) {
         this.selectedResultSet = station;
         electionPollingStation = station.getElectionPollingStation();
+        
+        inputVotes = false;
 
         electionResultsList = electionService.eps(electionPollingStation, station.getElectionType());
 
@@ -188,7 +198,14 @@ public class ConstituencyCollationController implements Serializable {
     }
 
     public void loadConstituencyResult() {
-        constituencyResultList = electionResultService.constituency(selectedConstituencyElection);
+        
+        presidential = electionResultService.constituencyType(selectedConstituencyElection, ElectionType.PRESIDENTIAL);
+        parliamentary = electionResultService.constituencyType(selectedConstituencyElection, ElectionType.PARLIAMENTARY);
+        
+        parliamentary.setDashboard(dashboardService.dashboard(ElectionType.PARLIAMENTARY, selectedConstituencyElection));
+        presidential.setDashboard(dashboardService.dashboard(ElectionType.PRESIDENTIAL, selectedConstituencyElection));
+        
+//        constituencyResultList = electionResultService.constituency(selectedConstituencyElection);
     }
 
     public void updateConstituencyElectionStatus() {
@@ -211,21 +228,17 @@ public class ConstituencyCollationController implements Serializable {
         JsfMsg.msg(true);
     }
     
-    public void rejectResult()
-    {
-        
-    }
-
+  
     public void approveSubmission() {
         selectedResultSet.setResultStatus(ResultStatus.FINALISED);
         crudService.save(selectedResultSet);
 
-        if (selectedResultSet.getResultStatus() == ResultStatus.FINALISED) {
+ 
             electionResultService.updateSource(electionResultsList);
 
             completedList.add(selectedResultSet);
             pendingList.remove(selectedResultSet);
-        }
+        
         
         if(selectedSubmission != null)
         {
@@ -234,7 +247,8 @@ public class ConstituencyCollationController implements Serializable {
             completedSubmissionList.remove(selectedSubmission);
         }
 
-        JsfMsg.msg(true);
+//        JsfMsg.msg(true);
+        updateConstituecyFigures();
     }
 
     public void recordUpdated(PollingStationResult result) {
@@ -313,9 +327,7 @@ public class ConstituencyCollationController implements Serializable {
         return pendingPollingStationsList;
     }
 
-    public List<ElectionTypeResult> getConstituencyResultList() {
-        return constituencyResultList;
-    }
+    
 
     public boolean isInputVotes() {
         return inputVotes;
@@ -349,4 +361,13 @@ public class ConstituencyCollationController implements Serializable {
         return selectedSubmission;
     }
 
+    public ElectionTypeResult getPresidential() {
+        return presidential;
+    }
+
+    public ElectionTypeResult getParliamentary() {
+        return parliamentary;
+    }
+
+    
 }

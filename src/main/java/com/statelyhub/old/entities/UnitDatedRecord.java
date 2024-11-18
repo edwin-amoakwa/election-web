@@ -18,24 +18,13 @@ import jakarta.persistence.MappedSuperclass;
 public class UnitDatedRecord extends DateRecord3
 {    
     
-    public static final String _department = "department";
-    @JoinColumn(name = "department")
-    @ManyToOne
-    private Department department;
-    
+
        
     public static final String _unit = "unit";
     @JoinColumn(name = "unit")
     @ManyToOne
     private Institution unit;
 
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
 
     public Institution getUnit() {
         return unit;

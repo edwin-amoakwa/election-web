@@ -7,6 +7,7 @@ package com.statelyhub.elections.entities;
 
 import com.stately.modules.jpa2.UniqueEntityModel3;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.ResultSource;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -48,6 +49,11 @@ public class ResultSet extends UniqueEntityModel3 {
     @JoinColumn(name = "election")
     @ManyToOne
     private Election election;
+
+    public static final String _resultSource = "resultSource";
+    @Column(name = "result_source")
+    @Enumerated(EnumType.STRING)
+    private ResultSource resultSource = ResultSource.SUBMITTED;
 
     public int getValidVotes() {
         return validVotes;
