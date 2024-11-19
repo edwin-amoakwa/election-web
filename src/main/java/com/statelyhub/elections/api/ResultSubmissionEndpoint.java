@@ -105,7 +105,7 @@ public class ResultSubmissionEndpoint {
         for (SubmittedResultDto submittedResultDto : resultSetDto.getCandidatesList()) 
         {
             SubmittedResult submittedResult = crudService.find(SubmittedResult.class, submittedResultDto.getId());
-            System.out.println("..... " + submittedResult);
+//            System.out.println("..... " + submittedResult);
             submittedResult.setSubmittedResult(submittedResultDto.getVotes());
             resultsList.add(submittedResult);
         }
@@ -157,9 +157,9 @@ public class ResultSubmissionEndpoint {
         
         for (AttachmentDto recordDto : dto.getAttachmentsList()) 
         {
-            System.out.println("dto.getFileResource().getFileUpload().getFileString() = "+recordDto.getFileDataBase64());
+//            System.out.println("dto.getFileResource().getFileUpload().getFileString() = "+recordDto.getFileDataBase64());
             
-            String ext = FileUtilities.getFileExtension(recordDto.getFileName());
+//            String ext = FileUtilities.getFileExtension(recordDto.getFileName());
 
             String before = "";
             String after = recordDto.getFileDataBase64();

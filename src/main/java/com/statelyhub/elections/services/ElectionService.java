@@ -30,10 +30,14 @@ public class ElectionService {
     @Inject
     private CrudService crudService;
 
-    public Election getCurrentElection() {
-        List<Election> elections = crudService.findAll(Election.class);
-
-        return elections.get(0);
+    public Election getCurrentElection() 
+    {
+        try {
+            List<Election> elections = crudService.findAll(Election.class);
+            return elections.get(0);
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public ConstituencyElection election(Constituency constituency, Election election) {
