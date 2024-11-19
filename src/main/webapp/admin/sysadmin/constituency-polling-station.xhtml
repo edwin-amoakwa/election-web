@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+                xmlns:election="jakarta.faces.composite/election"
+                xmlns:c="jakarta.tags.core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="pageTitle">
+        Polling Stations -  #{userSession.accountUR.constituency.constituencyName}
+    </ui:define>
+
+    <ui:define name="content">
+
+      
+        <div class="row">
+            
+                           <h:form>
+                               <p:dataTable value="#{constituencyPollingStationController.pollingStationsList}" var="pollingStation" 
+                                 rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
+                        </p:column>
+                        
+                          <p:column headerText="#{msg.polling_stations}" filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.pollingStation.stationName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.polling_stations}" rendered="false" >
+                            <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
+                                           action="#{electionDetailController.selectPollingStation(pollingStation)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+            
+        </div>
+
+
+
+    </ui:define>
+
+</ui:composition>
+

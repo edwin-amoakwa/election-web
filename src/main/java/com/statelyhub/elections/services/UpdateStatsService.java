@@ -114,7 +114,7 @@ public class UpdateStatsService {
         }
     }
 
-//    @Asynchronous
+    @Asynchronous
     public void initIaliseDefaultContesttants(PartyElection partyElection, Election election) {
 
         List<ConstituencyElection> constituencys = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
@@ -203,7 +203,7 @@ public class UpdateStatsService {
         stationResult.setViewOrder(contestant.getViewOrder());
         crudService.save(stationResult);
 
-        System.out.println("..... " + stationResult);
+//        System.out.println("..... " + stationResult);
     }
 
     public void addContestant(ConstituencyElection constituencyElection, ElectionContestant electionContestant) {
