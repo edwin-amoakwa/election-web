@@ -13,6 +13,7 @@ import com.statelyhub.elections.constants.UserAccountCategory;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.elections.constants.UserGroup;
+import com.statelyhub.elections.entities.Candidate;
 import jakarta.enterprise.context.RequestScoped;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class CommonOptions {
     }
 
     public List<ResultSource> getResultSourceList() {
-        return Arrays.asList(ResultSource.values());
+        return Arrays.asList(ResultSource.INPUTTED, ResultSource.SUBMITTED);
     }
 
     public List<PartyType> getPartyTypeList() {
@@ -57,7 +58,7 @@ public class CommonOptions {
         public List<UserGroup> getUserGroupList() {
         return Arrays.asList(UserGroup.values());
     }
-
+        
 //              public List<UserAccountCategory> getUserAccountCategorysList()
 //    {
 //        try

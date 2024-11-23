@@ -222,27 +222,6 @@
 
 
 
-
-
-                        <h:form rendered="false">
-                            <label style="font-size:14px;">Toggle to Input Votes</label>
-                            <p:toggleSwitch value="#{resultSubmissionController.inputVotes}" style="margin-left:3px;">
-                                <!--<p:ajax listener="{resultSubmissionController.addMessage}" update="msg"/>-->
-                                <!--<p:ajax process="@this" update="stationResult"/>-->
-                                <p:ajax update="stationResult"/>
-                            </p:toggleSwitch>
-                            <p:commandButton value="Save Changes" 
-                                             style="margin-left:3px;"
-                                             action="#{resultSubmissionController.saveResults()}"
-                                             rendered="false"/>
-                            <span style="margin-left:3px;" jsf:rendered="#{resultSubmissionController.inputVotes}">
-                                <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
-                                <i>Press the Enter Key to Update Record After Input</i>
-                            </span>
-                        </h:form>
-                        <br/>
-
-
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <div class="panel-title">
@@ -271,35 +250,7 @@
                                         <p:column headerText="#{msg.name}">
                                             <h:outputText value="#{result.candidateName}" />
                                         </p:column>
-
-                                        <p:column headerText="#{msg.accepted}" rendered="false">
-                                            <h:outputText value="#{result.acceptedResult}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.input_result}" rendered="false">
-                                            <h:outputText value="#{result.inputResult}" 
-                                                          rendered="#{!resultSubmissionController.inputVotes}">
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                            <p:inputNumber value="#{result.inputResult}"
-                                                           rendered="#{resultSubmissionController.inputVotes}" >
-                                                <p:ajax event="change" process="@this" listener="#{resultSubmissionController.recordUpdated(result)}"/>
-                                            </p:inputNumber>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.official}" rendered="false">
-                                            <h:outputText value="#{result.officialResult}" 
-                                                          rendered="#{!resultSubmissionController.inputVotes}">
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                            <p:inputNumber value="#{result.officialResult}"
-                                                           rendered="#{resultSubmissionController.inputVotes}" >
-                                                <p:ajax event="change" process="@this" listener="#{resultSubmissionController.recordUpdated(result)}"/>
-                                            </p:inputNumber>
-                                        </p:column> 
-
+                                        
                                         <p:column headerText="#{msg.submitted}">
                                             <h:outputText value="#{result.submittedResult}" >
                                                 <f:convertNumber pattern="#,##0" />
@@ -349,7 +300,9 @@
 
 
         <h:panelGroup id="sumbissionDetails">
-            <p:dialog widgetVar="resultPanel" header="${resultSubmissionController.selectedSubmission.electionType.label}">
+            
+            <h:form>
+                    <p:dialog widgetVar="resultPanel" header="${resultSubmissionController.selectedSubmission.electionType.label}">
 
                 <div class="container">
 
@@ -371,7 +324,8 @@
 
 
 
-                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" var="submittedResult" rendered="false">
+                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" 
+                                         var="submittedResult" rendered="false">
                                 <p:column headerText="">
                                     #{submittedResult.partyDetails}
                                 </p:column>
@@ -381,17 +335,24 @@
                                 </p:column>
 
                             </p:dataTable>
+                            
+                            
 
                             <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
 
                                 <c:forEach items="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
 
                                     <h:outputText value="#{submittedResult.partyDetails}" styleClass="field-label" />
-                                    <h:outputText value="#{submittedResult.submittedResult}" styleClass="field-value text-right" >
+                                    <h:inputText value="#{submittedResult.submittedResult}" styleClass="field-value text-right" >
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:inputText>
+                                    
+                                    <h:outputText value="#{submittedResult.position}" styleClass="field-value text-right" rendered="false">
                                         <f:convertNumber pattern="#,##0" />
                                     </h:outputText>
 
                                 </c:forEach>
+                               
 
                             </h:panelGrid>
 
@@ -480,6 +441,10 @@
                 </div>
 
             </p:dialog>
+                
+            </h:form>
+            
+        
         </h:panelGroup>
 
 

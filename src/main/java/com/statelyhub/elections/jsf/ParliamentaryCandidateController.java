@@ -5,6 +5,7 @@
 package com.statelyhub.elections.jsf;
 
 import com.stately.common.collection.CollectionUtils;
+import com.stately.common.data.ProcResponse;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
@@ -22,6 +23,8 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -143,6 +146,11 @@ public class ParliamentaryCandidateController implements Serializable {
             return;
         }
         
+        if(electionContestant.getCandidateType() == PartyType.INDEPENDENT_CANDIDATE)
+        {
+            electionContestant.setParty(null);
+        }
+        
         electionContestant = crudService.save(electionContestant);
         if(electionContestant == null)
         {
@@ -151,8 +159,11 @@ public class ParliamentaryCandidateController implements Serializable {
         }
         
         CollectionUtils.checkAdd(electionContestantsList, electionContestant);
+        
+        Collections.sort(electionContestantsList, Comparator.comparingInt(ElectionContestant::getViewOrder));
+        
         JsfMsg.info("Record Updated Successfully");
-        this.clearElectionContestant();
+        clearElectionContestant();
     }
     
     public void updateElectionContestant(ElectionContestant electionContestant)
@@ -178,16 +189,22 @@ public class ParliamentaryCandidateController implements Serializable {
     {  
         try 
         {
-            if(crudService.delete(electionContestant))
-            {
+            
+            ProcResponse response = electionService.delete(electionContestant);
+            if(response.isSuccess()){
                 JsfMsg.successDelete();
-                this.electionContestantsList.remove(electionContestant);
+                electionContestantsList.remove(electionContestant);
                 return;
+            }
+            else
+            {
+                JsfMsg.error(response.getMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
+            JsfMsg.error("Error Removing Candidate. Contact Administrator!");
         }
-        JsfMsg.error("Error Removing Candidate. Contact Administrator!");
+        
     }
     
     public Region getSelectedRegion() {

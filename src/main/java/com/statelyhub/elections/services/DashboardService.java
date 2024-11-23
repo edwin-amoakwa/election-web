@@ -37,6 +37,7 @@ public class DashboardService {
 
     public ElectionTypeDashboard dashboard(ElectionType electionType, ConstituencyElection constituencyElection) {
         ElectionTypeDashboard dashboard = new ElectionTypeDashboard();
+        dashboard.setElectionType(electionType);
 
         if (constituencyElection != null) {
             dashboard.setTotalRegisteredVoters(constituencyElection.getVotersCount());

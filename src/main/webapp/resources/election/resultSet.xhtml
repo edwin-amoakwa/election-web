@@ -14,101 +14,112 @@
     </cc:interface>
 
     <cc:implementation>
-       
-        
-        
-                      <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <div class="panel-title">
-                                    #{cc.attrs.value.electionType} 
-                                    
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                
-                                <ui:remove>
-                                         ( #{cc.attrs.value.dashboard.pollingStationCompleted} out of #{cc.attrs.value.dashboard.totalPollingStation} Polling Station, 
-                                    #{cc.attrs.value.dashboard.pollingStationPct *100 } % completed)
-                                </ui:remove>
-
-                                    <div class="row bg-gray-light">
-                                        
-                                          <h:panelGrid  columns="3" styleClass="spaced-table" style="width: 80%">
-                           
-                                <h:outputLabel value="Pending" />
-                                <h:outputLabel value="Completed" />
-                                <h:outputLabel value="% Completed" />
-                                <h:outputText value="#{cc.attrs.value.dashboard.pollingStationPending}" styleClass="field-value" >
-                                    <f:convertNumber pattern="#,##0" />
-                                </h:outputText>
-                                <h:outputText value="#{cc.attrs.value.dashboard.pollingStationCompleted}" styleClass="field-value" >
-                                    <f:convertNumber pattern="#,##0" />
-                                </h:outputText>
-                                <h:outputText value="#{cc.attrs.value.dashboard.pollingStationPct}" styleClass="field-value" >
-                                    <f:convertNumber pattern="#,##0.00 %" />
-                                </h:outputText>
 
 
 
-                            </h:panelGrid>
-                                    </div>
-                                    
-                                    
-                                    
-                                    
-                                    
-                                <h:form>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    #{cc.attrs.value.electionType} 
 
-                                    <p:dataTable value="#{cc.attrs.value.contestantsList}" var="result" 
-                                                 rowKey="#{pollingStationResult.id}">
+                </div>
+            </div>
+            <div class="panel-body">
 
-                                        <p:column rendered="false">
-                                            <p:rowToggler />
-                                        </p:column>
+                <ui:remove>
+                    ( #{cc.attrs.value.dashboard.pollingStationCompleted} out of #{cc.attrs.value.dashboard.totalPollingStation} Polling Station, 
+                    #{cc.attrs.value.dashboard.pollingStationPct *100 } % completed)
+                </ui:remove>
 
-                                        <p:rowExpansion>
-                                            #{result.id}
-                                        </p:rowExpansion>
+                <div class="row bg-gray-light">
 
-                                        <p:column headerText="#{msg.party}">
-                                            <h:outputText value="#{result.party.initials}" />
-                                        </p:column>
+                    <h:panelGrid  columns="7" styleClass="spaced-table" style="width: 80%">
 
-                                        <p:column headerText="#{msg.name}">
-                                            <h:outputText value="#{result.candidateName}" />
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.votes}">
-                                            <h:outputText value="#{result.acceptedResult}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-
-                                        <p:column headerText="#{msg.position}">
-                                            <h:outputText value="#{result.position}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.percent}">
-                                            <h:outputText value="#{result.votePct}" >
-                                                <f:convertNumber pattern="#,##0.0 %" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                    </p:dataTable>
-
-                                </h:form>
-
-                            </div>
-                        </div>
+                        <h:outputLabel value="Pending" />
+                        
+                        <h:outputText value="#{cc.attrs.value.dashboard.pollingStationPending}" styleClass="field-value" >
+                            <f:convertNumber pattern="#,##0" />
+                        </h:outputText>
+                        
+                        <h:outputLabel value="Completed" />
+                        
+                         <h:outputText value="#{cc.attrs.value.dashboard.pollingStationCompleted}" styleClass="field-value" >
+                            <f:convertNumber pattern="#,##0" />
+                        </h:outputText>
+                        
+                        <h:outputLabel value="% Completed" />
+                        
+                       
+                        <h:outputText value="#{cc.attrs.value.dashboard.pollingStationPct}" styleClass="field-value" >
+                            <f:convertNumber pattern="#,##0.00 %" />
+                        </h:outputText>
 
 
 
-        
-        
-        
+                    </h:panelGrid>
+                </div>
+
+
+
+
+
+                <h:form>
+
+                    <h:commandLink>
+                        Export
+                        <p:dataExporter type="xls" target="dataTable" fileName="Result_#{cc.attrs.value.electionType} " />
+                    </h:commandLink>
+
+                    <p:dataTable id="dataTable" value="#{cc.attrs.value.contestantsList}" var="result" 
+                                 rowKey="#{pollingStationResult.id}">
+
+                        <p:column rendered="false">
+                            <p:rowToggler />
+                        </p:column>
+
+                        <p:rowExpansion>
+                            #{result.id}
+                        </p:rowExpansion>
+
+                        <p:column headerText="#{msg.party}">
+                            <h:outputText value="#{result.party.initials}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.name}">
+                            <h:outputText value="#{result.candidateName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.votes}">
+                            <h:outputText value="#{result.acceptedResult}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+
+
+                        <p:column headerText="#{msg.position}">
+                            <h:outputText value="#{result.position}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{msg.percent}">
+                            <h:outputText value="#{result.votePct}" >
+                                <f:convertNumber pattern="#,##0.0 %" />
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+            </div>
+        </div>
+
+
+
+
+
+
 
     </cc:implementation>
 </html>

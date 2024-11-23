@@ -18,11 +18,9 @@ import com.statelyhub.old.constants.AmtInWords;
 import com.statelyhub.old.entities.BillStatus;
 import com.statelyhub.old.entities.ReceivedStatus;
 import com.statelyhub.old.constants.AuthorisationRequirement;
-import com.statelyhub.elections.constants.UserAccountCategory;
 import com.statelyhub.old.constants.VoucherCurrency;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
@@ -158,8 +156,8 @@ public class UserCommonOptions implements Serializable
         return constituenciesList;
     }
 
-    public void setConstituenciesList(List<Constituency> constituenciesList) {
-        this.constituenciesList = constituenciesList;
-    }
+//    public void setConstituenciesList(List<Constituency> constituenciesList) {
+//        this.constituenciesList = constituenciesList;
+//    }
 
 }

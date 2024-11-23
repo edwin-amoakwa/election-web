@@ -4,6 +4,7 @@
  */
 package com.statelyhub.elections.services;
 
+import com.stately.common.data.ProcResponse;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultStatus;
@@ -139,4 +140,18 @@ public class ElectionService {
         return resultSet;
     }
 
+    
+    public ProcResponse delete(ElectionContestant contestant)
+    {
+        try {
+            int deleted = crudService.deleteAll(SubmittedResult.class, SubmittedResult._electionContestant, contestant);
+            int deleted2 = crudService.deleteAll(PollingStationResult.class, PollingStationResult._electionContestant, contestant);
+        } catch (Exception e) 
+        {
+            e.printStackTrace();
+            return ProcResponse.fail("Failed Deleting Contestant. Contact Administrator");
+        }
+        
+        return ProcResponse.success();
+    }
 }

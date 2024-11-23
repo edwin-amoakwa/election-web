@@ -55,6 +55,7 @@ public class ElectionPollingStation extends SummarySet {
     @Column(name = "result_status")
     @Enumerated(EnumType.STRING)
     private ResultStatus resultStatus;
+    
 
     public Election getElection() {
         return election;
@@ -103,6 +104,8 @@ public class ElectionPollingStation extends SummarySet {
     public void setResultStatus(ResultStatus resultStatus) {
         this.resultStatus = resultStatus;
     }
+
+    
 
     @Override
     public String toString() {

@@ -58,10 +58,6 @@ public class SubmisionService {
 
         if (resultSubmission == null) 
         {
-            
-//            ConstituencyElection ce = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
-//                    .addObjectParam(ConstituencyElection._constituency, eps)
-            
             resultSubmission = new ResultSubmission();
             resultSubmission.setElectionPollingStation(eps);
             resultSubmission.setVolunteer(volunteer);
@@ -97,25 +93,7 @@ public class SubmisionService {
 
         ElectionTypeResult volunteerBucket = electionResultService.volunteerEpsBucket(eps,electionType);
 
-//        List<ElectionResultSetDto> dtos = new LinkedList<>();
 
-//        for (ElectionTypeResult volunteerBucket : volunteerBuckets) 
-//        {
-            
-            
-//            SubmittedResultSet resultSet = QryBuilder.get(crudService.getEm(), SubmittedResultSet.class)
-////                    .addObjectParam(SubmittedResultSet._electionType, volunteerBucket.getElectionType())
-//                    .addObjectParam(SubmittedResultSet._resultSubmission, resultSubmission.getId())
-//                    .getSingleResult(SubmittedResultSet.class);
-//            
-//            if(resultSet == null)
-//            {
-//                resultSet = new SubmittedResultSet();
-//                resultSet.setResultSubmissionId(resultSubmission.getId());
-//                resultSet.setElectionType(volunteerBucket.getElectionType());
-//                crudService.save(resultSet);
-//            }
-             
             electionResultSetDto.setResultSetId(resultSubmission.getId());
             
             electionResultSetDto.setValidVotes(resultSubmission.getValidVotes());
@@ -129,7 +107,7 @@ public class SubmisionService {
                 SubmittedResultDto submittedDto = new SubmittedResultDto();
 
                 submittedDto.setId(submittedResult.getId());
-                submittedDto.setCondidateName(submittedResult.getCandidateName());
+                submittedDto.setCondidateName(submittedResult.getElectionContestant().getCandidateName());
                 submittedDto.setVotes(submittedResult.getSubmittedResult());
                 submittedDto.setParty(submittedResult.getPartyDetails());
 

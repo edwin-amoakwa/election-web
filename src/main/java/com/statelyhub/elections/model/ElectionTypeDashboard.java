@@ -4,6 +4,7 @@
  */
 package com.statelyhub.elections.model;
 
+import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.entities.ElectionContestant;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public class ElectionTypeDashboard {
     
+    private ElectionType electionType;
+
     private int totalPollingStation;
     private int pendingSubmission;
     private int unprocessedSubmission;
@@ -20,20 +23,18 @@ public class ElectionTypeDashboard {
     private int rejectedBallot;
     private int totalRegisteredVoters;
     private double processedPct;
-    
+
     private int pollingStationCompleted;
     private int pollingStationPending;
     private double pollingStationPct;
     private int validVotes;
-       private int spoiltVotes;
-    
-    
-    
-     private int votesCounted;
-    
-       private List<PresidentialResult> mainResultList;
-      
-        private List<ElectionContestant> contestantsList;
+    private int spoiltVotes;
+
+    private int votesCounted;
+
+    private List<PresidentialResult> mainResultList;
+
+    private List<ElectionContestant> contestantsList;
 
     public int getTotalPollingStation() {
         return totalPollingStation;
@@ -154,9 +155,13 @@ public class ElectionTypeDashboard {
     public void setContestantsList(List<ElectionContestant> contestantsList) {
         this.contestantsList = contestantsList;
     }
-       
-       
-       
-       
-    
+
+    public ElectionType getElectionType() {
+        return electionType;
+    }
+
+    public void setElectionType(ElectionType electionType) {
+        this.electionType = electionType;
+    }
+
 }

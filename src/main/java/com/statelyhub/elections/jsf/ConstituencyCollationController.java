@@ -16,6 +16,7 @@ import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
+import com.statelyhub.elections.entities.SubmittedResultPicture;
 import com.statelyhub.elections.model.ElectionTypeResult;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.DashboardService;
@@ -62,6 +63,8 @@ public class ConstituencyCollationController implements Serializable {
 //    private List<PollingStationResult> stationResultList;
     private List<PollingStationResult> presidentialList;
     private List<PollingStationResult> parliamentaryList;
+    
+           private List<SubmittedResultPicture> submittedResultImagesList = new LinkedList<>();
 
     private List<ElectionTypeResult> resultsList;
     
@@ -133,6 +136,15 @@ public class ConstituencyCollationController implements Serializable {
         inputVotes = false;
 
         electionResultsList = electionService.eps(electionPollingStation, station.getElectionType());
+        
+        
+        submittedResultImagesList = QryBuilder.get(crudService.getEm(), SubmittedResultPicture.class)
+                .addObjectParam(SubmittedResultPicture._resultSubmission_id, selectedResultSet.getElectionPollingStation().getResultSubmissionId())
+                .orderByAsc(SubmittedResultPicture._createdDate)
+                .printQryInfo()
+                .buildQry().getResultList();
+        
+        System.out.println(".... imagess... " + submittedResultImagesList.size());
 
     }
 
@@ -146,26 +158,7 @@ public class ConstituencyCollationController implements Serializable {
         
         System.out.println("....... " +selectedResultSet);
 
-//        System.out.println("resultSubmission.getSubmissionPictureImageFormat() = " + resultSubmission.getSubmissionPictureImageFormat());
-//        System.out.println("resultSubmission.getSubmissionPicture() = " + resultSubmission.getSubmissionPicture());
-//        System.out.println("resultSubmission.getSubmissionPictureSRC() = " + resultSubmission.getSubmissionPictureSRC());
-
-//        selectedPollingStationResultSet = electionService.init(selectedSubmission.getElectionPollingStation(), selectedSubmission.getElectionType());
-//        electionPollingStation = selectedSubmission.getElectionPollingStation();
-//        
-//        submittedResultsList = QryBuilder.get(crudService.getEm(), SubmittedResult.class)
-//                .addObjectParam(SubmittedResult._resultSubmission, resultSubmission)
-//                .orderByAsc(SubmittedResult._viewOrder)
-//                .buildQry().getResultList();
-//        
-//        
-//        
-//        electionResultsList =  QryBuilder.get(crudService.getEm(), PollingStationResult.class)
-//                .addObjectParam(PollingStationResult._electionType, resultSubmission.getElectionType())
-//                .addObjectParam(PollingStationResult._electionPollingStation, resultSubmission.getElectionPollingStation())
-//                .orderByAsc(PollingStationResult._viewOrder)
-//                .buildQry().getResultList();
-//        selectPollingStation(resultSubmission.getElectionPollingStation());
+        
     }
 
     public void searchPollingStation() {
@@ -226,11 +219,17 @@ public class ConstituencyCollationController implements Serializable {
         }
         electionResultService.runConstituency(selectedConstituencyElection);
         loadConstituencyResult();
-        JsfMsg.msg(true);
+        JsfMsg.info("Updated");
     }
     
   
     public void approveSubmission() {
+        
+        if(inputVotes)
+        {
+            selectedResultSet.setResultSource(ResultSource.INPUTTED);
+        }
+        
         selectedResultSet.setResultStatus(ResultStatus.FINALISED);
         crudService.save(selectedResultSet);
 
@@ -382,6 +381,10 @@ public class ConstituencyCollationController implements Serializable {
 
     public ElectionTypeResult getParliamentary() {
         return parliamentary;
+    }
+
+    public List<SubmittedResultPicture> getSubmittedResultImagesList() {
+        return submittedResultImagesList;
     }
 
     

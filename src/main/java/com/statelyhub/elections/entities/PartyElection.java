@@ -29,8 +29,12 @@ public class PartyElection extends UniqueEntityModel3 {
     @JoinColumn(name = "party")
     @ManyToOne
     private PoliticalParty party;
-    
-     public static final String _viewOrder = "viewOrder";
+
+    public static final String _candidateName = "candidateName";
+    @Column(name = "candidate_name")
+    private String candidateName;
+
+    public static final String _viewOrder = "viewOrder";
     @Column(name = "view_order")
     private int viewOrder;
 
@@ -57,8 +61,13 @@ public class PartyElection extends UniqueEntityModel3 {
     public void setViewOrder(int viewOrder) {
         this.viewOrder = viewOrder;
     }
-    
 
-    
+    public String getCandidateName() {
+        return candidateName;
+    }
+
+    public void setCandidateName(String candidateName) {
+        this.candidateName = candidateName;
+    }
 
 }

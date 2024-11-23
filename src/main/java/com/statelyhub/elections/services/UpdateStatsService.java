@@ -145,6 +145,14 @@ public class UpdateStatsService {
             contestant.setConstituencyElection(constituencyElection);
             contestant.setElectionType(electionType);
             contestant.setViewOrder(partyElection.getViewOrder());
+            
+            
+            if(electionType == ElectionType.PRESIDENTIAL)
+            {
+                contestant.setCandidateName(partyElection.getCandidateName());
+                
+            }
+            
 //            contestant.setResultStatus(ResultStatus.PENDING);
 //            crudService.save(contestant);
 
@@ -201,6 +209,7 @@ public class UpdateStatsService {
         }
 
         stationResult.setViewOrder(contestant.getViewOrder());
+//        stationResult.setc
         crudService.save(stationResult);
 
 //        System.out.println("..... " + stationResult);

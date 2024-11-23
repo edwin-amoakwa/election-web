@@ -23,7 +23,7 @@
 
             <div class="row">
 
-                <div class="col-lg-5">
+                <div class="col-lg-7">
 
                     <center>
                         <h:form>
@@ -91,6 +91,7 @@
 
                                     <p:column  >
                                         <p:commandLink value="#{msg.view}" update=":stationResult"
+                                                       oncomplete="PF('resultDialog').show()"
                                                        action="#{constituencyCollationController.pickSubmission(submission)}" />
                                     </p:column>
 
@@ -115,9 +116,11 @@
                                     </p:column>
 
 
-                                    <p:column headerText="#{msg.polling_stations}"  filterBy="#{record.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains" >
+                                    <p:column headerText="#{msg.polling_stations}"  
+                                              filterBy="#{record.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains" >
                                         <p:commandLink value="#{record.electionPollingStation.pollingStation.stationName}" 
-                                                       update=":stationResult"
+                                                       update=":stationResult" 
+                                                       oncomplete="PF('resultDialog').show()"
                                                        action="#{constituencyCollationController.selectResultSet(record)}"/>
                                     </p:column>
 
@@ -142,8 +145,11 @@
                                     </p:column>
 
 
-                                    <p:column headerText="#{msg.polling_stations}"  filterBy="#{record.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains" >
-                                        <p:commandLink value="#{record.electionPollingStation.pollingStation.stationName}" update=":stationResult"
+                                    <p:column headerText="#{msg.polling_stations}"  
+                                              filterBy="#{record.electionPollingStation.pollingStation.stationName}" filterMatchMode="contains" >
+                                        <p:commandLink value="#{record.electionPollingStation.pollingStation.stationName}" 
+                                                       update=":stationResult" 
+                                                       oncomplete="PF('resultDialog').show()"
                                                        action="#{constituencyCollationController.selectResultSet(record)}"/>
                                     </p:column>
 
@@ -161,58 +167,33 @@
 
 
 
-                        <p:tabView rendered="false">
-
-                            <p:tab title="Pending - #{constituencyCollationController.pendingPollingStationsList.size()}">
-
-                                <p:dataTable value="#{constituencyCollationController.pendingPollingStationsList}" var="pollingStation" 
-                                             rows="10" paginator="true" paginatorPosition="bottom">
-
-                                    <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
-                                        <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
-                                    </p:column>
-
-                                    <p:column headerText="#{msg.polling_stations}"  filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
-                                        <p:commandLink value="#{pollingStation.pollingStation.stationName}" update=":stationResult"
-                                                       action="#{constituencyCollationController.selectPollingStation(pollingStation)}"/>
-                                    </p:column>
-                                </p:dataTable>
-
-                            </p:tab>
-
-                            <p:tab title="Finalised - #{constituencyCollationController.completedPollingStationsList.size()}">
-                                <p:dataTable value="#{constituencyCollationController.completedPollingStationsList}" var="pollingStation" 
-                                             rows="10" paginator="true" paginatorPosition="bottom">
-
-                                    <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
-                                        <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
-                                    </p:column>
-
-                                    <p:column headerText="#{msg.polling_stations}"  filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
-                                        <p:commandLink value="#{pollingStation.pollingStation.stationName}" update=":stationResult"
-                                                       action="#{constituencyCollationController.selectPollingStation(pollingStation)}"/>
-                                    </p:column>
-
-
-                                </p:dataTable>
-
-                            </p:tab>
-
-                        </p:tabView>
-
-
-
                     </h:form>
 
 
-                    <br />
-                    <br />
+
+                    <h:form rendered="false">
+                        <election:pollingStationSearch selectAction="#{constituencyCollationController.searchPollingStation()}"
+                                                       update=":stationResult, :submittedResultPanel"/>
+                    </h:form>
+                </div>
+
+                <div class="col-lg-5">
+
+                    <h2>Current #{msg.constituency} Result  
+
+                        <h:form class="pull-right" >
+                            <p:commandButton value="Referesh Result" 
+                                             styleClass="ui-button-success" 
+                                             ajax="true" update=":collationBoad" 
+                                             action="#{constituencyCollationController.updateConstituecyFigures()}" />
+                        </h:form>
 
 
-                    <h2>Current #{msg.constituency} Result</h2>
-                    
+                    </h2>
+                    <br />
+
                     <election:resultSet value="#{constituencyCollationController.presidential}" />
-                    
+
                     <election:resultSet value="#{constituencyCollationController.parliamentary}" />
 
 
@@ -222,13 +203,22 @@
                         <center>
 
                             <h:panelGrid columns="3" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedConstituencyElection}">
-                                <h:outputText value="Result Source" />
 
-                                <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultSource}">
-                                    <f:selectItems value="#{commonOptions.resultSourceList}" />
-                                </p:selectOneMenu>
+                                <ui:remove>
 
-                                <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateResultSource()}" />
+                                    <h:outputText value="Result Source" />
+
+                                    <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection.resultSource}">
+                                        <f:selectItems value="#{commonOptions.resultSourceList}" />
+                                    </p:selectOneMenu>
+
+                                    <p:commandButton value="Update" ajax="false" action="#{constituencyCollationController.updateResultSource()}" />
+
+
+                                </ui:remove>
+
+
+
 
                                 <h:outputText value="Status" />
 
@@ -241,211 +231,11 @@
 
                             </h:panelGrid>
 
-                            <br />
-                            <p:commandButton value="#{msg.analyse_update}" 
-                                             styleClass="ui-button-success " 
-                                             ajax="false" action="#{constituencyCollationController.updateConstituecyFigures()}" />
-                        </center>
-
-                    </h:form>
-
-
-
-
-                    <h:form rendered="false">
-                        <election:pollingStationSearch selectAction="#{constituencyCollationController.searchPollingStation()}"
-                                                       update=":stationResult, :submittedResultPanel"/>
-                    </h:form>
-                </div>
-
-                <div class="col-lg-7">
-
-                    <h:panelGroup id="stationResult">
-
-                        <div class="row">
-                            <div class="col-md-9">
-                                <h3>#{constituencyCollationController.electionPollingStation.pollingStation.stationCode} - #{constituencyCollationController.electionPollingStation.pollingStation.stationName}</h3>
-                            </div>
-                        </div>
-
-                        <h:form>
-                            <label style="font-size:14px;">Toggle to Input Votes</label>
-                            <p:toggleSwitch value="#{constituencyCollationController.inputVotes}" style="margin-left:3px;">
-                                <!--<p:ajax listener="{constituencyCollationController.addMessage}" update="msg"/>-->
-                                <!--<p:ajax process="@this" update="stationResult"/>-->
-                                <p:ajax update="stationResult"/>
-                            </p:toggleSwitch>
-                            <p:commandButton value="Save Changes" 
-                                             style="margin-left:3px;"
-                                             action="#{constituencyCollationController.saveResults()}"
-                                             rendered="false"/>
-                            <span style="margin-left:3px;" jsf:rendered="#{constituencyCollationController.inputVotes}">
-                                <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
-                                <i>Press the Enter Key to Update Record After Input</i>
-                            </span>
-                        </h:form>
-                        <br/>
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <div class="panel-title">
-                                    #{constituencyCollationController.selectedResultSet.electionType}
-                                </div>
-                            </div>
-                            <div class="panel-body">
-
-                                <h:form>
-                                    
-                                    <center>
-                                            <h:panelGroup rendered="#{constituencyCollationController.inputVotes}">
-                                        
-                                        <h:panelGrid columns="2" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
-                                        <h:outputText value="Result Source" />
-                                        
-                                        <p:selectOneMenu value="#{constituencyCollationController.selectedResultSet.resultSource}" required="true">
-                                            <f:selectItem itemLabel="#{msg.select_one}"  noSelectionOption="true" />
-                                            <f:selectItems value="#{commonOptions.resultSourceList}" />
-                                            <p:ajax process="@this" />
-                                        </p:selectOneMenu>
-                                        
-                                    </h:panelGrid>
-                                    </h:panelGroup>
-                                    </center>
-                                    
-                                    
-                                    
-
-                                    <p:dataTable value="#{constituencyCollationController.electionResultsList}" var="result" 
-                                                 rowKey="#{result.id}">
-
-                                        <p:column>
-                                            <p:rowToggler />
-                                        </p:column>
-
-                                        <p:rowExpansion>
-                                            #{result.id}
-                                        </p:rowExpansion>
-
-                                        <p:column headerText="#{msg.party}">
-                                            <h:outputText value="#{result.electionContestant.party.initials}" />
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.name}">
-                                            <h:outputText value="#{result.candidateName}" />
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.accepted}">
-                                            <h:outputText value="#{result.acceptedResult}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.input_result}">
-                                            <h:outputText value="#{result.inputResult}" 
-                                                          rendered="#{!constituencyCollationController.inputVotes}">
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                            <p:inputNumber value="#{result.inputResult}" size="10"
-                                                           rendered="#{constituencyCollationController.inputVotes}" >
-                                                <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
-                                            </p:inputNumber>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.official}">
-                                            <h:outputText value="#{result.officialResult}" 
-                                                          rendered="#{!constituencyCollationController.inputVotes}">
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                            <p:inputNumber value="#{result.officialResult}" size="10"
-                                                           rendered="#{constituencyCollationController.inputVotes}" >
-                                                <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
-                                            </p:inputNumber>
-                                        </p:column> 
-
-                                        <p:column headerText="#{msg.submitted}">
-                                            <h:outputText value="#{result.submittedResult}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.position}">
-                                            <h:outputText value="#{result.position}" >
-                                                <f:convertNumber pattern="#,##0" />
-                                            </h:outputText>
-                                        </p:column>
-
-                                        <p:column headerText="#{msg.percent}">
-                                            <h:outputText value="#{result.votePct}" >
-                                                <f:convertNumber pattern="#,##0.0 %" />
-                                            </h:outputText>
-                                        </p:column>
-
-
-                                    </p:dataTable>
-
-                                </h:form>
-
-                            </div>
-                        </div>
-
-
-
-                        <center>
-                            <h:form >
-                                <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
-
-                                    <h:outputText value="#{msg.valid_votes}" />
-                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.validVotes}" 
-                                                 disabled="#{!constituencyCollationController.inputVotes}"/>
-
-                                    <h:outputText value="#{msg.rejected_ballots}" />
-                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.rejectedBallots}"  
-                                                 size="6"
-                                                 disabled="#{!constituencyCollationController.inputVotes}"/>
-
-
-                                    <h:outputText value="#{msg.spoilt_ballots}" />
-                                    <p:inputText value="#{constituencyCollationController.selectedResultSet.spoiltBallots}" 
-                                                 size="6"
-                                                 disabled="#{!constituencyCollationController.inputVotes}" />
-
-
-                                </h:panelGrid>
-
-                                <h:panelGrid columns="2" styleClass="spaced-table">
-
-                                    <p:commandButton value="Approve" action="#{constituencyCollationController.approveSubmission()}" 
-                                                     styleClass="ui-button-success" 
-                                                     ajax=":collationBoad"/>
-
-
-                                </h:panelGrid>
-
-                            </h:form>
-
 
 
                         </center>
 
-
-                        <h:panelGroup id="picturePanel" >
-
-                            <ui:remove>
-                                <div jsf:rendered="#{not empty constituencyCollationController.selectedSubmission.submissionPictureSRC}">
-                                    <img src="#{constituencyCollationController.selectedSubmission.submissionPictureSRC}" width="250" height="420" alt="alt"/>
-                                </div>
-                            </ui:remove>
-
-
-                        </h:panelGroup>
-
-                    </h:panelGroup>
-
-                    <br />
-
-
-
-
+                    </h:form>
 
                 </div>
 
@@ -541,7 +331,216 @@
 
 
 
+        <h:panelGroup id="reviewPanel">
 
+            <p:dialog widgetVar="resultDialog" modal="true" maximizable="true" width="80%">
+
+                <h:panelGroup id="stationResult">
+
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h3>#{constituencyCollationController.electionPollingStation.pollingStation.stationCode} - #{constituencyCollationController.electionPollingStation.pollingStation.stationName}</h3>
+                                </div>
+                            </div>
+
+                            <h:form>
+                                <label style="font-size:14px;">Toggle to Input Votes</label>
+                                <p:toggleSwitch value="#{constituencyCollationController.inputVotes}" style="margin-left:3px;">
+                                    <!--<p:ajax listener="{constituencyCollationController.addMessage}" update="msg"/>-->
+                                    <!--<p:ajax process="@this" update="stationResult"/>-->
+                                    <p:ajax update="stationResult"/>
+                                </p:toggleSwitch>
+                                <p:commandButton value="Save Changes" 
+                                                 style="margin-left:3px;"
+                                                 action="#{constituencyCollationController.saveResults()}"
+                                                 rendered="false"/>
+                                <span style="margin-left:3px;" jsf:rendered="#{constituencyCollationController.inputVotes}">
+                                    <!--<i>Records Get Updated Automatically Once Value is Inputted</i>-->
+                                    <i>Press the Enter Key to Update Record After Input</i>
+                                </span>
+                            </h:form>
+                            <br/>
+
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="panel-title">
+                                        #{constituencyCollationController.selectedResultSet.electionType}
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+
+                                    <h:form>
+
+                                        <center>
+                                            <h:panelGroup >
+
+                                                <h:panelGrid columns="2" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
+                                                    <h:outputText value="Result Source" />
+
+                                                    <p:selectOneMenu value="#{constituencyCollationController.selectedResultSet.resultSource}" required="true">
+                                                        <f:selectItem itemLabel="#{msg.select_one}"  noSelectionOption="true" />
+                                                        <f:selectItems value="#{commonOptions.resultSourceList}" />
+                                                        <p:ajax process="@this" />
+                                                    </p:selectOneMenu>
+
+                                                </h:panelGrid>
+                                            </h:panelGroup>
+                                        </center>
+
+
+
+
+                                        <p:dataTable value="#{constituencyCollationController.electionResultsList}" var="result" 
+                                                     rowKey="#{result.id}">
+
+                                            <p:column>
+                                                <p:rowToggler />
+                                            </p:column>
+
+                                            <p:rowExpansion>
+                                                #{result.id}
+                                            </p:rowExpansion>
+
+                                            <p:column headerText="#{msg.party}">
+                                                <h:outputText value="#{result.electionContestant.party.initials}" />
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.name}">
+                                                <h:outputText value="#{result.electionContestant.candidateName}" />
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.accepted}">
+                                                <h:outputText value="#{result.acceptedResult}" >
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.input_result}">
+                                                <h:outputText value="#{result.inputResult}" 
+                                                              rendered="#{!constituencyCollationController.inputVotes}">
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                                <p:inputNumber value="#{result.inputResult}" size="10"
+                                                               rendered="#{constituencyCollationController.inputVotes}" >
+                                                    <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
+                                                </p:inputNumber>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.official}" rendered="false">
+                                                <h:outputText value="#{result.officialResult}" 
+                                                              rendered="#{!constituencyCollationController.inputVotes}">
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                                <p:inputNumber value="#{result.officialResult}" size="10"
+                                                               rendered="#{constituencyCollationController.inputVotes}" >
+                                                    <p:ajax event="change" process="@this" listener="#{constituencyCollationController.recordUpdated(result)}"/>
+                                                </p:inputNumber>
+                                            </p:column> 
+
+                                            <p:column headerText="#{msg.submitted}">
+                                                <h:outputText value="#{result.submittedResult}" >
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.position}">
+                                                <h:outputText value="#{result.position}" >
+                                                    <f:convertNumber pattern="#,##0" />
+                                                </h:outputText>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.percent}">
+                                                <h:outputText value="#{result.votePct}" >
+                                                    <f:convertNumber pattern="#,##0.0 %" />
+                                                </h:outputText>
+                                            </p:column>
+
+
+                                        </p:dataTable>
+
+                                    </h:form>
+
+                                </div>
+                            </div>
+
+
+
+                            <center>
+                                <h:form >
+                                    <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{not empty constituencyCollationController.selectedResultSet}">
+
+                                        <h:outputText value="#{msg.valid_votes}" />
+                                        <p:inputText value="#{constituencyCollationController.selectedResultSet.validVotes}" 
+                                                     disabled="#{!constituencyCollationController.inputVotes}"/>
+
+                                        <h:outputText value="#{msg.rejected_ballots}" />
+                                        <p:inputText value="#{constituencyCollationController.selectedResultSet.rejectedBallots}"  
+                                                     size="6"
+                                                     disabled="#{!constituencyCollationController.inputVotes}"/>
+
+
+                                        <h:outputText value="#{msg.spoilt_ballots}" />
+                                        <p:inputText value="#{constituencyCollationController.selectedResultSet.spoiltBallots}" 
+                                                     size="6"
+                                                     disabled="#{!constituencyCollationController.inputVotes}" />
+
+
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="2" styleClass="spaced-table">
+
+                                        <p:commandButton value="Approve" action="#{constituencyCollationController.approveSubmission()}" 
+                                                         styleClass="ui-button-success" 
+                                                         ajax=":collationBoad"/>
+
+
+                                    </h:panelGrid>
+
+                                </h:form>
+
+
+
+                            </center>
+
+                        </div>
+                        <div class="col-lg-6">
+
+                            <p:carousel value="#{constituencyCollationController.submittedResultImagesList}" var="record" 
+                                        numVisible="1" numScroll="1">
+
+                                <div class="product-item">
+                                    <div class="product-item-content">
+                                        <div class="mb-3">
+                                            <img class="product-image" src="#{record.imageSRC}" alt="alt"/>
+                                        </div>
+
+                                        <div class="mt-5">
+                                            <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:carousel>
+
+                        </div>
+                    </div>
+
+
+
+
+
+                </h:panelGroup>
+
+
+
+            </p:dialog>
+
+
+
+
+        </h:panelGroup>
 
 
 
