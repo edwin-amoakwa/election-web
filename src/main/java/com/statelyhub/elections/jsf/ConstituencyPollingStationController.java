@@ -62,6 +62,11 @@ public class ConstituencyPollingStationController implements Serializable {
     }
 
     public void load() {
+        if(selectedConstituencyElection == null)
+        {
+            return;
+        }
+        
         pollingStationsList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
                 .addObjectParam(ElectionPollingStation._constituency, selectedConstituencyElection.getConstituency())
                 .addObjectParam(ElectionPollingStation._election, userSession.getElectionUR())

@@ -47,9 +47,14 @@ public class ElectionPollingStation extends SummarySet {
     @ManyToOne
     private ConstituencyElection constituencyElection;
     
-    public static final String _resultSubmission = "resultSubmissionId";
-    @Column(name = "result_submission")
-    private String resultSubmissionId;
+    public static final String _parliamentarySubmissionId = "parliamentarySubmissionId";
+    @Column(name = "parliamentary_submission_id")
+    private String parliamentarySubmissionId;
+    
+    
+    public static final String _presidentialSubmissionId = "presidentialSubmissionId";
+    @Column(name = "presidential_submission_id")
+    private String presidentialSubmissionId;
 
     public static final String _resultStatus = "resultStatus";
     @Column(name = "result_status")
@@ -88,12 +93,14 @@ public class ElectionPollingStation extends SummarySet {
     public void setConstituencyElection(ConstituencyElection constituencyElection) {
         this.constituencyElection = constituencyElection;
     }
-    public String getResultSubmissionId() {
-        return resultSubmissionId;
+    
+    
+    public String getParliamentarySubmissionId() {
+        return parliamentarySubmissionId;
     }
 
-    public void setResultSubmissionId(String resultSubmissionId) {
-        this.resultSubmissionId = resultSubmissionId;
+    public void setParliamentarySubmissionId(String parliamentarySubmissionId) {
+        this.parliamentarySubmissionId = parliamentarySubmissionId;
     }
 
 
@@ -103,6 +110,14 @@ public class ElectionPollingStation extends SummarySet {
 
     public void setResultStatus(ResultStatus resultStatus) {
         this.resultStatus = resultStatus;
+    }
+
+    public String getPresidentialSubmissionId() {
+        return presidentialSubmissionId;
+    }
+
+    public void setPresidentialSubmissionId(String presidentialSubmissionId) {
+        this.presidentialSubmissionId = presidentialSubmissionId;
     }
 
     

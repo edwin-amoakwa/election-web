@@ -52,7 +52,7 @@ public class DataUploadService {
             eps.setElection(constituencyElection.getElection());
             eps.setConstituency(constituencyElection.getConstituency());
             eps.setPollingStation(pollingStation);
-           eps.setConstituencyElection(constituencyElection);
+            eps.setConstituencyElection(constituencyElection);
             eps.setResultStatus(ResultStatus.PENDING);
 
             crudService.save(eps);
@@ -60,7 +60,25 @@ public class DataUploadService {
 
     }
 
-    public ConstituencyElection initConsElection(Constituency constituency, Region region, Election election, ElectionType electionType) {
+
+
+//    public void process(ConstituencyElection constituencyElection, ElectionPollingStation eps) {
+//
+////        PollingStation pollingStation = pollingStation(constituencyElection.getConstituency(), stationCode, stationName);
+//        if (eps == null) {
+//            eps = new ElectionPollingStation();
+//            eps.setElection(constituencyElection.getElection());
+//            eps.setConstituency(constituencyElection.getConstituency());
+//            eps.setPollingStation(eps.getPollingStation());
+//            eps.setConstituencyElection(constituencyElection);
+//            eps.setResultStatus(ResultStatus.PENDING);
+//
+//            crudService.save(eps);
+//        }
+//
+//    }
+
+    public ConstituencyElection initConsElection(Constituency constituency, Region region, Election election) {
         ConstituencyElection ce = QryBuilder.get(crudService.getEm(), ConstituencyElection.class)
                 .addObjectParam(ConstituencyElection._constituency, constituency)
                 .addObjectParam(ConstituencyElection._election, election)
@@ -83,8 +101,6 @@ public class DataUploadService {
 
         return ce;
     }
-
-
 
     public Region region(String regionName) {
         Region region = QryBuilder.get(crudService.getEm(), Region.class)

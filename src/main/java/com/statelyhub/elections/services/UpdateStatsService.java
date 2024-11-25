@@ -113,6 +113,25 @@ public class UpdateStatsService {
 
         }
     }
+    
+    
+    
+//      @Asynchronous
+    public void initIaliseDefaultContesttants(ConstituencyElection constituency , Election election) {
+
+        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .addObjectParam(PartyElection._election, election).printQryInfo().buildQry().getResultList();
+
+        for (PartyElection partyElection : partyElectionsList) {
+
+//            for (ConstituencyElection constituency : constituencys) {
+
+                initConstituencyContestants(constituency, partyElection, ElectionType.PRESIDENTIAL);
+                initConstituencyContestants(constituency, partyElection, ElectionType.PARLIAMENTARY);
+//            }
+
+        }
+    }
 
     @Asynchronous
     public void initIaliseDefaultContesttants(PartyElection partyElection, Election election) {
