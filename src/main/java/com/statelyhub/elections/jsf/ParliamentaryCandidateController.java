@@ -13,6 +13,7 @@ import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.PartyType;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
+import com.statelyhub.elections.entities.PartyElection;
 import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
@@ -41,33 +42,30 @@ public class ParliamentaryCandidateController implements Serializable {
 
     @Inject
     private ElectionService electionService;
-    
-    
+
     @Inject
     private UserSession userSession;
 
     @Inject
     private ElectionResultService electionResultService;
-    
-     @Inject
+
+    @Inject
     private UpdateStatsService updateStatsService;
 
     private List<ElectionContestant> electionContestantsList;
-    
-     private List<ElectionContestant> presidentialContestantsList;
+
+    private List<ElectionContestant> presidentialContestantsList;
 
     private List<ConstituencyElection> constituencyElectionList;
-    
 
     private ConstituencyElection selectedConstituencyElection;
-    
+
     private Region selectedRegion;
-    
+
     private ElectionContestant electionContestant;
-    
+
     @PostConstruct
-    public void init()
-    {
+    public void init() {
         selectedConstituencyElection = userSession.getConstituencyElectionUR();
         constituencyElectionList = new LinkedList<>();
         constituencyElectionList.add(selectedConstituencyElection);
@@ -79,7 +77,7 @@ public class ParliamentaryCandidateController implements Serializable {
                 .addObjectParamWhenNotNull(ConstituencyElection._region, selectedRegion)
                 .orderByDesc(ConstituencyElection._constituency_constituencyName)
                 .buildQry().getResultList();
-        
+
     }
 
     public void loadConstituencyResult(ConstituencyElection constituencyElection) {
@@ -90,123 +88,115 @@ public class ParliamentaryCandidateController implements Serializable {
                 .addObjectParam(ElectionContestant._electionType, ElectionType.PARLIAMENTARY)
                 .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();
-        
-        
-        
-        presidentialContestantsList= QryBuilder.get(crudService.getEm(), ElectionContestant.class)
+
+        presidentialContestantsList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)
                 .addObjectParam(ElectionContestant._electionType, ElectionType.PRESIDENTIAL)
                 .orderByAsc(ElectionContestant._viewOrder)
                 .buildQry().getResultList();
-        
+
     }
 
+    public void initialise() {
+//        loadConstituency();
+//        
+//        for (ElectionContestant contestant : electionContestantsList) {
+//             updateStatsService.addContestant(selectedConstituencyElection, contestant);
+//        }
 
-    public void initialise()
-    {
-        for (ElectionContestant contestant : electionContestantsList) {
-             updateStatsService.addContestant(selectedConstituencyElection, contestant);
+        List<PartyElection> partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class)
+                .addObjectParam(PartyElection._election, userSession.getElectionUR()).printQryInfo().buildQry().getResultList();
+
+        for (PartyElection partyElection : partyElectionsList) {
+            updateStatsService.initConstituencyContestants(selectedConstituencyElection, partyElection, ElectionType.PRESIDENTIAL);
+            updateStatsService.initConstituencyContestants(selectedConstituencyElection, partyElection, ElectionType.PARLIAMENTARY);
         }
-        JsfMsg.msg(true);
-//        electionResultService.runConstituency(selectedConstituencyElection);
+
+        loadConstituencyResult(selectedConstituencyElection);
+
+        JsfMsg.info("Data Initialised for  " + selectedConstituencyElection);
     }
 
-    
-    public void editElectionContestant(ElectionContestant electionContestant)
-    {
+    public void editElectionContestant(ElectionContestant electionContestant) {
         this.electionContestant = electionContestant;
     }
-    
-    public void clearElectionContestant()
-    {
+
+    public void clearElectionContestant() {
         this.electionContestant = new ElectionContestant();
         this.electionContestant.setConstituencyElection(selectedConstituencyElection);
         this.electionContestant.setElectionType(ElectionType.PARLIAMENTARY);
-        this.electionContestant.setCandidateType(PartyType.INDEPENDENT_CANDIDATE);   
+        this.electionContestant.setCandidateType(PartyType.INDEPENDENT_CANDIDATE);
         electionContestant.setElectionType(ElectionType.PARLIAMENTARY);
     }
-    
-    public void saveElectionContestant()
-    {
-        if(StringUtil.isNullOrEmpty(electionContestant.getCandidateName()))
-        {
+
+    public void saveElectionContestant() {
+        if (StringUtil.isNullOrEmpty(electionContestant.getCandidateName())) {
             JsfMsg.error("Specify Candidate Name");
             return;
         }
-        
-        if(electionContestant.getCandidateType() == null)
-        {
+
+        if (electionContestant.getCandidateType() == null) {
             JsfMsg.error("Specify Candidate Type");
             return;
         }
-        
-        if(electionContestant.isPoliticalParty() && electionContestant.getParty() == null)
-        {
+
+        if (electionContestant.isPoliticalParty() && electionContestant.getParty() == null) {
             JsfMsg.error("Specify Political Party Affiliated To");
             return;
         }
-        
-        if(electionContestant.getCandidateType() == PartyType.INDEPENDENT_CANDIDATE)
-        {
+
+        if (electionContestant.getCandidateType() == PartyType.INDEPENDENT_CANDIDATE) {
             electionContestant.setParty(null);
         }
-        
+
         electionContestant = crudService.save(electionContestant);
-        if(electionContestant == null)
-        {
+        if (electionContestant == null) {
             JsfMsg.error("Error Updating Record");
             return;
         }
-        
+
         CollectionUtils.checkAdd(electionContestantsList, electionContestant);
-        
+
         Collections.sort(electionContestantsList, Comparator.comparingInt(ElectionContestant::getViewOrder));
-        
+
         JsfMsg.info("Record Updated Successfully");
         clearElectionContestant();
     }
-    
-    public void updateElectionContestant(ElectionContestant electionContestant)
-    {
-        if(StringUtil.isNullOrEmpty(electionContestant.getCandidateName()))
-        {
+
+    public void updateElectionContestant(ElectionContestant electionContestant) {
+        if (StringUtil.isNullOrEmpty(electionContestant.getCandidateName())) {
             JsfMsg.error("Specify Candidate Name");
             return;
         }
-        
+
         electionContestant = crudService.save(electionContestant);
-        if(electionContestant == null)
-        {
+        if (electionContestant == null) {
             JsfMsg.error("Error Updating Record");
             return;
         }
-        
+
         CollectionUtils.checkAdd(electionContestantsList, electionContestant);
         JsfMsg.info("Record Updated Successfully");
     }
-    
-    public void removeElectionContestant(ElectionContestant electionContestant)
-    {  
-        try 
-        {
-            
+
+    public void removeElectionContestant(ElectionContestant electionContestant) {
+        try {
+
             ProcResponse response = electionService.delete(electionContestant);
-            if(response.isSuccess()){
+            if (response.isSuccess()) {
                 JsfMsg.successDelete();
                 electionContestantsList.remove(electionContestant);
                 return;
-            }
-            else
-            {
+            } else {
                 JsfMsg.error(response.getMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
             JsfMsg.error("Error Removing Candidate. Contact Administrator!");
         }
-        
+
     }
-    
+
     public Region getSelectedRegion() {
         return selectedRegion;
     }
@@ -219,7 +209,6 @@ public class ParliamentaryCandidateController implements Serializable {
         return constituencyElectionList;
     }
 
-    
     public ConstituencyElection getSelectedConstituencyElection() {
         return selectedConstituencyElection;
     }
@@ -240,7 +229,4 @@ public class ParliamentaryCandidateController implements Serializable {
         return presidentialContestantsList;
     }
 
-    
-
-      
 }

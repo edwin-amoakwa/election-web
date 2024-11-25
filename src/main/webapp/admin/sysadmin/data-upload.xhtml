@@ -14,31 +14,66 @@
 
 
         <div class="card">
-            <h5>Upload</h5>
-            <h:form enctype="multipart/form-data">
+            <h5>Upload  ALl</h5>
+           
+            
+            
+            <p:tabView>
+                
+                <p:tab title="Upload By #{msg.constituency}">
+                     <h:form enctype="multipart/form-data">
+                <p:fileUpload value="#{dataUploadController.uploadFile}" mode="simple" skinSimple="true"/>
+
+                <p:commandButton value="Submit" ajax="false" action="#{dataUploadController.uploadByConstituency}" 
+                                 styleClass="mt-3 ui-button-outlined block"/>
+            </h:form>
+                </p:tab>
+                
+                
+                
+                     
+                <p:tab title="Upload All">
+                    
+                     <h:form enctype="multipart/form-data">
                 <p:fileUpload value="#{dataUploadController.uploadFile}" mode="simple" skinSimple="true"/>
 
                 <p:commandButton value="Submit" ajax="false" action="#{dataUploadController.handleFileUpload}" 
                                  styleClass="mt-3 ui-button-outlined block"/>
             </h:form>
+                    
+                </p:tab>
+                
+            </p:tabView>
+            
+            
+            
         </div>
 
         <h:form style="margin-top: 20px;">
-            <p:dataTable value="#{fundingSourceController.bankAccountsList}" var="fundingSource">
+            <p:dataTable value="#{dataUploadController.containerList}" var="container">
                 <p:column headerText="#{msg.code}">
-                    <h:outputText value="#{fundingSource.sourceId}" />
+                    <h:outputText value="#{container.pollingStationCode}" />
                 </p:column>
 
                 <p:column headerText="#{msg.name}">
-                    <h:outputText value="#{fundingSource.sourceName}" />
+                    <h:outputText value="#{container.stationName}" />
                 </p:column>
 
-                <p:column headerText="#{msg.action}">
-                    <h:commandLink value="#{msg.edit}" 
-                                   action="#{fundingSourceController.editFundingSource(fundingSource)}"/>
+                <p:column headerText="#{msg.constituency}">
+                         <h:outputText value="#{container.constitencyName}" />
                 </p:column>
 
-                <p:column headerText="#{msg.action}">
+                <p:column headerText="District">
+                    <h:outputText value="#{container.disctrictName}" />
+                </p:column>
+
+                
+                <p:column headerText="Region">
+                    <h:outputText value="#{container.regionName}" />
+                </p:column>
+                
+
+                <p:column headerText="#{msg.action}" rendered="false">
                     <h:commandLink value="#{msg.delete}" styleClass="delete"
                                    action="#{fundingSourceController.deleteFundingSource(fundingSource)}"/>
                 </p:column>

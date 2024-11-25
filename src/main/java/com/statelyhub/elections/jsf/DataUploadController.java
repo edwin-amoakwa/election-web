@@ -14,6 +14,7 @@ import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.DistrictAssembly;
 import com.statelyhub.elections.entities.ElectionPollingStation;
 import com.statelyhub.elections.entities.Region;
+import com.statelyhub.elections.model.UploadContainer;
 import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.DataUploadService;
 import jakarta.enterprise.context.SessionScoped;
@@ -46,8 +47,10 @@ public class DataUploadController implements Serializable {
     private UploadedFile uploadFile;
 
     private List<ElectionPollingStation> stationsList = new LinkedList<>();
-
-    public void handleFileUpload() {
+    private List<UploadContainer> containerList = new LinkedList<>();
+    
+    
+        public void handleFileUpload() {
         try {
 
 //            QryBuilder.get(crudService.getEm(), ElectionPollingStation.class).delete();
@@ -143,6 +146,89 @@ public class DataUploadController implements Serializable {
         }
     }
 
+    
+    
+
+    public void uploadByConstituency() {
+        try {
+            
+            containerList = new LinkedList<>();
+
+//            QryBuilder.get(crudService.getEm(), ElectionPollingStation.class).delete();
+//            QryBuilder.get(crudService.getEm(), PollingStation.class).delete();
+//            QryBuilder.get(crudService.getEm(), Constituency.class).delete();
+//
+//            QryBuilder.get(crudService.getEm(), DistrictAssembly.class).delete();
+//            QryBuilder.get(crudService.getEm(), Region.class).delete();
+            File bankFile = new File(ExcelExporter.TEMP_DIR, uploadFile.getFileName());
+            FileUtils.writeByteArrayToFile(bankFile, uploadFile.getContent());
+            List<Object[]> uploadList = ExcelDataLoader.read(bankFile.getAbsolutePath()).getWorkBookData();
+
+            System.out.println("total rows ... " + uploadList.size());
+
+            uploadList.remove(0);
+
+            int index = 0;
+            for (Object[] resultRow : uploadList) {
+                index++;
+                System.out.println("index ..... " + index + " >>>>>>> ---- " + resultRow.length);
+                StringUtil.printArrayHorizontally(resultRow);
+                StringUtil.printArray(resultRow);
+                if (resultRow.length < 4) {
+                    continue;
+                }
+
+                String counter = ObjectValue.getStringValue(resultRow[0]);
+                String stationCode = ObjectValue.getStringValue(resultRow[1]);
+                String stationName = ObjectValue.getStringValue(resultRow[2]);
+                String consistuencyName = ObjectValue.getStringValue(resultRow[3]);
+                String districtName = ObjectValue.getStringValue(resultRow[4]).trim();
+                String regionName = ObjectValue.getStringValue(resultRow[5]).trim();
+
+                System.out.println(index + " .... " + counter + " --- " + stationCode + " ---- " + stationName + " --- " + consistuencyName + "..regionName." + regionName);
+
+                if (StringUtil.isNullOrEmpty(regionName) || StringUtil.isNullOrEmpty(stationCode)
+                        || StringUtil.isNullOrEmpty(consistuencyName)) {
+                    continue;
+                }
+
+                if (stationCode.length() < 5) {
+                    continue;
+                }
+
+                if (regionName.length() < 3) {
+                    continue;
+                }
+
+                if (regionName.contains("0")) {
+                    continue;
+                }
+                
+                    if (consistuencyName.contains("1.0")) {
+                    continue;
+                }
+
+                if (regionName.contains("Region")) {
+                    continue;
+                }
+
+                UploadContainer container =  new UploadContainer();
+                container.setRegionName(regionName);
+                container.setConstitencyName(consistuencyName);
+                container.setDisctrictName(districtName);
+                container.setPollingStationCode(stationCode);
+                container.setStationName(stationName);
+                
+                containerList.add(container);
+                
+                
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public UploadedFile getUploadFile() {
         return uploadFile;
     }
@@ -153,6 +239,10 @@ public class DataUploadController implements Serializable {
 
     public List<ElectionPollingStation> getStationsList() {
         return stationsList;
+    }
+
+    public List<UploadContainer> getContainerList() {
+        return containerList;
     }
 
 }
