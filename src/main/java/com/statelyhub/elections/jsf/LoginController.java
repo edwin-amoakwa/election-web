@@ -9,7 +9,7 @@ import com.statelyhub.elections.jsf.Pages;
 import com.statelyhub.elections.jsf.UserPermission;
 import com.statelyhub.elections.jsf.UserSession;
 import com.statelyhub.elections.entities.UserAccount;
-import com.statelyhub.old.service.AdminService;
+import com.statelyhub.elections.services.AdminService;
 import com.stately.common.security.SecurityHash;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.Msg;

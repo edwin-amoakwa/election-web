@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.statelyhub.old.service;
+package com.statelyhub.elections.services;
 
-import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.entities.UserAccount;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.UserAccessLevel;

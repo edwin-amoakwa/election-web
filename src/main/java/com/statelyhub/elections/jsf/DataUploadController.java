@@ -187,9 +187,28 @@ public class DataUploadController implements Serializable {
                 String counter = ObjectValue.getStringValue(resultRow[0]);
                 String stationCode = ObjectValue.getStringValue(resultRow[1]);
                 String stationName = ObjectValue.getStringValue(resultRow[2]);
-                String consistuencyName = ObjectValue.getStringValue(resultRow[3]);
-                String districtName = ObjectValue.getStringValue(resultRow[4]).trim();
-                String regionName = ObjectValue.getStringValue(resultRow[5]).trim();
+                
+                int positin = 3;
+                
+                while (positin < resultRow.length) {
+                    String value = ObjectValue.getStringValue(resultRow[positin]);
+                    
+                    System.out.println("checking ... " +value + " ... " + positin);
+                    
+                    if (value.matches(".*[a-zA-Z].*")) {
+                        
+                        break;
+                        
+                    } else {
+                        stationName = (stationName + " " + value.trim()).trim();
+                        positin++;
+                    }
+                }
+                
+                
+                String consistuencyName = ObjectValue.getStringValue(resultRow[positin]);
+                String districtName = ObjectValue.getStringValue(resultRow[positin + 1]).trim();
+                String regionName = ObjectValue.getStringValue(resultRow[positin + 2]).trim();
 
                 System.out.println(index + " .... " + counter + " --- " + stationCode + " ---- " + stationName + " --- " + consistuencyName + "..regionName." + regionName);
 

@@ -11,7 +11,7 @@ import com.stately.common.security.SecurityHash;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.stately.modules.web.jsf.JsfUtil;
 import com.statelyhub.elections.constants.UserAccessLevel;
-import com.statelyhub.old.service.AdminService;
+import com.statelyhub.elections.services.AdminService;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
 import java.io.Serializable;
