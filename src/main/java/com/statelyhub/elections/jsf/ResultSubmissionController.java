@@ -148,7 +148,15 @@ public class ResultSubmissionController implements Serializable {
             }
 
         }
-        electionPollingStation.setParliamentarySubmissionId(selectedSubmission.getId());
+        
+        if(selectedPollingStationResultSet.getElectionType() == ElectionType.PARLIAMENTARY)
+        {
+            electionPollingStation.setParliamentarySubmissionId(selectedSubmission.getId());
+        }
+        else
+        {
+            electionPollingStation.setPresidentialSubmissionId(selectedSubmission.getId());
+        }
 
         selectedSubmission.setSubmissionStatus(SubmissionStatus.ACCEPTED);
 

@@ -83,6 +83,7 @@ public class SubmisionService {
                 submittedResult.setViewOrder(stationResult.getViewOrder());
                 submittedResult.setPollingStationResult(stationResult);
                 submittedResult.setElectionContestant(stationResult.getElectionContestant());
+                submittedResult.setCandidateName(stationResult.getElectionContestant().getCandidateName());
                 crudService.save(submittedResult);
             }
         }

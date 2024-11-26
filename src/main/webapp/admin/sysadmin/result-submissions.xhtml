@@ -329,6 +329,8 @@
                                 <p:column headerText="">
                                     #{submittedResult.partyDetails}
                                 </p:column>
+                                
+                           
 
                                 <p:column headerText="">
                                     #{submittedResult.submittedResult}
@@ -338,11 +340,17 @@
                             
                             
 
-                            <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
+                            <h:panelGrid columns="3" styleClass="spaced-table" style="width: 80%">
 
                                 <c:forEach items="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
 
                                     <h:outputText value="#{submittedResult.partyDetails}" styleClass="field-label" />
+                                  
+                                    <h:outputText value="#{submittedResult.electionContestant.candidateName}" styleClass="field-label1" />
+                                    
+                               
+                                    
+                                    
                                     <h:inputText value="#{submittedResult.submittedResult}" styleClass="field-value text-right" >
                                         <f:convertNumber pattern="#,##0" />
                                     </h:inputText>

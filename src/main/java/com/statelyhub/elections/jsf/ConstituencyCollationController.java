@@ -137,9 +137,14 @@ public class ConstituencyCollationController implements Serializable {
 
         electionResultsList = electionService.eps(electionPollingStation, station.getElectionType());
         
+        String submissionId = selectedResultSet.getElectionPollingStation().getParliamentarySubmissionId();
+        if(selectedResultSet.getElectionType() == ElectionType.PRESIDENTIAL)
+        {
+            submissionId = selectedResultSet.getElectionPollingStation().getPresidentialSubmissionId();
+        }
         
         submittedResultImagesList = QryBuilder.get(crudService.getEm(), SubmittedResultPicture.class)
-                .addObjectParam(SubmittedResultPicture._resultSubmission_id, selectedResultSet.getElectionPollingStation().getParliamentarySubmissionId())
+                .addObjectParam(SubmittedResultPicture._resultSubmission_id, submissionId)
                 .orderByAsc(SubmittedResultPicture._createdDate)
                 .printQryInfo()
                 .buildQry().getResultList();

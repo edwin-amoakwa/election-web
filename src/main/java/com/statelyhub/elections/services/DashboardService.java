@@ -11,12 +11,15 @@ import com.statelyhub.elections.constants.ElectionType;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.entities.ConstituencyElection;
+import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.model.ElectionTypeDashboard;
 import com.statelyhub.elections.utils.NumberUtil;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -116,6 +119,9 @@ public class DashboardService {
 
         dashboard.setContestantsList(electionService.consititueny(constituencyElection, electionType));
 
+        Collections.sort(dashboard.getContestantsList(), Comparator.comparing(ElectionContestant::getPosition));
+        
+        
         return dashboard;
     }
 
