@@ -146,6 +146,7 @@ public class ElectionService {
         try {
             int deleted = crudService.deleteAll(SubmittedResult.class, SubmittedResult._electionContestant, contestant);
             int deleted2 = crudService.deleteAll(PollingStationResult.class, PollingStationResult._electionContestant, contestant);
+            crudService.delete(contestant);
         } catch (Exception e) 
         {
             e.printStackTrace();

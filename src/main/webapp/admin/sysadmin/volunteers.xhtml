@@ -11,63 +11,101 @@
     </ui:define>
 
     <ui:define name="content">
-      
+
         <h:panelGroup id="mainPanel">
-            <h:form>
-                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
-
-                    <h:outputText value="Volunteer Name" styleClass="field-label-required"/>
-                    <p:inputText value="#{volunteerController.volunteer.volunteerName}" />
-
-                    <h:outputText value="Phone Contact"  styleClass="field-label-required" />
-                    <p:inputText value="#{volunteerController.volunteer.mobileNo}" />
-
-                    <h:outputText value="Email Address" />
-                    <p:inputText value="#{volunteerController.volunteer.emailAddress}" />
-
-                    <h:outputText value="Constituency"  styleClass="field-label-required"/>
-                    <p:selectOneMenu value="#{volunteerController.volunteer.constituency}" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="#{msg.select_one}" />
-                        <f:selectItems value="#{userCommonOptions.constituenciesList}" />
-                        <p:ajax event="change" update="pollingStation" process="@this" 
-                                listener="#{volunteerController.onConstituencyChange}"/>
-                    </p:selectOneMenu>
 
 
+            <div class="row">
+                <div class="col-lg-7">
 
-                </p:panelGrid>
-                
-                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
-                    <h:outputText value="Polling Station"  styleClass="field-label-required"/>
-                    <p:selectOneMenu value="#{volunteerController.volunteer.pollingStation}"  
-                                      filter="true" filterMatchMode="contains"
-                                     id="pollingStation">
-                        <f:selectItem itemLabel="#{msg.select_one}" />
-                        <f:selectItems value="#{volunteerController.pollingStationsList}" var="pollingStation" 
-                                       itemLabel="#{pollingStation.stationCode} - #{pollingStation.stationName}"
-                                       itemValue="#{pollingStation}"/>
-                    </p:selectOneMenu>
-                    
-                </p:panelGrid>
-                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
-                    
-                    <f:facet name="footer">
-                        <center style="margin: 10px">
-                            <stately:formControl saveButtonAction="#{volunteerController.saveVolunteer()}" 
-                                            update="@form" cancelButtonAction="#{volunteerController.initVolunteer()}"/>
-                        </center>
-                    </f:facet>
-                </p:panelGrid>
-            </h:form>
+                    <h:form>
+                        <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                            <h:outputText value="Volunteer Name" styleClass="field-label-required"/>
+                            <p:inputText value="#{volunteerController.volunteer.volunteerName}" />
+
+                            <h:outputText value="Phone Contact"  styleClass="field-label-required" />
+                            <p:inputText value="#{volunteerController.volunteer.mobileNo}" />
+
+                            <h:outputText value="Email Address" />
+                            <p:inputText value="#{volunteerController.volunteer.emailAddress}" />
+
+                            <h:outputText value="Constituency"  styleClass="field-label-required"/>
+                            <p:selectOneMenu value="#{volunteerController.volunteer.constituency}" 
+                                             required="true"
+                                             filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="#{msg.select_one}" />
+                                <f:selectItems value="#{userCommonOptions.constituenciesList}" />
+                                <p:ajax event="change" update="pollingStation" process="@this" 
+                                        listener="#{volunteerController.onConstituencyChange}"/>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                            <h:outputText value="Polling Station"  styleClass="field-label-required"/>
+                            <p:selectOneMenu value="#{volunteerController.volunteer.pollingStation}"  
+                                             filter="true" filterMatchMode="contains"
+                                             id="pollingStation">
+                                <f:selectItem itemLabel="#{msg.select_one}" />
+                                <f:selectItems value="#{volunteerController.pollingStationsList}" var="pollingStation" 
+                                               itemLabel="#{pollingStation.stationCode} - #{pollingStation.stationName}"
+                                               itemValue="#{pollingStation}"/>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                        <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                            <f:facet name="footer">
+                                <center style="margin: 10px">
+                                    <stately:formControl saveButtonAction="#{volunteerController.saveVolunteer()}" 
+                                                         update="@form" cancelButtonAction="#{volunteerController.initVolunteer()}"/>
+                                </center>
+                            </f:facet>
+                        </p:panelGrid>
+
+
+                    </h:form>
+
+                </div>
+
+
+                <div class="col-lg-5">
+                    <h:form>
+
+
+                        <h:panelGroup id="passwordForm">
+                            <h:form rendered="#{not empty volunteerController.volunteer.id}">
+
+                                <h:panelGrid columns="2" styleClass="spaced-table">
+                                    <h:outputText value="Password" />
+                                    <h:inputText value="#{volunteerController.newPassword}"/>
+
+                                    <h:outputLabel />
+
+                                    <p:commandButton value="Save Password" action="#{volunteerController.saveNewPassword()}" 
+                                                     ajax="false" />
+                                </h:panelGrid>
+
+                            </h:form>
+                        </h:panelGroup>
+
+                    </h:form>
+                </div>
+
+            </div>
+
+
+
 
             <h:form style="margin-top: 20px;">
                 <p:dataTable value="#{volunteerController.volunteersList}" var="record">
 
                     <f:facet name="header">
                         <p:commandButton value="Reload" ajax="false"
-                                     action="#{volunteerController.loadVolunteers()}"/>
+                                         action="#{volunteerController.loadVolunteers()}"/>
                     </f:facet>
-                    
+
                     <p:column headerText="Volunteer Name">
                         <h:outputText value="#{record.volunteerName}" />
                     </p:column>
@@ -95,7 +133,7 @@
                     <p:column headerText="#{msg.edit}">
                         <h:commandLink value="#{msg.edit}" styleClass="select"
                                        action="#{volunteerController.selectVolunteer(record)}"/>
-                     </p:column>
+                    </p:column>
                     <p:column headerText="#{msg.delete}">
                         <h:commandLink value="#{msg.delete}" styleClass="delete"
                                        action="#{volunteerController.deleteVolunteer(record)}"
@@ -104,24 +142,24 @@
                     </p:column>
                     <p:column headerText="Verified">
                         <h:commandLink value="Verify" styleClass="primary"
-                             rendered="#{!record.verified}"
-                            action="#{volunteerController.verifyVolunteer(record)}"
-                            onclick="return confirm('Verify Volunteer?');"/>
+                                       rendered="#{!record.verified}"
+                                       action="#{volunteerController.verifyVolunteer(record)}"
+                                       onclick="return confirm('Verify Volunteer?');"/>
                         <h:commandLink value="Unverify" styleClass="primary"
-                             rendered="#{record.verified}"
-                            action="#{volunteerController.unverifyVolunteer(record)}"
-                            onclick="return confirm('Unverify Volunteer?');"/>
+                                       rendered="#{record.verified}"
+                                       action="#{volunteerController.unverifyVolunteer(record)}"
+                                       onclick="return confirm('Unverify Volunteer?');"/>
                         <!--<h:outputText value="verified" rendered="{record.verified}"/>-->
                     </p:column>
                     <p:column headerText="Approved">
                         <h:commandLink value="Approve" styleClass="primary"
-                             rendered="#{!record.approved}"
-                            action="#{volunteerController.approveVolunteer(record)}"
-                            onclick="return confirm('Approve Volunteer?');"/>
+                                       rendered="#{!record.approved}"
+                                       action="#{volunteerController.approveVolunteer(record)}"
+                                       onclick="return confirm('Approve Volunteer?');"/>
                         <h:commandLink value="Disapprove" styleClass="primary"
-                             rendered="#{record.approved}"
-                            action="#{volunteerController.disapproveVolunteer(record)}"
-                            onclick="return confirm('Diapprove Volunteer?');"/>
+                                       rendered="#{record.approved}"
+                                       action="#{volunteerController.disapproveVolunteer(record)}"
+                                       onclick="return confirm('Diapprove Volunteer?');"/>
                         <!--<h:outputText value="approved" rendered="{record.approved}"/>-->
                     </p:column>
 
@@ -129,7 +167,7 @@
                 </p:dataTable>
             </h:form>
         </h:panelGroup>
-        
+
     </ui:define>
 
 </ui:composition>

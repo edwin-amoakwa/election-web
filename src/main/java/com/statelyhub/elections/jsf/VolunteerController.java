@@ -6,6 +6,7 @@ package com.statelyhub.elections.jsf;
 
 import com.stately.common.collection.CollectionUtils;
 import com.stately.common.data.ProcResponse;
+import com.stately.common.security.SecurityHash;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.stately.modules.web.jsf.JsfMsg;
@@ -38,6 +39,9 @@ public class VolunteerController implements Serializable
     
     private List<Volunteer> volunteersList;
     private Volunteer volunteer;
+    
+    
+        private String newPassword = "";
     
     private List<PollingStation> pollingStationsList = new LinkedList<>();
     
@@ -196,6 +200,20 @@ public class VolunteerController implements Serializable
         JsfMsg.info("Volunteer Disapproved Successfully");
         CollectionUtils.checkAdd(volunteersList, volunteer);
     }
+    
+    
+    public void saveNewPassword() {
+        try {
+            volunteer.setUserPassword(SecurityHash.getInstance().shaHash(newPassword));
+            crudService.save(volunteer);
+
+            initVolunteer();
+
+            JsfMsg.msg(true);
+        } catch (Exception e) {
+        }
+
+    }
 
     public List<Volunteer> getVolunteersList() {
         return volunteersList;
@@ -219,6 +237,14 @@ public class VolunteerController implements Serializable
 
     public void setPollingStationsList(List<PollingStation> pollingStationsList) {
         this.pollingStationsList = pollingStationsList;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
     
 }
