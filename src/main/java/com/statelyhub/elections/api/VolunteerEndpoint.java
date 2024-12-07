@@ -29,9 +29,17 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import com.google.gson.JsonParser;
 import com.stately.common.data.ProcResponse;
+import com.stately.common.formating.NumberFormattingUtils;
 import com.stately.common.security.SecurityHash;
+import com.statelyhub.elections.entities.Region;
 import com.statelyhub.elections.utils.JsonUtils;
 import com.statelyhub.elections.utils.ResponseMapper;
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PathParam;
+import java.util.List;
 
 /**
  *
@@ -199,6 +207,35 @@ public class VolunteerEndpoint
         
         return ApiResponse.ok(msg);
     }
+    
+    
+        @GET
+    @Path("/person/{uniqueId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRegions(@PathParam("uniqueId") String uniqueId)
+    {
+        Volunteer volunteer = crudService.find(Volunteer.class, uniqueId);
+        
+        if(volunteer == null)
+        {
+            volunteer = new Volunteer();
+            volunteer.setId(uniqueId);
+            
+            
+            int total = QryBuilder.get(crudService.getEm(), Volunteer.class).count();
+            volunteer.setVolunteerName("Volunteer " + NumberFormattingUtils.formatNumber(total, "#,##0"));
+            
+            crudService.save(volunteer);
+        }
+        
+      
+          LoginResponse response = volunteerService.loginResponse(volunteer);
+                 
+         return ApiResponse.ok(response);
+    }
+    
+    
+    
     
     public MappingResult<Volunteer> toEntity(Volunteer record,VolunteerDto dto)
     {

@@ -27,6 +27,8 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -105,7 +107,7 @@ public class NationalViewController implements Serializable {
     }
 
     public List<PresidentialResult> presiddentail(ElectionType electionType) {
-        mainResultList = new LinkedList<>();
+       List<PresidentialResult> list = new LinkedList<>();
         List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addReturnField("e." + ElectionContestant._party)
                 .addReturnField("SUM(e." + ElectionContestant._acceptedResult + ")")
@@ -122,20 +124,22 @@ public class NationalViewController implements Serializable {
             result.setPartyName(party.getPartyName());
             result.setPresidentialVotes(ObjectValue.get_intValue(objects[1]));
 
-            mainResultList.add(result);
+            list.add(result);
         }
 
-        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
-        for (PresidentialResult presidentialResult : mainResultList) {
+        double totalPresidential = list.stream().mapToInt(PresidentialResult::getPresidentialVotes).sum();
+        System.out.println("...... " + totalPresidential);
+        for (PresidentialResult presidentialResult : list) {
             double pct = presidentialResult.getPresidentialVotes() / totalPresidential;
+ 
             pct = pct * 100;
             presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
         }
 
-        for (PresidentialResult compare : mainResultList) {
+        for (PresidentialResult compare : list) {
 
             int counter = 0;
-            for (PresidentialResult submitted : mainResultList) {
+            for (PresidentialResult submitted : list) {
                 if (submitted.getPresidentialVotes() > compare.getPresidentialVotes()) {
                     counter++;
                 }
@@ -143,11 +147,12 @@ public class NationalViewController implements Serializable {
             compare.setPosition(counter + 1);
         }
 
-        return mainResultList;
+             Collections.sort(list, Comparator.comparing(PresidentialResult::getPosition));
+        return list;
     }
 
     public List<PresidentialResult> parliament(ElectionType electionType) {
-        mainResultList = new LinkedList<>();
+        List<PresidentialResult> list  = new LinkedList<>();
         List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addReturnField("e." + ElectionContestant._party)
                 .addReturnField("SUM(e." + ElectionContestant._won + ")")
@@ -166,20 +171,20 @@ public class NationalViewController implements Serializable {
             result.setSeatCount(ObjectValue.get_intValue(objects[1]));
             result.setPresidentialVotes(ObjectValue.get_intValue(objects[2]));
 
-            mainResultList.add(result);
+            list.add(result);
         }
 
-        double totalPresidential = mainResultList.stream().mapToInt(PresidentialResult::getSeatCount).sum();
+        double totalPresidential = list.stream().mapToInt(PresidentialResult::getSeatCount).sum();
         
-        for (PresidentialResult presidentialResult : mainResultList) {
+        for (PresidentialResult presidentialResult : list) {
             double pct = presidentialResult.getSeatCount() / totalPresidential;
             pct = pct * 100;
             presidentialResult.setPresidentialPct(NumberFormattingUtils.formatDecimalNumberTo_2(pct));
         }
 
-        for (PresidentialResult compare : mainResultList) {
+        for (PresidentialResult compare : list) {
             int counter = 0;
-            for (PresidentialResult submitted : mainResultList) {
+            for (PresidentialResult submitted : list) {
                 if (submitted.getSeatCount() > compare.getSeatCount()) {
                     counter++;
                 }
@@ -187,7 +192,8 @@ public class NationalViewController implements Serializable {
             compare.setPosition(counter + 1);
         }
 
-        return mainResultList;
+         Collections.sort(list, Comparator.comparing(PresidentialResult::getSeatCount));
+        return list;
     }
 
     public void updateNationalStats(List<PresidentialResult> mainResultList) {

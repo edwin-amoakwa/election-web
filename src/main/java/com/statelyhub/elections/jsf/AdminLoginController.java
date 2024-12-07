@@ -11,6 +11,7 @@ import com.stately.common.security.SecurityHash;
 import com.stately.modules.web.jsf.JsfMsg;
 import com.stately.modules.web.jsf.JsfUtil;
 import com.statelyhub.elections.constants.UserAccessLevel;
+import com.statelyhub.elections.constants.UserDomain;
 import com.statelyhub.elections.services.AdminService;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
@@ -62,7 +63,6 @@ public class AdminLoginController implements Serializable {
 //        if (!userSession.getAccountUR().isSuperUser()) {
 //            userAccount.setInstitution(userSession.getAccountUR().getInstitution());
 //        }
-
         JsfUtil.resetViewRoot();
 
     }
@@ -71,6 +71,10 @@ public class AdminLoginController implements Serializable {
 //        if (userAccount.isSuperUser()) {
 ////            userAccount.setInstitution(null);
 //        }
+
+        if (userAccount.getUserDomain() == UserDomain.NATIONAL) {
+            userAccount.setConstituency(null);
+        }
 
         if (crudService.save(userAccount) != null) {
             JsfMsg.msg(true);
@@ -140,5 +144,4 @@ public class AdminLoginController implements Serializable {
         this.accessLevel = accessLevel;
     }
 
-    
 }

@@ -150,7 +150,7 @@ public class ElectionService {
         } catch (Exception e) 
         {
             e.printStackTrace();
-            return ProcResponse.fail("Failed Deleting Contestant. Contact Administrator");
+            return ProcResponse.error("Failed Deleting Contestant. Contact Administrator");
         }
         
         return ProcResponse.success();

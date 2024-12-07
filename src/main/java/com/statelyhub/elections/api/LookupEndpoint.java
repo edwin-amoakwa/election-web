@@ -118,9 +118,30 @@ public class LookupEndpoint
          {
              return ApiResponse.error("Specified Volunteer Not Found");
          }
-         
+        
+        return getPollingStations(volunteer.getConstituency());
+    }
+    
+    
+        @GET
+    @Path("/polling-stations-constituency/{constituencyId}")   
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPollingStationConstituency(@PathParam("constituencyId") String constituencyId)
+    {
+       
+        Constituency constituency = crudService.find(Constituency.class, constituencyId);
+        
+        return getPollingStations(constituency);
+    }
+    
+      
+
+    public Response getPollingStations(Constituency constituency)
+    {
+        
+        
         List<ElectionPollingStation> dataList = QryBuilder.get(crudService.getEm(), ElectionPollingStation.class)
-                .addObjectParamWhenNotNull(ElectionPollingStation._constituency, volunteer.getConstituency())
+                .addObjectParamWhenNotNull(ElectionPollingStation._constituency, constituency)
                 .orderByAsc(ElectionPollingStation._pollingStation_stationName)
                 .printQryInfo().buildQry().getResultList();
         
@@ -145,6 +166,7 @@ public class LookupEndpoint
                  
          return Response.status(Response.Status.OK).entity(result.build()).build(); 
     }
+    
     
     
     @GET
