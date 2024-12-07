@@ -19,6 +19,7 @@ import com.statelyhub.elections.entities.PollingStationResultSet;
 import com.statelyhub.elections.entities.SubmittedResult;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -76,6 +77,11 @@ public class ElectionService {
 
     public List<ElectionContestant> consititueny(ConstituencyElection constituencyElection, ElectionType electionType) {
 
+        if(constituencyElection == null)
+        {
+            return Collections.emptyList();
+        }
+        
         return QryBuilder.get(crudService.getEm(), ElectionContestant.class)
                 .addObjectParam(ElectionContestant._electionType, electionType)
                 .addObjectParam(ElectionContestant._constituencyElection, constituencyElection)

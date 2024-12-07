@@ -39,8 +39,8 @@ import org.primefaces.model.ResponsiveOption;
  * @author edwin
  */
 @SessionScoped
-@Named(value = "resultSubmissionController")
-public class ResultSubmissionController implements Serializable {
+@Named(value = "generalSubmissionController")
+public class GeneralSubmissionController implements Serializable {
 
     @Inject
     private CrudService crudService;
@@ -213,10 +213,7 @@ public class ResultSubmissionController implements Serializable {
     }
 
     public void pickSubmission(ResultSubmission resultSubmission) {
-        
         this.selectedSubmission = resultSubmission;
-        
-        selectedConstituencyElection = resultSubmission.getConstituencyElection();
 
         selectedPollingStationResultSet = electionService.init(selectedSubmission.getElectionPollingStation(), selectedSubmission.getElectionType());
         electionPollingStation = selectedSubmission.getElectionPollingStation();
@@ -239,22 +236,47 @@ public class ResultSubmissionController implements Serializable {
 //        selectPollingStation(resultSubmission.getElectionPollingStation());
     }
 
-    public void loadUnProcessedSubmissions() 
-    {
-        
-         unprocessedSubmissionsList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
+    public void loadUnProcessedSubmissions() {
+        unprocessedSubmissionsList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
                 .addObjectParamWhenNotNull(ResultSubmission._constituencyElection, selectedConstituencyElection)
-                 .addObjectParam(ResultSubmission._submissionStatus, SubmissionStatus.OPEN)
+                .addObjectParam(ResultSubmission._submissionStatus, SubmissionStatus.OPEN)
                 .buildQry().getResultList();
+
+//        unprocessedSubmissionsList.clear();
+//        processedSubmissionsList.clear();
+//        rejectedSubmissionsList.clear();
+//
+//        for (ResultSubmission submission : submissionsList) {
+//            if (submission.getSubmissionStatus() == SubmissionStatus.ACCEPTED) {
+//                processedSubmissionsList.add(submission);
+//            } else if (submission.getSubmissionStatus() == SubmissionStatus.OPEN) {
+//                unprocessedSubmissionsList.add(submission);
+//            } else if (submission.getSubmissionStatus() == SubmissionStatus.REJECTED) {
+//                rejectedSubmissionsList.add(submission);
+//            }
+//        }
 
     }
     
-          public void loadRejected() {
+      public void loadRejected() {
         rejectedSubmissionsList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
                 .addObjectParamWhenNotNull(ResultSubmission._constituencyElection, selectedConstituencyElection)
                 .addObjectParam(ResultSubmission._submissionStatus, SubmissionStatus.REJECTED)
                 .buildQry().getResultList();
 
+//        unprocessedSubmissionsList.clear();
+//        processedSubmissionsList.clear();
+//        rejectedSubmissionsList.clear();
+//
+//        for (ResultSubmission submission : submissionsList) {
+//            if (submission.getSubmissionStatus() == SubmissionStatus.ACCEPTED) {
+//                processedSubmissionsList.add(submission);
+//            } else if (submission.getSubmissionStatus() == SubmissionStatus.OPEN) {
+//                unprocessedSubmissionsList.add(submission);
+//            } else if (submission.getSubmissionStatus() == SubmissionStatus.REJECTED) {
+//                rejectedSubmissionsList.add(submission);
+//            }
+//        }
 
     }
 

@@ -10,7 +10,7 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:define name="pageTitle">
-        #{msg.submission_board} - #{resultSubmissionController.selectedConstituencyElection.constituency.constituencyName}
+      General  #{msg.submission_board} - #{generalSubmissionController.selectedConstituencyElection.constituency.constituencyName}
     </ui:define>
 
     <ui:define name="content">
@@ -41,14 +41,14 @@
                         <h:panelGrid columns="6" styleClass="spaced-table">
 
                             <h:outputText value="#{msg.constituency}" />
-                            <p:selectOneMenu value="#{resultSubmissionController.selectedConstituencyElection}" 
+                            <p:selectOneMenu value="#{generalSubmissionController.selectedConstituencyElection}" 
                                              filter="true" filterMatchMode="contains">
                                 <f:selectItem itemLabel="#{msg.select_one}" />
                                 <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
                             </p:selectOneMenu>
 
-                            <p:commandButton value="Filter" ajax="false"
-                                             action="#{resultSubmissionController.loadPollingStation()}"/>
+                            <p:commandButton value="Load" ajax="false"
+                                             action="#{generalSubmissionController.loadPollingStation()}"/>
                         </h:panelGrid>
 
 
@@ -60,26 +60,20 @@
 
 
 
-                  
+                        <p:commandButton value="Refresh" action="#{generalSubmissionController.referesh()}"
+                                         update="@form"/>
 
                         <p:tabView>
-                            
-                             
 
-                            <p:tab title="Unprocessed Submissions - #{resultSubmissionController.unprocessedSubmissionsList.size()}">
-                                
-                                     <p:commandButton value="Load Unprocessed Submission" action="#{resultSubmissionController.loadUnProcessedSubmissions()}"
-                                         update="@form"/>
 
-                                
-                                
-                                <p:dataTable value="#{resultSubmissionController.unprocessedSubmissionsList}" var="submission" 
+                            <p:tab title="Unprocessed Submissions - #{generalSubmissionController.unprocessedSubmissionsList.size()}">
+                                <p:dataTable value="#{generalSubmissionController.unprocessedSubmissionsList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                                         <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
                                                        update=":stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}"/>
+                                                       action="#{generalSubmissionController.pickSubmission(submission)}"/>
                                     </p:column>
 
 
@@ -98,7 +92,7 @@
 
                                     <p:column  >
                                         <p:commandLink value="#{msg.view}" update=":sumbissionDetails, :stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}" 
+                                                       action="#{generalSubmissionController.pickSubmission(submission)}" 
                                                        oncomplete="PF('resultPanel').show()"/>
                                     </p:column>
 
@@ -107,16 +101,15 @@
 
                             </p:tab>
 
-                            <p:tab title="Finalised - #{resultSubmissionController.processedSubmissionsList.size()}" 
-                                   rendered="#{not empty resultSubmissionController.selectedConstituencyElection}">
-                                <p:dataTable value="#{resultSubmissionController.processedSubmissionsList}" var="submission" 
+                            <p:tab title="Finalised - #{generalSubmissionController.processedSubmissionsList.size()}" rendered="false">
+                                <p:dataTable value="#{generalSubmissionController.processedSubmissionsList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
 
                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                                         <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
                                                        update=":stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}"/>
+                                                       action="#{generalSubmissionController.pickSubmission(submission)}"/>
                                     </p:column>
 
 
@@ -135,7 +128,7 @@
 
                                     <p:column  >
                                         <p:commandLink value="#{msg.view}" update=":sumbissionDetails, :stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}" 
+                                                       action="#{generalSubmissionController.pickSubmission(submission)}" 
                                                        oncomplete="PF('resultPanel').show()"/>
                                     </p:column>
 
@@ -145,22 +138,15 @@
                             </p:tab>
 
 
-                            <p:tab title="Rejected - #{resultSubmissionController.rejectedSubmissionsList.size()}">
-                                
-                                           <p:commandButton value="Load Rejected" action="#{resultSubmissionController.loadRejected()}"
-                                         update="@form"/>
-
-                                
-                                
-                                <p:dataTable value="#{resultSubmissionController.rejectedSubmissionsList}" var="submission" 
-                                             rendered="#{not empty resultSubmissionController.selectedConstituencyElection}"
+                            <p:tab title="Rejected - #{generalSubmissionController.rejectedSubmissionsList.size()}" rendered="false">
+                                <p:dataTable value="#{generalSubmissionController.rejectedSubmissionsList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
 
                                     <p:column headerText="#{msg.code}" filterBy="#{submission.electionPollingStation.pollingStation.stationCode}" filterMatchMode="contains">
                                         <p:commandLink value="#{submission.electionPollingStation.pollingStation.stationCode}" 
                                                        update=":stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}"/>
+                                                       action="#{generalSubmissionController.pickSubmission(submission)}"/>
                                     </p:column>
 
 
@@ -179,7 +165,7 @@
 
                                     <p:column  >
                                         <p:commandLink value="#{msg.view}" update=":sumbissionDetails, :stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}" 
+                                                       action="#{generalSubmissionController.pickSubmission(submission)}" 
                                                        oncomplete="PF('resultPanel').show()"/>
                                     </p:column>
 
@@ -190,8 +176,8 @@
 
 
 
-                            <p:tab title="Finalised - #{resultSubmissionController.processedSubmissionsList.size()}" rendered="false">
-                                <p:dataTable value="#{resultSubmissionController.completedPollingStationsList}" var="pollingStation" 
+                            <p:tab title="Finalised - #{generalSubmissionController.processedSubmissionsList.size()}" rendered="false">
+                                <p:dataTable value="#{generalSubmissionController.completedPollingStationsList}" var="pollingStation" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
                                     <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
@@ -200,7 +186,7 @@
 
                                     <p:column headerText="#{msg.polling_stations}"  filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains" >
                                         <p:commandLink value="#{pollingStation.pollingStation.stationName}" update=":stationResult"
-                                                       action="#{resultSubmissionController.selectPollingStation(pollingStation)}"/>
+                                                       action="#{generalSubmissionController.selectPollingStation(pollingStation)}"/>
                                     </p:column>
 
 
@@ -226,9 +212,9 @@
 
                         <div class="row">
                             <div class="col-md-9">
-                                <h3>#{resultSubmissionController.electionPollingStation.pollingStation.stationCode} 
-                                    - #{resultSubmissionController.electionPollingStation.pollingStation.stationName}
-                                    (#{resultSubmissionController.selectedSubmission.electionType.label})
+                                <h3>#{generalSubmissionController.electionPollingStation.pollingStation.stationCode} 
+                                    - #{generalSubmissionController.electionPollingStation.pollingStation.stationName}
+                                    (#{generalSubmissionController.selectedSubmission.electionType.label})
                                 </h3>
                             </div>
                         </div>
@@ -239,14 +225,14 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <div class="panel-title">
-                                    #{resultSubmissionController.selectedSubmission.electionType.label}
+                                    #{generalSubmissionController.selectedSubmission.electionType.label}
                                 </div>
                             </div>
                             <div class="panel-body">
 
                                 <h:form>
 
-                                    <p:dataTable value="#{resultSubmissionController.electionResultsList}" var="result" 
+                                    <p:dataTable value="#{generalSubmissionController.electionResultsList}" var="result" 
                                                  rowKey="#{pollingStationResult.id}">
 
                                         <p:column>
@@ -316,7 +302,7 @@
         <h:panelGroup id="sumbissionDetails">
             
             <h:form>
-                    <p:dialog widgetVar="resultPanel" header="${resultSubmissionController.selectedSubmission.electionType.label}">
+                    <p:dialog widgetVar="resultPanel" header="${generalSubmissionController.selectedSubmission.electionType.label}">
 
                 <div class="container">
 
@@ -324,9 +310,9 @@
 
                         <div class="col-md-12">
                             <h3>
-                                ${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
+                                ${generalSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
 
-                                -  <h:outputText value=" Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
+                                -  <h:outputText value=" Submitted By: ${generalSubmissionController.selectedSubmission.volunteer.volunteerName}" />
                             </h3>
                         </div>
                         <div class="col-md-12">
@@ -338,7 +324,7 @@
 
 
 
-                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" 
+                            <p:dataTable value="#{generalSubmissionController.submittedResultsList}" 
                                          var="submittedResult" rendered="false">
                                 <p:column headerText="">
                                     #{submittedResult.partyDetails}
@@ -356,7 +342,7 @@
 
                             <h:panelGrid columns="3" styleClass="spaced-table" style="width: 80%">
 
-                                <c:forEach items="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
+                                <c:forEach items="#{generalSubmissionController.submittedResultsList}" var="submittedResult">
 
                                     <h:outputText value="#{submittedResult.partyDetails}" styleClass="field-label" />
                                   
@@ -381,14 +367,14 @@
                             <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
 
                                 <h:outputText value="Valid Votes" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
+                                <h:outputText value="${generalSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
 
                                 <h:outputText value="Rejected Votes" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
+                                <h:outputText value="${generalSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
 
 
                                 <h:outputText value="Total Votes Cast" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
+                                <h:outputText value="${generalSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
 
 
 
@@ -396,11 +382,11 @@
 
                             <h:panelGrid columns="2" styleClass="spaced-table">
 
-                                <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
+                                <p:commandButton value="Accept Result" action="#{generalSubmissionController.acceptResult()}" 
                                                  update=":stationResult, :mainListForm"
                                                  oncomplete="PF('resultPanel').hide()"/>
 
-                                <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
+                                <p:commandButton value="Reject Result" action="#{generalSubmissionController.rejectResult()}" 
                                                  styleClass="ui-button-danger" update=":collationBoad"
                                                  oncomplete="PF('resultPanel').hide()"/>
 
@@ -416,7 +402,7 @@
 
                                 <div class="card">
                        
-                                    <p:carousel value="#{resultSubmissionController.submittedResultImagesList}" var="record" 
+                                    <p:carousel value="#{generalSubmissionController.submittedResultImagesList}" var="record" 
                                                 numVisible="1" numScroll="1">
                          
                                         <div class="product-item">

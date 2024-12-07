@@ -16,9 +16,7 @@
     <ui:define name="content">
 
         <h:panelGroup id="collationBoad">
-
-
-
+            
             <br />
 
             <div class="row">
@@ -26,14 +24,14 @@
                 <div class="col-lg-7">
 
                     <center>
-                        <h:form>
+                        <h:form rendered="false">
                             <p:commandButton value="Refresh" action="#{constituencyCollationController.init()}"
                                              update="@form"/>
                         </h:form>
 
                         <h:form>
 
-                            <h:panelGrid columns="6" styleClass="spaced-table" rendered="#{!userSession.accountUR.userDomain.constituencyUser}">
+                            <h:panelGrid columns="6" styleClass="spaced-table" >
 
                                 <h:outputText value="#{msg.constituency}" />
                                 <p:selectOneMenu value="#{constituencyCollationController.selectedConstituencyElection}" 
@@ -42,30 +40,25 @@
                                     <f:selectItems value="#{userCommonOptions.constituencyElectionsList}" />
                                 </p:selectOneMenu>
 
-                                <p:commandButton value="Load" ajax="false"
+                                <p:commandButton value="Set Filter" ajax="false"
                                                  action="#{constituencyCollationController.load()}"/>
                             </h:panelGrid>
-
-
-
+                            
                         </h:form>
-
-
-
+                        
                     </center>
 
                     <h:form>
-
-
-
-
-
-
-
+                        
                         <p:tabView>
 
 
                             <p:tab title="Accepted Submissions - #{constituencyCollationController.completedSubmissionList.size()}">
+                                
+                                 <p:commandButton value="Refresh" action="#{constituencyCollationController.loadUnCoallatedSubmissions()}"
+                                             update="@form"/>
+                                
+                                
                                 <p:dataTable value="#{constituencyCollationController.completedSubmissionList}" var="submission" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
 
@@ -102,7 +95,8 @@
 
 
 
-                            <p:tab title="Pending - #{constituencyCollationController.pendingList.size()}">
+                            <p:tab title="Pending - #{constituencyCollationController.pendingList.size()}" 
+                                   rendered="#{not empty constituencyCollationController.selectedConstituencyElection}" >
 
                                 <p:dataTable value="#{constituencyCollationController.pendingList}" var="record" 
                                              rows="10" paginator="true" paginatorPosition="bottom">
@@ -131,7 +125,8 @@
 
 
 
-                            <p:tab title="Finalised - #{constituencyCollationController.completedList.size()}">
+                            <p:tab title="Finalised - #{constituencyCollationController.completedList.size()}" 
+                                    rendered="#{not empty constituencyCollationController.selectedConstituencyElection}" >
 
                                 <p:dataTable value="#{constituencyCollationController.completedList}" var="record" 
                                              rows="10" paginator="true" paginatorPosition="bottom">

@@ -128,6 +128,23 @@ public class ConstituencyCollationController implements Serializable {
 
         loadConstituencyResult();
     }
+    
+    
+    public void loadUnCoallatedSubmissions() {
+      
+
+        completedSubmissionList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
+                .addObjectParamWhenNotNull(ResultSubmission._constituencyElection, selectedConstituencyElection)
+                .addObjectParam(ResultSubmission._submissionStatus, SubmissionStatus.ACCEPTED)
+                .addObjectParam(ResultSubmission._collated, false)
+                .printQryInfo()
+                .buildQry().getResultList();
+
+        loadConstituencyResult();
+    }
+    
+    
+    
 
     public void selectResultSet(PollingStationResultSet station) {
         this.selectedResultSet = station;
