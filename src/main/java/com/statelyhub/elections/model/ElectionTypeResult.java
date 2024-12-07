@@ -5,6 +5,7 @@
 package com.statelyhub.elections.model;
 
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.entities.ConstituencyResultSet;
 import com.statelyhub.elections.entities.ElectionContestant;
 import com.statelyhub.elections.entities.PollingStationResult;
 import com.statelyhub.elections.entities.SubmittedResult;
@@ -18,6 +19,7 @@ public class ElectionTypeResult {
 
     private ElectionType electionType;
     private ElectionTypeDashboard dashboard;
+    private ConstituencyResultSet constituencySet;
     
     private List<PollingStationResult> votingsList;
     
@@ -63,6 +65,14 @@ public class ElectionTypeResult {
 
     public void setDashboard(ElectionTypeDashboard dashboard) {
         this.dashboard = dashboard;
+    }
+
+    public ConstituencyResultSet getConstituencySet() {
+        return constituencySet;
+    }
+
+    public void setConstituencySet(ConstituencyResultSet constituencySet) {
+        this.constituencySet = constituencySet;
     }
 
     @Override

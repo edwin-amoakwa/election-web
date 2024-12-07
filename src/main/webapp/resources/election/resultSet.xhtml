@@ -11,6 +11,7 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="value" />
+        <cc:attribute name="inputMode" default="false"/>
     </cc:interface>
 
     <cc:implementation>
@@ -61,10 +62,6 @@
 
 
 
-
-
-                <h:form>
-
                     <h:commandLink>
                         Export
                         <p:dataExporter type="xls" target="dataTable" fileName="Result_#{cc.attrs.value.electionType} " />
@@ -90,9 +87,14 @@
                         </p:column>
 
                         <p:column headerText="#{msg.votes}">
-                            <h:outputText value="#{result.acceptedResult}" >
+                            <h:outputText value="#{result.acceptedResult}" rendered="#{!cc.attrs.inputMode}">
                                 <f:convertNumber pattern="#,##0" />
                             </h:outputText>
+                            
+                            <p:inputText value="#{result.acceptedResult}" rendered="#{cc.attrs.inputMode}">
+                                <f:convertNumber pattern="#,##0" />
+                            </p:inputText>
+                            
                         </p:column>
 
 
@@ -109,8 +111,6 @@
                         </p:column>
 
                     </p:dataTable>
-
-                </h:form>
 
             </div>
         </div>

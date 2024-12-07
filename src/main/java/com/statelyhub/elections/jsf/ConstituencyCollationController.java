@@ -78,11 +78,11 @@ public class ConstituencyCollationController implements Serializable {
     private List<ElectionPollingStation> completedPollingStationsList;
     private List<ElectionPollingStation> pendingPollingStationsList;
 
-    private List<PollingStationResultSet> completedList;
-    private List<PollingStationResultSet> pendingList;
+    private List<PollingStationResultSet> completedList = new LinkedList<>();
+    private List<PollingStationResultSet> pendingList = new LinkedList<>();
 
-    private List<PollingStationResult> electionResultsList;
-    private List<ResultSubmission> completedSubmissionList;
+    private List<PollingStationResult> electionResultsList = new LinkedList<>();
+    private List<ResultSubmission> completedSubmissionList = new LinkedList<>();
     private ResultSubmission selectedSubmission;
 
     private ConstituencyElection selectedConstituencyElection;
@@ -174,6 +174,9 @@ public class ConstituencyCollationController implements Serializable {
     public void pickSubmission(ResultSubmission resultSubmission) 
     {
         this.selectedSubmission = resultSubmission;
+        
+        selectedConstituencyElection = resultSubmission.getConstituencyElection();
+        
         selectedResultSet = crudService.find(PollingStationResultSet.class, selectedSubmission.getResultSetId());
         
         selectResultSet(selectedResultSet);

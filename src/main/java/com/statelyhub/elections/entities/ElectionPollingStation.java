@@ -38,6 +38,7 @@ public class ElectionPollingStation extends SummarySet {
 
     public static final String _constituency = "constituency";
     public static final String _constituency_region = _constituency + "." + Constituency._region;
+    public static final String _constituency_constituencyName = _constituency + "." + Constituency._constituencyName;
     @JoinColumn(name = "constituency")
     @ManyToOne
     private Constituency constituency;

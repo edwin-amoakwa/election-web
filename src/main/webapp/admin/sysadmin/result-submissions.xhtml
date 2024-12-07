@@ -97,9 +97,8 @@
 
 
                                     <p:column  >
-                                        <p:commandLink value="#{msg.view}" update=":sumbissionDetails, :stationResult"
-                                                       action="#{resultSubmissionController.pickSubmission(submission)}" 
-                                                       oncomplete="PF('resultPanel').show()"/>
+                                        <p:commandLink value="#{msg.view}" update=" :stationResult"
+                                                       action="#{resultSubmissionController.pickSubmission(submission)}" />
                                     </p:column>
 
 
@@ -223,8 +222,161 @@
 
                 <div class="col-lg-7">
                     <h:panelGroup id="stationResult">
+                        
+                        
+                            <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    #{resultSubmissionController.selectedSubmission.electionType.label} - 
+                         #{resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName} 
+                         - #{resultSubmissionController.selectedSubmission.constituencyElection.region.regionName}
+                                </div>
+                            </div>
+                            <div class="panel-body">
 
-                        <div class="row">
+                                  <h3>
+                                ${resultSubmissionController.selectedSubmission.electionPollingStation.pollingStation.stationName}
+
+                                -  <h:outputText value=" Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
+                            </h3>
+                                
+                                
+                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" 
+                                         var="submittedResult" rendered="false">
+                                <p:column headerText="">
+                                    #{submittedResult.partyDetails}
+                                </p:column>
+                                
+                           
+
+                                <p:column headerText="">
+                                    #{submittedResult.submittedResult}
+                                </p:column>
+
+                            </p:dataTable>
+                            
+                            
+
+                            <h:panelGrid columns="3" styleClass="spaced-table" style="width: 80%">
+
+                                <c:forEach items="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
+
+                                    <h:outputText value="#{submittedResult.partyDetails}" styleClass="field-label" />
+                                  
+                                    <h:outputText value="#{submittedResult.electionContestant.candidateName}" styleClass="field-label1" />
+                                    
+                               
+                                    
+                                    
+                                    <p:inputText value="#{submittedResult.submittedResult}" styleClass="field-value text-right" >
+                                        <f:convertNumber pattern="#,##0" />
+                                    </p:inputText>
+                                    
+                                    <h:outputText value="#{submittedResult.position}" styleClass="field-value text-right" rendered="false">
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+
+                                </c:forEach>
+                               
+
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
+
+                                <h:outputText value="Valid Votes" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
+
+                                <h:outputText value="Rejected Votes" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
+
+
+                                <h:outputText value="Total Votes Cast" styleClass="field-label" />
+                                <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
+
+
+
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="2" styleClass="spaced-table">
+
+                                <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
+                                                 update=":stationResult, :mainListForm"
+                                                 oncomplete="PF('resultPanel').hide()"/>
+
+                                <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
+                                                 styleClass="ui-button-danger" update=":collationBoad"
+                                                 oncomplete="PF('resultPanel').hide()"/>
+
+                            </h:panelGrid>
+
+                                
+                                
+                            </div>
+                            </div>
+                        
+                        
+                                         <f:facet name="header">
+                       
+                    </f:facet>
+                    
+                <div class="container">
+
+                    <div class="row justify-content-center">
+
+                        <div class="col-md-12">
+                          
+                        </div>
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                    <div class="clearfix row">
+                        <div class="col-md-5">
+
+
+
+
+
+                        </div>
+
+                        <div class="clearfix col-md-7">
+
+                            <h:panelGroup id="picturePanel">
+
+                                <div class="card">
+                       
+                                    <p:carousel value="#{resultSubmissionController.submittedResultImagesList}" var="record" 
+                                                numVisible="1" numScroll="1">
+                         
+                                        <div class="product-item">
+                                            <div class="product-item-content">
+                                                <div class="mb-3">
+                                                    <!--<p:graphicImage name="demo/images/product/{record.image}" styleClass="product-image"/>-->
+                                                    <!--<img src="{record.imageSRC}" width="250" height="420" alt="alt"/>-->
+                                                    <img class="product-image" src="#{record.imageSRC}" alt="alt"/>
+                                                </div>
+                   
+                                                <div class="mt-5">
+                                                    <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:carousel>
+                                </div>
+
+                            </h:panelGroup>
+                        </div>
+
+                    </div>
+                </div>
+
+                        
+                        
+                        
+
+                  
+                        <ui:remove>
+                                  <div class="row">
                             <div class="col-md-9">
                                 <h3>#{resultSubmissionController.electionPollingStation.pollingStation.stationCode} 
                                     - #{resultSubmissionController.electionPollingStation.pollingStation.stationName}
@@ -290,6 +442,8 @@
 
                             </div>
                         </div>
+                        </ui:remove>
+                        
 
                     </h:panelGroup>
 
@@ -313,145 +467,7 @@
         <hr />
 
 
-        <h:panelGroup id="sumbissionDetails">
-            
-            <h:form>
-                    <p:dialog widgetVar="resultPanel" header="${resultSubmissionController.selectedSubmission.electionType.label}">
-
-                <div class="container">
-
-                    <div class="row justify-content-center">
-
-                        <div class="col-md-12">
-                            <h3>
-                                ${resultSubmissionController.selectedSubmission.constituencyElection.constituency.constituencyName}
-
-                                -  <h:outputText value=" Submitted By: ${resultSubmissionController.selectedSubmission.volunteer.volunteerName}" />
-                            </h3>
-                        </div>
-                        <div class="col-md-12">
-
-                        </div>
-                    </div>
-                    <div class="clearfix row">
-                        <div class="col-md-5">
-
-
-
-                            <p:dataTable value="#{resultSubmissionController.submittedResultsList}" 
-                                         var="submittedResult" rendered="false">
-                                <p:column headerText="">
-                                    #{submittedResult.partyDetails}
-                                </p:column>
-                                
-                           
-
-                                <p:column headerText="">
-                                    #{submittedResult.submittedResult}
-                                </p:column>
-
-                            </p:dataTable>
-                            
-                            
-
-                            <h:panelGrid columns="3" styleClass="spaced-table" style="width: 80%">
-
-                                <c:forEach items="#{resultSubmissionController.submittedResultsList}" var="submittedResult">
-
-                                    <h:outputText value="#{submittedResult.partyDetails}" styleClass="field-label" />
-                                  
-                                    <h:outputText value="#{submittedResult.electionContestant.candidateName}" styleClass="field-label1" />
-                                    
-                               
-                                    
-                                    
-                                    <h:inputText value="#{submittedResult.submittedResult}" styleClass="field-value text-right" >
-                                        <f:convertNumber pattern="#,##0" />
-                                    </h:inputText>
-                                    
-                                    <h:outputText value="#{submittedResult.position}" styleClass="field-value text-right" rendered="false">
-                                        <f:convertNumber pattern="#,##0" />
-                                    </h:outputText>
-
-                                </c:forEach>
-                               
-
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="spaced-table" style="width: 80%">
-
-                                <h:outputText value="Valid Votes" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.validVotes}"  styleClass="field-value text-right"/>
-
-                                <h:outputText value="Rejected Votes" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.rejectedBallots}"  styleClass="field-value text-right"/>
-
-
-                                <h:outputText value="Total Votes Cast" styleClass="field-label" />
-                                <h:outputText value="${resultSubmissionController.selectedSubmission.totalVotesCast}" styleClass="field-value text-right"/>
-
-
-
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="spaced-table">
-
-                                <p:commandButton value="Accept Result" action="#{resultSubmissionController.acceptResult()}" 
-                                                 update=":stationResult, :mainListForm"
-                                                 oncomplete="PF('resultPanel').hide()"/>
-
-                                <p:commandButton value="Reject Result" action="#{resultSubmissionController.rejectResult()}" 
-                                                 styleClass="ui-button-danger" update=":collationBoad"
-                                                 oncomplete="PF('resultPanel').hide()"/>
-
-                            </h:panelGrid>
-
-
-
-                        </div>
-
-                        <div class="clearfix col-md-7">
-
-                            <h:panelGroup id="picturePanel">
-
-                                <div class="card">
-                       
-                                    <p:carousel value="#{resultSubmissionController.submittedResultImagesList}" var="record" 
-                                                numVisible="1" numScroll="1">
-                         
-                                        <div class="product-item">
-                                            <div class="product-item-content">
-                                                <div class="mb-3">
-                                                    <!--<p:graphicImage name="demo/images/product/{record.image}" styleClass="product-image"/>-->
-                                                    <!--<img src="{record.imageSRC}" width="250" height="420" alt="alt"/>-->
-                                                    <img class="product-image" src="#{record.imageSRC}" alt="alt"/>
-                                                </div>
-                   
-                                                <div class="mt-5">
-                                                    <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </p:carousel>
-                                </div>
-
-                            </h:panelGroup>
-                        </div>
-
-                    </div>
-                </div>
-
-            </p:dialog>
-                
-            </h:form>
-            
         
-        </h:panelGroup>
-
-
-
-
-
 
     </ui:define>
 

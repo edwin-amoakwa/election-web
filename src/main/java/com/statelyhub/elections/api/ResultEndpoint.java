@@ -7,6 +7,7 @@ package com.statelyhub.elections.api;
 import com.stately.modules.api.ApiResponse;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ResultStatus;
+import com.statelyhub.elections.constants.SubmissionStatus;
 import com.statelyhub.elections.entities.ResultSubmission;
 import com.statelyhub.elections.entities.Volunteer;
 import com.statelyhub.elections.services.AppConfigService;
@@ -44,7 +45,8 @@ public class ResultEndpoint {
     public Response getColunteres() {
         int totalVolunters = QryBuilder.get(crudService.getEm(), Volunteer.class).count();
 
-        int submisstion = QryBuilder.get(crudService.getEm(), ResultSubmission.class).count();
+        int submisstion = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
+                .addObjectParamNotEqual(ResultSubmission._submissionStatus, SubmissionStatus.PENDING).count();
 
         JsonObjectBuilder data = Json.createObjectBuilder()
                 .add("volunteers", totalVolunters)

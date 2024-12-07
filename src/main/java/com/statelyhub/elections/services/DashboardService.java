@@ -50,7 +50,7 @@ public class DashboardService {
         List<Object[]> pollSummary = QryBuilder.get(crudService.getEm(), PollingStationResultSet.class)
                 .addReturnField("e." + PollingStationResultSet._resultStatus)
                 .addReturnField("COUNT(e." + PollingStationResultSet._id + ")")
-                .addObjectParam(PollingStationResultSet._electionPollingStation_constituencyElection, constituencyElection)
+                .addObjectParamWhenNotNull(PollingStationResultSet._electionPollingStation_constituencyElection, constituencyElection)
                 .addObjectParam(PollingStationResultSet._electionType, electionType)
                 .addGroupBy(PollingStationResultSet._resultStatus)
                 .printQryInfo()
@@ -72,7 +72,7 @@ public class DashboardService {
                 .addReturnField("SUM(e." + PollingStationResultSet._validVotes + ")")
                 .addReturnField("SUM(e." + PollingStationResultSet._rejectedBallots + ")")
                 .addReturnField("SUM(e." + PollingStationResultSet._spoiltBallots + ")")
-                .addObjectParam(PollingStationResultSet._electionPollingStation_constituencyElection, constituencyElection)
+                .addObjectParamWhenNotNull(PollingStationResultSet._electionPollingStation_constituencyElection, constituencyElection)
                 .addObjectParam(PollingStationResultSet._electionType, electionType)
                 .addGroupBy(PollingStationResultSet._resultStatus).getSingleResult(Object[].class);
 
@@ -89,7 +89,7 @@ public class DashboardService {
         List<Object[]> resultList = QryBuilder.get(crudService.getEm(), ResultSubmission.class)
                 .addReturnField("e." + ResultSubmission._submissionStatus)
                 .addReturnField("COUNT(e." + ResultSubmission._id + ")")
-                .addObjectParam(ResultSubmission._constituencyElection, constituencyElection)
+                .addObjectParamWhenNotNull(ResultSubmission._constituencyElection, constituencyElection)
                 .addGroupBy(ResultSubmission._submissionStatus)
                 .buildQry().getResultList();
 

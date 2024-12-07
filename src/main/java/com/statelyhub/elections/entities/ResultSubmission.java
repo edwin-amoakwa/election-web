@@ -35,7 +35,7 @@ public class ResultSubmission extends  ResultSet {
     public static final String _submissionStatus = "submissionStatus";
     @Column(name = "submission_status")
     @Enumerated(EnumType.STRING)
-    private SubmissionStatus submissionStatus = SubmissionStatus.OPEN;
+    private SubmissionStatus submissionStatus = SubmissionStatus.PENDING;
     
     public static final String _collated = "collated";
      @Column(name = "collated")

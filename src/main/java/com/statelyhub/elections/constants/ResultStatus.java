@@ -16,8 +16,8 @@ import com.stately.common.api.MessageResolvable;
 public enum ResultStatus implements MessageResolvable
 {
 
-    PENDING("PENDING","PENDING"),
-    FINALISED("FINALISED","FINALISED");
+    PENDING("PENDING","Pending"),
+    FINALISED("FINALISED","Finalised");
 
     private final String code;
     private final String label;

@@ -216,7 +216,7 @@ public class ResultSubmissionController implements Serializable {
         
         this.selectedSubmission = resultSubmission;
         
-        selectedConstituencyElection = resultSubmission.getConstituencyElection();
+//        selectedConstituencyElection = resultSubmission.getConstituencyElection();
 
         selectedPollingStationResultSet = electionService.init(selectedSubmission.getElectionPollingStation(), selectedSubmission.getElectionType());
         electionPollingStation = selectedSubmission.getElectionPollingStation();

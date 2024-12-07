@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately"
+                xmlns:election="jakarta.faces.composite/election"
+                xmlns:c="jakarta.tags.core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="pageTitle">
+        Polling Stations -  #{userSession.accountUR.constituency.constituencyName}
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                
+                <h:form>
+                    
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{msg.constituency}" />
+                        <p:inputText />
+                        
+                        <h:outputText value="#{msg.polling_stations}" />
+                        <p:inputText />
+                    </h:panelGrid>
+                    
+                    <p:commandButton value="Search" action="#{stationResultController.search()}" 
+                                     update=":stationForm"/>
+                    
+                </h:form>
+                
+                
+                <h:form id="stationForm">
+                    
+                    
+                    <h:commandLink rendered="false">
+                        Export
+                        <p:dataExporter type="xls" target="pollingStationsDataTable" fileName="PollingStations" />
+                    </h:commandLink>
+                    
+                    
+                    
+                    
+                    <p:dataTable id="pollingStationsDataTable" value="#{stationResultController.pollingStationsList}" var="pollingStation" 
+                                 rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.polling_stations}" filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.pollingStation.stationName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.voters_count}"  filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.votersCount}" >
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{msg.polling_stations}" rendered="false" >
+                            <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
+                                           action="#{electionDetailController.selectPollingStation(pollingStation)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+            </div>
+
+            <div class="col-lg-6">
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </ui:define>
+
+</ui:composition>
+

@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-aqua">
+          <div class="small-box bg-aqua hidden">
             <div class="inner">
                 <h3>
                     <h:outputText value="#{dashboardController.totalPollingStation}">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-6 hidden">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
@@ -109,7 +109,42 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <election:dashboard value="#{dashboardController.presidential}" />
+                    <election:dashboard value="#{dashboardController.presidential}" rendered="false"/>
+                    
+                    
+                    
+                    <p:dataTable value="#{nationalViewController.mainResultList}" var="mainResult">
+
+                            <p:column headerText="#{msg.party}">
+                                <h:outputText value="#{mainResult.partyName}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.votes}">
+                                <h:outputText value="#{mainResult.presidentialVotes}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="#{msg.position}">
+                                <h:outputText value="#{mainResult.position}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+
+
+                            <p:column headerText="President %">
+                                <h:outputText value="#{mainResult.presidentialPct}" >
+                                    <f:convertNumber pattern="#,##0.00" />
+                                </h:outputText>
+                            </p:column>
+                            
+                        
+
+                        </p:dataTable>
+                    
+                    
+                    
+                    
                 </div>
             </div>
 
@@ -129,7 +164,38 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <election:dashboard value="#{dashboardController.parliamentary}" />
+                    <election:dashboard value="#{dashboardController.parliamentary}" rendered="false"/>
+                    
+                    
+                      <p:dataTable value="#{nationalViewController.parliamenSummaryList}" var="mainResult">
+
+                            <p:column headerText="#{msg.party}">
+                                <h:outputText value="#{mainResult.partyName}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.votes}">
+                                <h:outputText value="#{mainResult.presidentialVotes}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+                            
+                                <p:column headerText="#{msg.wins}">
+                                    <h:outputText value="#{mainResult.seatCount}" >
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                            </p:column>
+
+                       
+
+                            <p:column headerText=" %">
+                                <h:outputText value="#{mainResult.presidentialPct}" >
+                                    <f:convertNumber pattern="#,##0.00" />
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+                    
+                    
                 </div>
             </div>
 

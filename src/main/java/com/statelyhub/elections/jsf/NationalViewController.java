@@ -9,6 +9,7 @@ import com.stately.common.formating.ObjectValue;
 import com.stately.common.utils.StringUtil;
 import com.stately.modules.jpa2.QryBuilder;
 import com.statelyhub.elections.constants.ElectionType;
+import com.statelyhub.elections.constants.PartyType;
 import com.statelyhub.elections.constants.ResultStatus;
 import com.statelyhub.elections.entities.ConstituencyElection;
 import com.statelyhub.elections.entities.ElectionContestant;
@@ -23,6 +24,7 @@ import com.statelyhub.elections.services.CrudService;
 import com.statelyhub.elections.services.ElectionResultService;
 import com.statelyhub.elections.services.ElectionService;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -36,7 +38,8 @@ import java.util.List;
  *
  * @author edwin
  */
-@SessionScoped
+//@SessionScoped
+@RequestScoped
 @Named(value = "nationalViewController")
 public class NationalViewController implements Serializable {
 
@@ -66,9 +69,16 @@ public class NationalViewController implements Serializable {
     private List<PresidentialResult> mainResultList;
     private List<PresidentialResult> parliamenSummaryList;
 
+//    @PostConstruct
+//    public void init() {
+//        partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class).buildQry().getResultList();
+//    }
+    
     @PostConstruct
-    public void init() {
-        partyElectionsList = QryBuilder.get(crudService.getEm(), PartyElection.class).buildQry().getResultList();
+      public void updateNationalStats() {
+        mainResultList = presiddentail(ElectionType.PRESIDENTIAL);
+        parliamenSummaryList = parliament(ElectionType.PARLIAMENTARY);
+
     }
 
     public void loadConstituency() {
@@ -100,11 +110,7 @@ public class NationalViewController implements Serializable {
         electionResultService.runConstituency(selectedConstituencyElection);
     }
 
-    public void updateNationalStats() {
-        mainResultList = presiddentail(ElectionType.PRESIDENTIAL);
-        parliamenSummaryList = parliament(ElectionType.PARLIAMENTARY);
-
-    }
+  
 
     public List<PresidentialResult> presiddentail(ElectionType electionType) {
        List<PresidentialResult> list = new LinkedList<>();
@@ -151,6 +157,10 @@ public class NationalViewController implements Serializable {
         return list;
     }
 
+    
+    
+    
+    
     public List<PresidentialResult> parliament(ElectionType electionType) {
         List<PresidentialResult> list  = new LinkedList<>();
         List<Object[]> presidentialList = QryBuilder.get(crudService.getEm(), ElectionContestant.class)
@@ -158,6 +168,7 @@ public class NationalViewController implements Serializable {
                 .addReturnField("SUM(e." + ElectionContestant._won + ")")
                 .addReturnField("SUM(e." + ElectionContestant._acceptedResult + ")")
                 .addObjectParam(ElectionContestant._electionType, electionType)
+                .addObjectParam(ElectionContestant._candidateType, PartyType.POLITICAL_PARTY)
                 .addGroupBy(ElectionContestant._party)
                 .buildQry().getResultList();
 
