@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml" 
+                xmlns:stately="http://xmlns.jcp.org/jsf/composite/stately">
+
+    <ui:define name="pageTitle">
+        Election Details
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            #{msg.constituency}
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                      <h:form rendered="true">
+                    <p:dataTable value="#{consituencyController.constituencyList}" var="consElection"
+                                 scrollable="true" scrollHeight="720px;">
+                        
+                        <p:column >
+                            <h:outputText value="#{consElection.counter}" />
+                        </p:column>
+                        
+                 
+                        
+                        
+                        <p:column headerText="#{msg.constituency}" filterBy="#{consElection.constituency.constituencyName}" filterMatchMode="contains">
+                            <p:commandLink value="#{consElection.constituency.constituencyName}" update=":pollingStationForm"
+                                           action="#{consituencyController.selectConstituency(consElection)}"/>
+                        </p:column>
+                        
+                               <p:column headerText="#{msg.region}" filterBy="#{consElection.region.regionName}" filterMatchMode="contains">
+                            <h:outputText value="#{consElection.region.regionName}" />
+                        </p:column>
+                        
+
+                        <p:column headerText="# #{msg.polling_stations}">
+                            <h:outputText value="#{consElection.pollingStationCount}" rendered="#{consElection.pollingStationCount !=0}" >
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </p:column>
+                        
+                        
+                        <p:column headerText="#{msg.constituency}" >
+                            <p:commandLink value="Init" 
+                                           action="#{consituencyController.initiaiseConsiituency(consElection)}"/>
+                        </p:column>
+                        
+
+                    </p:dataTable>
+                </h:form>
+
+                    </div>
+                </div>
+
+            </div>
+
+            
+
+            <div class="col-lg-5">
+
+
+                <h:form id="pollingStationForm">
+                    <p:dataTable value="#{consituencyController.pollingStationsList}" var="pollingStation" 
+                                 rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="#{msg.code}" filterBy="#{pollingStation.pollingStation.stationCode}" filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.pollingStation.stationCode}" />
+                        </p:column>
+                        
+                          <p:column headerText="#{msg.polling_stations}" filterBy="#{pollingStation.pollingStation.stationName}" filterMatchMode="contains">
+                            <h:outputText value="#{pollingStation.pollingStation.stationName}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.polling_stations}" rendered="false" >
+                            <h:commandLink value="#{pollingStation.pollingStation.stationName}" 
+                                           action="#{consituencyController.selectPollingStation(pollingStation)}"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+
+            </div>
+
+
+            <div class="col-lg-2">
+
+            </div>
+
+        </div>
+
+        
+        
+        
+        <h:form>
+            <p:commandButton value="Update Stats" ajax="false"
+                             action="#{consituencyController.updateStats()}"/>
+            
+            
+            
+              <p:commandButton value="Init" ajax="false"
+                             action="#{consituencyController.initIaliseDefaultContesttants()}"/>
+        </h:form>
+        
+
+    </ui:define>
+
+</ui:composition>
+

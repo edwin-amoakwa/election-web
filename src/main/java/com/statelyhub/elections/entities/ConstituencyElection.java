@@ -35,6 +35,7 @@ public class ConstituencyElection extends SummarySet {
     private Constituency constituency;
 
     public static final String _region = "region";
+    public static final String _region_regionName =_region + "." + Region._regionName;
     @JoinColumn(name = "region")
     @ManyToOne
     private Region region;
